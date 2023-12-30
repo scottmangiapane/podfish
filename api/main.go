@@ -3,39 +3,54 @@ package main
 import (
 	"net/http"
 	"podcast-app/controllers"
+	"podcast-app/docs"
 
 	"github.com/gin-gonic/gin"
+
+	ginSwagger "github.com/swaggo/gin-swagger"
+
+	swaggerfiles "github.com/swaggo/files"
 )
 
+// @contact.name	Scott Mangiapane
+// @contact.url    	https://github.com/scottmangiapane/podcast-app/issues
+
+// @license.name  GPL 3.0
+// @license.url   https://github.com/scottmangiapane/podcast-app/blob/master/LICENSE
 func main() {
-	router := gin.Default()
+	r := gin.Default()
 
-	router.POST("/auth/sign-up", controllers.PostSignUp)
-	router.POST("/auth/sign-in", controllers.PostSignIn)
-	router.POST("/auth/sign-out", controllers.PostSignOut)
+	r.POST("/auth/sign-up", controllers.PostSignUp)
+	r.POST("/auth/sign-in", controllers.PostSignIn)
+	r.POST("/auth/sign-out", controllers.PostSignOut)
 
-	router.PATCH("/users/:id/email", controllers.PatchUserEmail)
-	router.PATCH("/users/:id/password", controllers.PatchUserPassword)
-	router.POST("/reset-password", controllers.PostResetPassword)
-	router.POST("/reset-password/:token", controllers.PostResetPasswordWithToken)
+	r.PATCH("/users/:id/email", controllers.PatchUserEmail)
+	r.PATCH("/users/:id/password", controllers.PatchUserPassword)
 
-	router.GET("/subscriptions", controllers.GetSubscriptions)
-	router.POST("/subscriptions", controllers.PostSubscriptions)
-	router.GET("/subscriptions/:id", controllers.GetSubscription)
-	router.DELETE("/subscriptions/:id", controllers.DeleteSubscription)
+	r.POST("/reset-password", controllers.PostResetPassword)
+	r.POST("/reset-password/:token", controllers.PostResetPasswordWithToken)
 
-	router.GET("/episodes", controllers.GetEpisodes)
-	router.GET("/episodes/:id", controllers.GetEpisode)
-	router.PATCH("/episodes/:id/completed", controllers.PatchEpisodeCompleted)
-	router.PATCH("/episodes/:id/playback-position", controllers.PatchEpisodePlaybackPosition)
+	r.GET("/subscriptions", controllers.GetSubscriptions)
+	r.POST("/subscriptions", controllers.PostSubscriptions)
+	r.GET("/subscriptions/:id", controllers.GetSubscription)
+	r.DELETE("/subscriptions/:id", controllers.DeleteSubscription)
 
-	router.GET("/now-playing", controllers.GetNowPlaying)
-	router.PUT("/now-playing", controllers.PutNowPlaying)
-	router.DELETE("/now-playing", controllers.DeleteNowPlaying)
+	r.GET("/episodes", controllers.GetEpisodes)
+	r.GET("/episodes/:id", controllers.GetEpisode)
+	r.PATCH("/episodes/:id/completed", controllers.PatchEpisodeCompleted)
+	r.PATCH("/episodes/:id/playback-position", controllers.PatchEpisodePlaybackPosition)
 
-	router.NoRoute(func(c *gin.Context) {
+	r.GET("/now-playing", controllers.GetNowPlaying)
+	r.PUT("/now-playing", controllers.PutNowPlaying)
+	r.DELETE("/now-playing", controllers.DeleteNowPlaying)
+
+	docs.SwaggerInfo.Title = "Podcast API"
+	r.StaticFS("/docs", http.Dir("docs"))
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
+
+	r.NoRoute(func(c *gin.Context) {
 		c.JSON(http.StatusNotFound, gin.H{"code": "NOT_FOUND", "message": "Not found"})
 	})
 
-	router.Run("localhost:8080")
+	r.Run("localhost:8080")
 }
