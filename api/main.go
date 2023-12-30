@@ -19,16 +19,16 @@ import (
 // @license.url   https://github.com/scottmangiapane/podcast-app/blob/master/LICENSE
 func main() {
 	r := gin.Default()
+	r.SetTrustedProxies(nil)
 
-	r.POST("/auth/sign-up", controllers.PostSignUp)
 	r.POST("/auth/sign-in", controllers.PostSignIn)
 	r.POST("/auth/sign-out", controllers.PostSignOut)
-
-	r.PATCH("/users/:id/email", controllers.PatchUserEmail)
-	r.PATCH("/users/:id/password", controllers.PatchUserPassword)
+	r.POST("/auth/sign-up", controllers.PostSignUp)
 
 	r.POST("/reset-password", controllers.PostResetPassword)
 	r.POST("/reset-password/:token", controllers.PostResetPasswordWithToken)
+	r.PATCH("/users/:id/email", controllers.PatchUserEmail)
+	r.PATCH("/users/:id/password", controllers.PatchUserPassword)
 
 	r.GET("/subscriptions", controllers.GetSubscriptions)
 	r.POST("/subscriptions", controllers.PostSubscriptions)
@@ -52,5 +52,5 @@ func main() {
 		c.JSON(http.StatusNotFound, gin.H{"code": "NOT_FOUND", "message": "Not found"})
 	})
 
-	r.Run("localhost:8080")
+	r.Run("0.0.0.0:8080")
 }
