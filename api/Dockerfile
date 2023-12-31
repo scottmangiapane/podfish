@@ -2,18 +2,23 @@
 
 FROM golang:1.21
 
+ENV CGO_ENABLED=0 \
+    GOOS=linux
+
 WORKDIR /src
 
-RUN go install github.com/swaggo/swag/cmd/swag@latest
+RUN go install github.com/githubnemo/CompileDaemon@latest && \
+    go install github.com/swaggo/swag/cmd/swag@latest
 
 COPY go.mod go.sum ./
 RUN go mod download && \
     go mod verify
 
 COPY . .
-RUN swag init && \
-    CGO_ENABLED=0 GOOS=linux go build -o /podcast-api
 
 EXPOSE 8080
 
-CMD ["/podcast-api"]
+ENTRYPOINT CompileDaemon \
+    -build="swag init && go build -o /app" \
+    -command="/app" \
+    -exclude-dir="./docs"

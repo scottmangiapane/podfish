@@ -1,0 +1,41 @@
+version: '3.9'
+services:
+  api:
+    container_name: podcast_api
+    environment:
+      - POSTGRES_DB=podcast
+      - DATABASE_HOST=postgresdb
+      - DATABASE_PORT=5432
+      - POSTGRES_USER=podcast
+      - POSTGRES_PASSWORD=podcast
+    volumes:
+      - ./api:/src
+    tty: true
+    build: api
+    ports:
+      - 8080:8080
+    restart: on-failure
+    depends_on:
+      - postgres
+    networks:
+      - podcast
+
+  postgres:
+    image: postgres:latest
+    container_name: podcast_postgres
+    environment:
+      - POSTGRES_DB=podcast
+      - DATABASE_HOST=postgresdb
+      - POSTGRES_USER=podcast
+      - POSTGRES_PASSWORD=podcast
+    volumes:
+      - ./pg_data:/var/lib/postgresql/data
+    networks:
+      - podcast
+
+volumes:
+  pg_data:
+
+networks:
+  podcast:
+    driver: bridge

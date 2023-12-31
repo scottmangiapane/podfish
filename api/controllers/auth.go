@@ -17,17 +17,18 @@ func PostSignIn(c *gin.Context) {
 
 	var r request
 	if err := c.BindJSON(&r); err != nil {
-		// TODO when will this run?
+		c.JSON(http.StatusBadRequest, gin.H{"code": "BAD_REQUEST", "message": "Could not parse request"})
 		return
 	}
 
-	c.IndentedJSON(http.StatusBadRequest, gin.H{"code": "NOT_IMPLEMENTED", "message": "Not implemented"})
+	// TODO change this back
+	c.JSON(http.StatusBadRequest, gin.H{"code": "NOT_IMPLEMENTED", "message": "Not implemented"})
 }
 
 // @Tags auth
 // @Router /auth/sign-out [post]
 func PostSignOut(c *gin.Context) {
-	c.IndentedJSON(http.StatusBadRequest, gin.H{"code": "NOT_IMPLEMENTED", "message": "Not implemented"})
+	c.JSON(http.StatusBadRequest, gin.H{"code": "NOT_IMPLEMENTED", "message": "Not implemented"})
 }
 
 // @Tags auth
@@ -41,9 +42,9 @@ func PostSignUp(c *gin.Context) {
 
 	var r request
 	if err := c.BindJSON(&r); err != nil {
-		// TODO when will this run?
+		c.JSON(http.StatusBadRequest, gin.H{"code": "BAD_REQUEST", "message": "Could not parse request"})
 		return
 	}
 
-	c.IndentedJSON(http.StatusBadRequest, gin.H{"code": "NOT_IMPLEMENTED", "message": "Not implemented"})
+	c.JSON(http.StatusBadRequest, gin.H{"code": "NOT_IMPLEMENTED", "message": "Not implemented"})
 }
