@@ -21,7 +21,6 @@ func PostSignIn(c *gin.Context) {
 		return
 	}
 
-	// TODO change this back
 	c.JSON(http.StatusBadRequest, gin.H{"code": "NOT_IMPLEMENTED", "message": "Not implemented"})
 }
 

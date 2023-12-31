@@ -1,41 +1,32 @@
 version: '3.9'
 services:
   api:
-    container_name: podcast_api
+    container_name: podfish_api
     environment:
-      - POSTGRES_DB=podcast
+      - POSTGRES_DB=podfish
       - DATABASE_HOST=postgresdb
       - DATABASE_PORT=5432
-      - POSTGRES_USER=podcast
-      - POSTGRES_PASSWORD=podcast
+      - POSTGRES_USER=podfish
+      - POSTGRES_PASSWORD=podfish
     volumes:
-      - ./api:/src
-    tty: true
+      - ./api:/podfish-src
     build: api
     ports:
       - 8080:8080
     restart: on-failure
     depends_on:
       - postgres
-    networks:
-      - podcast
 
   postgres:
     image: postgres:latest
-    container_name: podcast_postgres
+    container_name: podfish_postgres
     environment:
-      - POSTGRES_DB=podcast
+      - POSTGRES_DB=podfish
       - DATABASE_HOST=postgresdb
-      - POSTGRES_USER=podcast
-      - POSTGRES_PASSWORD=podcast
+      - POSTGRES_USER=podfish
+      - POSTGRES_PASSWORD=podfish
     volumes:
       - ./pg_data:/var/lib/postgresql/data
-    networks:
-      - podcast
 
 volumes:
   pg_data:
-
-networks:
-  podcast:
-    driver: bridge

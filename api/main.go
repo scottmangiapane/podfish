@@ -2,8 +2,8 @@ package main
 
 import (
 	"net/http"
-	"podcast-app/controllers"
-	"podcast-app/docs"
+	"podfish/controllers"
+	"podfish/docs"
 
 	"github.com/gin-gonic/gin"
 	swaggerfiles "github.com/swaggo/files"
@@ -12,9 +12,9 @@ import (
 
 // @BasePath /api/v1
 // @contact.name       Scott Mangiapane
-// @contact.url        https://github.com/scottmangiapane/podcast-app/issues
+// @contact.url        https://github.com/scottmangiapane/podfish/issues
 // @license.name  GPL 3.0
-// @license.url   https://github.com/scottmangiapane/podcast-app/blob/master/LICENSE
+// @license.url   https://github.com/scottmangiapane/podfish/blob/master/LICENSE
 func main() {
 	gin.ForceConsoleColor()
 	gin.SetMode(gin.ReleaseMode)
@@ -46,7 +46,7 @@ func main() {
 	v1.PUT("/now-playing", controllers.PutNowPlaying)
 	v1.DELETE("/now-playing", controllers.DeleteNowPlaying)
 
-	docs.SwaggerInfo.Title = "Podcast API"
+	docs.SwaggerInfo.Title = "PodFish"
 	r.StaticFS("/docs", http.Dir("docs"))
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 

@@ -1,4 +1,4 @@
-module podcast-app
+module podfish
 
 go 1.21.5
 
