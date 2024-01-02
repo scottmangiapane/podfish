@@ -1,4 +1,5 @@
 version: '3.9'
+
 services:
   api:
     container_name: podfish_api
@@ -16,7 +17,6 @@ services:
     restart: on-failure
     depends_on:
       - postgres
-
   postgres:
     image: postgres:latest
     container_name: podfish_postgres
