@@ -2,31 +2,40 @@ version: '3.9'
 
 services:
   api:
+    build: api
     container_name: podfish_api
+    depends_on:
+      - postgres
     environment:
       - POSTGRES_DB=podfish
       - DATABASE_HOST=postgresdb
       - DATABASE_PORT=5432
       - POSTGRES_USER=podfish
       - POSTGRES_PASSWORD=podfish
-    volumes:
-      - ./api:/podfish-src
-    build: api
     ports:
       - 8080:8080
     restart: on-failure
-    depends_on:
-      - postgres
+    volumes:
+      - ./api:/podfish-src
   postgres:
-    image: postgres:latest
     container_name: podfish_postgres
     environment:
       - POSTGRES_DB=podfish
       - DATABASE_HOST=postgresdb
       - POSTGRES_USER=podfish
       - POSTGRES_PASSWORD=podfish
+    image: postgres:latest
     volumes:
       - ./pg_data:/var/lib/postgresql/data
+  ui:
+    build: ui
+    container_name: podfish_ui
+    ports:
+      - 3000:3000
+    restart: on-failure
+    volumes:
+      - ./ui:/podfish-src
+      - /podfish-src/node_modules
 
 volumes:
   pg_data:
