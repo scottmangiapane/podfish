@@ -1,9 +1,13 @@
 package controllers
 
 import (
+	"errors"
 	"net/http"
+	"podfish/database"
+	"podfish/models"
 
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
 // @Tags auth
@@ -45,5 +49,14 @@ func PostSignUp(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusBadRequest, gin.H{"code": "NOT_IMPLEMENTED", "message": "Not implemented"})
+	result := database.DB.Where(&models.User{Email: r.Email}).First(&models.User{})
+	if !errors.Is(result.Error, gorm.ErrRecordNotFound) {
+		c.JSON(http.StatusConflict, gin.H{"code": "ALREADY_EXISTS", "message": "Email is already in use"})
+		return
+	}
+
+	user := models.User{Email: r.Email}
+	user.SetPassword(r.Password)
+	database.DB.Create(&user)
+	c.JSON(http.StatusCreated, user)
 }

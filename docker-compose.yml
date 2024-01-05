@@ -8,7 +8,7 @@ services:
       - postgres
     environment:
       - POSTGRES_DB=podfish
-      - DATABASE_HOST=postgresdb
+      - DATABASE_HOST=podfish_postgres
       - DATABASE_PORT=5432
       - POSTGRES_USER=podfish
       - POSTGRES_PASSWORD=podfish
@@ -21,7 +21,7 @@ services:
     container_name: podfish_postgres
     environment:
       - POSTGRES_DB=podfish
-      - DATABASE_HOST=postgresdb
+      - DATABASE_HOST=podfish_postgres
       - POSTGRES_USER=podfish
       - POSTGRES_PASSWORD=podfish
     image: postgres:latest

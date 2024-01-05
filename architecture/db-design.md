@@ -1,6 +1,6 @@
 # Users
 
-- ID (primary key)
+- ID (primary key, uuid)
 - email
 - hashed password
 - created timestamp
@@ -8,12 +8,12 @@
 
 # Subscriptions
 
-- ID (primary key)
+- ID (primary key, uuid)
 - feed URL
 
 # Episodes
 
-- ID (primary key)
+- ID (primary key, uuid)
 - FK to subscription ID
 
 Note: additional data required to match with data from RSS feeds
