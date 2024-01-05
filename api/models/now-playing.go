@@ -1,6 +1,10 @@
 package models
 
+import "github.com/google/uuid"
+
 type NowPlaying struct {
-	UserID    uint `json:"user_id" gorm:"primaryKey"`
-	EpisodeID uint `json:"episode_id"`
+	UserID    uuid.UUID `json:"user_id" gorm:"primaryKey"`
+	User      User
+	EpisodeID uint `json:"episode_id" gorm:"primaryKey"`
+	Episode   Episode
 }
