@@ -25,7 +25,19 @@ func PostSignIn(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusBadRequest, gin.H{"code": "NOT_IMPLEMENTED", "message": "Not implemented"})
+	var user models.User
+	result := database.DB.Where(&models.User{Email: r.Email}).First(&user)
+	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+		c.JSON(http.StatusNotFound, gin.H{"code": "NOT_FOUND", "message": "No user found for that email"})
+		return
+	}
+
+	if user.CheckPassword(r.Password) != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"code": "UNAUTHORIZED", "message": "Password verification failed"})
+		return
+	}
+
+	c.JSON(http.StatusOK, user)
 }
 
 // @Tags auth
