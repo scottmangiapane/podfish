@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
 	"podfish/global"
@@ -8,15 +9,32 @@ import (
 	"podfish/models"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
+	"gorm.io/gorm"
 )
 
 // @Tags subscriptions
 // @Router /subscriptions [get]
 func GetSubscriptions(c *gin.Context) {
-	c.JSON(http.StatusBadRequest, gin.H{
-		"code":    "NOT_IMPLEMENTED",
-		"message": "Not implemented",
+	var subscriptions []models.Subscription
+	result := global.DB.Preload("Podcast").Find(&subscriptions, models.Subscription{
+		UserID: middleware.GetUser(c),
 	})
+	if result.Error != nil {
+		fmt.Println(result.Error)
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
+			"code":    "SERVER_ERROR",
+			"message": "Failed to get subscriptions",
+		})
+		return
+	}
+
+	var podcasts []models.Podcast
+	for _, s := range subscriptions {
+		podcasts = append(podcasts, s.Podcast)
+	}
+
+	c.JSON(http.StatusOK, podcasts)
 }
 
 // @Tags subscriptions
@@ -64,10 +82,37 @@ func PostSubscriptions(c *gin.Context) {
 // @Router /subscriptions/{id} [get]
 // @Param id path string true "Subscription ID"
 func GetSubscription(c *gin.Context) {
-	c.JSON(http.StatusBadRequest, gin.H{
-		"code":    "NOT_IMPLEMENTED",
-		"message": "Not implemented",
+	id, err := uuid.Parse(c.Param("id"))
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusUnprocessableEntity, gin.H{
+			"code":    "BAD_REQUEST",
+			"message": "Invalid subscription ID",
+		})
+		return
+	}
+
+	var subscription models.Subscription
+	result := global.DB.Preload("Podcast").First(&subscription, models.Subscription{
+		UserID:    middleware.GetUser(c),
+		PodcastID: id,
 	})
+	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+		c.JSON(http.StatusNotFound, gin.H{
+			"code":    "NOT_FOUND",
+			"message": "No subscription found with that ID",
+		})
+		return
+	}
+	if result.Error != nil {
+		fmt.Println(result.Error)
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
+			"code":    "SERVER_ERROR",
+			"message": "Failed to get subscription",
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, subscription.Podcast)
 }
 
 // @Tags subscriptions

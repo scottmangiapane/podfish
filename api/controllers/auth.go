@@ -34,7 +34,7 @@ func PostSignIn(c *gin.Context) {
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
 		c.JSON(http.StatusNotFound, gin.H{
 			"code":    "NOT_FOUND",
-			"message": "No user found for that email",
+			"message": "No user found with that email",
 		})
 		return
 	}
