@@ -1,6 +1,9 @@
 package models
 
 import (
+	"os"
+	"strconv"
+
 	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
@@ -13,11 +16,17 @@ type User struct {
 	Password string    `json:"-"`
 }
 
-func (user *User) SetPassword(password string) error {
-	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
+func (user *User) BeforeSave(tx *gorm.DB) (err error) {
+	cost, err := strconv.Atoi(os.Getenv("BCRYPT_COST"))
 	if err != nil {
 		return err
 	}
+
+	bytes, err := bcrypt.GenerateFromPassword([]byte(user.Password), cost)
+	if err != nil {
+		return err
+	}
+
 	user.Password = string(bytes)
 	return nil
 }

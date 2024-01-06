@@ -2,11 +2,13 @@ package controllers
 
 import (
 	"errors"
+	"fmt"
 	"net/http"
 	"podfish/global"
 	"podfish/models"
 
 	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt/v5"
 	"gorm.io/gorm"
 )
 
@@ -37,13 +39,24 @@ func PostSignIn(c *gin.Context) {
 		return
 	}
 
+	key := []byte("development key")
+	t := jwt.New(jwt.SigningMethodHS256)
+	s, err := t.SignedString(key)
+	if err != nil {
+		fmt.Println(err)
+		c.JSON(http.StatusInternalServerError, gin.H{"code": "SERVER_ERROR", "message": "Failed to create JWT"})
+		return
+	}
+
+	c.SetCookie("auth", s, 3600, "/", "localhost", false, true)
 	c.JSON(http.StatusOK, user)
 }
 
 // @Tags auth
 // @Router /auth/sign-out [post]
 func PostSignOut(c *gin.Context) {
-	c.JSON(http.StatusBadRequest, gin.H{"code": "NOT_IMPLEMENTED", "message": "Not implemented"})
+	c.SetCookie("auth", "", -1, "/", "localhost", false, true)
+	c.Writer.WriteHeader(http.StatusNoContent)
 }
 
 // @Tags auth
@@ -62,8 +75,12 @@ func PostSignUp(c *gin.Context) {
 		return
 	}
 
-	user := models.User{Email: r.Email}
-	user.SetPassword(r.Password)
-	global.DB.Create(&user)
+	user := models.User{Email: r.Email, Password: r.Password}
+	if result := global.DB.Create(&user); result.Error != nil {
+		fmt.Println(result.Error)
+		c.JSON(http.StatusInternalServerError, gin.H{"code": "SERVER_ERROR", "message": "Failed to create user"})
+		return
+	}
+
 	c.JSON(http.StatusCreated, user)
 }

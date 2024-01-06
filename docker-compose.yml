@@ -7,6 +7,7 @@ services:
     depends_on:
       - postgres
     environment:
+      - BCRYPT_COST=14
       - POSTGRES_DB=podfish
       - DATABASE_HOST=podfish_postgres
       - DATABASE_PORT=5432
