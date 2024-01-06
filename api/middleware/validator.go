@@ -7,6 +7,8 @@ import (
 )
 
 func AbortWithValidationError(c *gin.Context, err error) {
-	msg := gin.H{"error": "BAD_REQUEST", "message": "Request is invalid"}
-	c.AbortWithStatusJSON(http.StatusUnprocessableEntity, msg)
+	c.AbortWithStatusJSON(http.StatusUnprocessableEntity, gin.H{
+		"error":   "BAD_REQUEST",
+		"message": "Request is invalid",
+	})
 }

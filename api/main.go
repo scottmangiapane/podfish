@@ -31,24 +31,27 @@ func main() {
 	v1.POST("/auth/sign-out", controllers.PostSignOut)
 	v1.POST("/auth/sign-up", controllers.PostSignUp)
 
-	v1.POST("/reset-password", middleware.CheckAuth, controllers.PostResetPassword)
-	v1.POST("/reset-password/:token", middleware.CheckAuth, controllers.PostResetPasswordWithToken)
-	v1.PATCH("/users/:id/email", middleware.CheckAuth, controllers.PatchUserEmail)
-	v1.PATCH("/users/:id/password", middleware.CheckAuth, controllers.PatchUserPassword)
+	authorized := v1.Group("/")
+	authorized.Use(middleware.CheckAuth)
 
-	v1.GET("/subscriptions", middleware.CheckAuth, controllers.GetSubscriptions)
-	v1.POST("/subscriptions", middleware.CheckAuth, controllers.PostSubscriptions)
-	v1.GET("/subscriptions/:id", middleware.CheckAuth, controllers.GetSubscription)
-	v1.DELETE("/subscriptions/:id", middleware.CheckAuth, controllers.DeleteSubscription)
+	authorized.POST("/reset-password", controllers.PostResetPassword)
+	authorized.POST("/reset-password/:token", controllers.PostResetPasswordWithToken)
+	authorized.PATCH("/users/:id/email", controllers.PatchUserEmail)
+	authorized.PATCH("/users/:id/password", controllers.PatchUserPassword)
 
-	v1.GET("/episodes", middleware.CheckAuth, controllers.GetEpisodes)
-	v1.GET("/episodes/:id", middleware.CheckAuth, controllers.GetEpisode)
-	v1.PATCH("/episodes/:id/completed", middleware.CheckAuth, controllers.PatchEpisodeCompleted)
-	v1.PATCH("/episodes/:id/playback-position", middleware.CheckAuth, controllers.PatchEpisodePlaybackPosition)
+	authorized.GET("/subscriptions", controllers.GetSubscriptions)
+	authorized.POST("/subscriptions", controllers.PostSubscriptions)
+	authorized.GET("/subscriptions/:id", controllers.GetSubscription)
+	authorized.DELETE("/subscriptions/:id", controllers.DeleteSubscription)
 
-	v1.GET("/now-playing", middleware.CheckAuth, controllers.GetNowPlaying)
-	v1.PUT("/now-playing", middleware.CheckAuth, controllers.PutNowPlaying)
-	v1.DELETE("/now-playing", middleware.CheckAuth, controllers.DeleteNowPlaying)
+	authorized.GET("/episodes", controllers.GetEpisodes)
+	authorized.GET("/episodes/:id", controllers.GetEpisode)
+	authorized.PATCH("/episodes/:id/completed", controllers.PatchEpisodeCompleted)
+	authorized.PATCH("/episodes/:id/playback-position", controllers.PatchEpisodePlaybackPosition)
+
+	authorized.GET("/now-playing", controllers.GetNowPlaying)
+	authorized.PUT("/now-playing", controllers.PutNowPlaying)
+	authorized.DELETE("/now-playing", controllers.DeleteNowPlaying)
 
 	docs.SwaggerInfo.Title = "PodFish"
 	r.StaticFS("/docs", http.Dir("docs"))

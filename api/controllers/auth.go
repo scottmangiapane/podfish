@@ -32,12 +32,18 @@ func PostSignIn(c *gin.Context) {
 	var user models.User
 	result := global.DB.Where(&models.User{Email: r.Email}).First(&user)
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-		c.JSON(http.StatusNotFound, gin.H{"code": "NOT_FOUND", "message": "No user found for that email"})
+		c.JSON(http.StatusNotFound, gin.H{
+			"code":    "NOT_FOUND",
+			"message": "No user found for that email",
+		})
 		return
 	}
 
 	if user.CheckPassword(r.Password) != nil {
-		c.JSON(http.StatusUnauthorized, gin.H{"code": "UNAUTHORIZED", "message": "Password verification failed"})
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"code":    "UNAUTHORIZED",
+			"message": "Password verification failed",
+		})
 		return
 	}
 
@@ -49,7 +55,10 @@ func PostSignIn(c *gin.Context) {
 	s, err := t.SignedString(key)
 	if err != nil {
 		fmt.Println(err)
-		c.JSON(http.StatusInternalServerError, gin.H{"code": "SERVER_ERROR", "message": "Failed to create JWT"})
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    "SERVER_ERROR",
+			"message": "Failed to create JWT",
+		})
 		return
 	}
 
@@ -76,14 +85,20 @@ func PostSignUp(c *gin.Context) {
 
 	result := global.DB.Where(&models.User{Email: r.Email}).First(&models.User{})
 	if !errors.Is(result.Error, gorm.ErrRecordNotFound) {
-		c.JSON(http.StatusConflict, gin.H{"code": "ALREADY_EXISTS", "message": "Email is already in use"})
+		c.JSON(http.StatusConflict, gin.H{
+			"code":    "ALREADY_EXISTS",
+			"message": "Email is already in use",
+		})
 		return
 	}
 
 	user := models.User{Email: r.Email, Password: r.Password}
 	if result := global.DB.Create(&user); result.Error != nil {
 		fmt.Println(result.Error)
-		c.JSON(http.StatusInternalServerError, gin.H{"code": "SERVER_ERROR", "message": "Failed to create user"})
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    "SERVER_ERROR",
+			"message": "Failed to create user",
+		})
 		return
 	}
 

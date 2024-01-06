@@ -12,7 +12,10 @@ import (
 func CheckAuth(c *gin.Context) {
 	cookie, err := c.Cookie("auth")
 	if err != nil || cookie == "" {
-		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"code": "UNAUTHORIZED", "message": "Auth token is missing"})
+		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
+			"code":    "UNAUTHORIZED",
+			"message": "Auth token is missing",
+		})
 		return
 	}
 
@@ -20,17 +23,26 @@ func CheckAuth(c *gin.Context) {
 	token, err := jwt.Parse(cookie, getKey)
 	if err != nil || !token.Valid {
 		fmt.Println(err)
-		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"code": "UNAUTHORIZED", "message": "Failed to parse auth token"})
+		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
+			"code":    "UNAUTHORIZED",
+			"message": "Failed to parse auth token",
+		})
 	}
 
 	issuedAt, err := token.Claims.GetIssuedAt()
 	if err != nil || issuedAt.Add(time.Hour).Before(time.Now()) {
-		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"code": "UNAUTHORIZED", "message": "Auth token is expired"})
+		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
+			"code":    "UNAUTHORIZED",
+			"message": "Auth token is expired",
+		})
 	}
 
 	userId, err := token.Claims.GetSubject()
 	if err != nil {
-		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"code": "UNAUTHORIZED", "message": "Failed to set active user"})
+		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
+			"code":    "UNAUTHORIZED",
+			"message": "Failed to set active user",
+		})
 	}
 	c.Set("user", userId)
 }
