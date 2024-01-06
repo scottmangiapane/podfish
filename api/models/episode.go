@@ -7,7 +7,7 @@ import (
 
 type Episode struct {
 	gorm.Model
-	ID             uuid.UUID `gorm:"type:uuid;default:gen_random_uuid()"`
-	SubscriptionID uint      `json:"subscription_id"`
-	Subscription   Subscription
+	ID        uuid.UUID `gorm:"type:uuid;default:gen_random_uuid()"`
+	PodcastID uuid.UUID `json:"podcast_id"`
+	Podcast   Podcast
 }

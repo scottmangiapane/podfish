@@ -2,11 +2,11 @@ package models
 
 import (
 	"github.com/google/uuid"
-	"gorm.io/gorm"
 )
 
 type Subscription struct {
-	gorm.Model
-	ID  uuid.UUID `gorm:"type:uuid;default:gen_random_uuid()"`
-	RSS string    `json:"rss"`
+	UserID    uuid.UUID `json:"user_id" gorm:"primaryKey"`
+	User      User
+	PodcastID uuid.UUID `json:"podcast_id" gorm:"primaryKey"`
+	Podcast   Podcast
 }

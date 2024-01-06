@@ -3,20 +3,25 @@
 - ID (primary key, uuid)
 - email
 - hashed password
-- created timestamp
-- destroyed timestamp
 
-# Subscriptions
+# Podcasts
 
 - ID (primary key, uuid)
-- feed URL
+- RSS feed URL
+
+Note: additional data (title, description, etc) may be cached here for performance
 
 # Episodes
 
 - ID (primary key, uuid)
-- FK to subscription ID
+- FK to podcast ID
 
 Note: additional data required to match with data from RSS feeds
+
+# Subscriptions
+
+- FK to user ID (composite key component)
+- FK to podcast ID (composite key component)
 
 # Playback positions
 

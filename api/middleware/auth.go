@@ -7,9 +7,10 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/google/uuid"
 )
 
-func CheckAuth(c *gin.Context) {
+func RequireAuth(c *gin.Context) {
 	cookie, err := c.Cookie("auth")
 	if err != nil || cookie == "" {
 		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
@@ -37,12 +38,28 @@ func CheckAuth(c *gin.Context) {
 		})
 	}
 
-	userId, err := token.Claims.GetSubject()
+	userIdString, err := token.Claims.GetSubject()
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
 			"code":    "UNAUTHORIZED",
 			"message": "Failed to set active user",
 		})
 	}
+
+	userId, err := uuid.Parse(userIdString)
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
+			"code":    "UNAUTHORIZED",
+			"message": "Invalid user ID in auth token",
+		})
+	}
+
 	c.Set("user", userId)
+}
+
+func GetUser(c *gin.Context) (u uuid.UUID) {
+	if val, ok := c.Get("user"); ok && val != nil {
+		u, _ = val.(uuid.UUID)
+	}
+	return
 }

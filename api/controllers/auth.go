@@ -30,11 +30,19 @@ func PostSignIn(c *gin.Context) {
 	}
 
 	var user models.User
-	result := global.DB.Where(&models.User{Email: r.Email}).First(&user)
+	result := global.DB.First(&user, &models.User{Email: r.Email})
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
 		c.JSON(http.StatusNotFound, gin.H{
 			"code":    "NOT_FOUND",
 			"message": "No user found for that email",
+		})
+		return
+	}
+	if result.Error != nil {
+		fmt.Println(result.Error)
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
+			"code":    "SERVER_ERROR",
+			"message": "Failed to get user",
 		})
 		return
 	}

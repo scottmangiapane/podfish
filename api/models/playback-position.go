@@ -2,12 +2,14 @@ package models
 
 import (
 	"time"
+
+	"github.com/google/uuid"
 )
 
 type PlaybackPosition struct {
-	UserID       uint `json:"user_id" gorm:"primaryKey"`
+	UserID       uuid.UUID `json:"user_id" gorm:"primaryKey"`
 	User         User
-	EpisodeID    uint `json:"episode_id" gorm:"primaryKey"`
+	EpisodeID    uuid.UUID `json:"episode_id" gorm:"primaryKey"`
 	Episode      Episode
 	Completed    bool      `json:"completed"`
 	Timestamp    time.Time `json:"timestamp"`

@@ -1,6 +1,7 @@
 version: '3.9'
 
 services:
+
   api:
     build: api
     container_name: podfish_api
@@ -18,6 +19,7 @@ services:
     restart: on-failure
     volumes:
       - ./api:/podfish-src
+
   postgres:
     container_name: podfish_postgres
     environment:
@@ -25,9 +27,15 @@ services:
       - DATABASE_HOST=podfish_postgres
       - POSTGRES_USER=podfish
       - POSTGRES_PASSWORD=podfish
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U podfish"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     image: postgres:latest
     volumes:
       - ./pg_data:/var/lib/postgresql/data
+
   ui:
     build: ui
     container_name: podfish_ui

@@ -22,6 +22,8 @@ Note: password resets are separate since the user ID isn't known before sign-in.
 - GET /subscriptions/{id}
 - DELETE /subscriptions/{id}
 
+Note: ability to request metadata refresh may be needed if backend service is slow
+
 # Episodes
 
 - GET /episodes

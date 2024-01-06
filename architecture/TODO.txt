@@ -1,3 +1,4 @@
+- Simpler error handling for gin and gorm
 - Refresh JWT token as needed
 - Secure JWT token generation/verification key (also: env file?)
 - SameSite cookie attribute (example: `c.SetSameSite(http.SameSiteLaxMode)`)
