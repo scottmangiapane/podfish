@@ -3,8 +3,8 @@ package main
 import (
 	"net/http"
 	"podfish/controllers"
-	"podfish/database"
 	"podfish/docs"
+	"podfish/global"
 
 	"github.com/gin-gonic/gin"
 	swaggerfiles "github.com/swaggo/files"
@@ -17,7 +17,7 @@ import (
 // @license.name  GPL 3.0
 // @license.url   https://github.com/scottmangiapane/podfish/blob/master/LICENSE
 func main() {
-	database.Connect()
+	global.InitDatabase()
 
 	gin.ForceConsoleColor()
 	gin.SetMode(gin.ReleaseMode)

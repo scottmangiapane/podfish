@@ -3,30 +3,30 @@ package controllers
 import (
 	"errors"
 	"net/http"
-	"podfish/database"
+	"podfish/global"
 	"podfish/models"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
 
+type creds struct {
+	Email    string `json:"email" binding:"email,required"`
+	Password string `json:"password" binding:"max=64,min=8,required"`
+}
+
 // @Tags auth
 // @Router /auth/sign-in [post]
-// @Param request body controllers.PostSignIn.request true "Request body"
+// @Param request body controllers.creds true "Request body"
 func PostSignIn(c *gin.Context) {
-	type request struct {
-		Email    string `json:"email"`
-		Password string `json:"password"`
-	}
-
-	var r request
-	if err := c.BindJSON(&r); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"code": "BAD_REQUEST", "message": "Could not parse request"})
+	var r creds
+	if err := c.ShouldBindJSON(&r); err != nil {
+		global.AbortWithValidationError(c, err)
 		return
 	}
 
 	var user models.User
-	result := database.DB.Where(&models.User{Email: r.Email}).First(&user)
+	result := global.DB.Where(&models.User{Email: r.Email}).First(&user)
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
 		c.JSON(http.StatusNotFound, gin.H{"code": "NOT_FOUND", "message": "No user found for that email"})
 		return
@@ -48,20 +48,15 @@ func PostSignOut(c *gin.Context) {
 
 // @Tags auth
 // @Router /auth/sign-up [post]
-// @Param request body controllers.PostSignUp.request true "Request body"
+// @Param request body controllers.creds true "Request body"
 func PostSignUp(c *gin.Context) {
-	type request struct {
-		Email    string `json:"email"`
-		Password string `json:"password"`
-	}
-
-	var r request
-	if err := c.BindJSON(&r); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"code": "BAD_REQUEST", "message": "Could not parse request"})
+	var r creds
+	if err := c.ShouldBindJSON(&r); err != nil {
+		global.AbortWithValidationError(c, err)
 		return
 	}
 
-	result := database.DB.Where(&models.User{Email: r.Email}).First(&models.User{})
+	result := global.DB.Where(&models.User{Email: r.Email}).First(&models.User{})
 	if !errors.Is(result.Error, gorm.ErrRecordNotFound) {
 		c.JSON(http.StatusConflict, gin.H{"code": "ALREADY_EXISTS", "message": "Email is already in use"})
 		return
@@ -69,6 +64,6 @@ func PostSignUp(c *gin.Context) {
 
 	user := models.User{Email: r.Email}
 	user.SetPassword(r.Password)
-	database.DB.Create(&user)
+	global.DB.Create(&user)
 	c.JSON(http.StatusCreated, user)
 }

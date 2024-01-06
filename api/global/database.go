@@ -1,4 +1,4 @@
-package database
+package global
 
 import (
 	"fmt"
@@ -13,7 +13,7 @@ var (
 	DB *gorm.DB
 )
 
-func Connect() {
+func InitDatabase() {
 	dsn := fmt.Sprintf("dbname=%s host=%s port=%s user=%s password=%s sslmode=disable TimeZone=UTC",
 		os.Getenv("POSTGRES_DB"),
 		os.Getenv("DATABASE_HOST"),
