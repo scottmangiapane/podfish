@@ -5,7 +5,9 @@ import (
 	"fmt"
 	"net/http"
 	"podfish/global"
+	"podfish/middleware"
 	"podfish/models"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
@@ -23,7 +25,7 @@ type creds struct {
 func PostSignIn(c *gin.Context) {
 	var r creds
 	if err := c.ShouldBindJSON(&r); err != nil {
-		global.AbortWithValidationError(c, err)
+		middleware.AbortWithValidationError(c, err)
 		return
 	}
 
@@ -40,7 +42,10 @@ func PostSignIn(c *gin.Context) {
 	}
 
 	key := []byte("development key")
-	t := jwt.New(jwt.SigningMethodHS256)
+	t := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"iat": time.Now().UTC().Unix(),
+		"sub": user.ID,
+	})
 	s, err := t.SignedString(key)
 	if err != nil {
 		fmt.Println(err)
@@ -65,7 +70,7 @@ func PostSignOut(c *gin.Context) {
 func PostSignUp(c *gin.Context) {
 	var r creds
 	if err := c.ShouldBindJSON(&r); err != nil {
-		global.AbortWithValidationError(c, err)
+		middleware.AbortWithValidationError(c, err)
 		return
 	}
 
