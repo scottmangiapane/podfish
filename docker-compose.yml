@@ -7,13 +7,8 @@ services:
     container_name: podfish_api
     depends_on:
       - postgres
-    environment:
-      - BCRYPT_COST=14
-      - POSTGRES_DB=podfish
-      - DATABASE_HOST=podfish_postgres
-      - DATABASE_PORT=5432
-      - POSTGRES_USER=podfish
-      - POSTGRES_PASSWORD=podfish
+    env_file:
+      - ./app.env
     ports:
       - 8080:8080
     restart: on-failure
@@ -22,11 +17,8 @@ services:
 
   postgres:
     container_name: podfish_postgres
-    environment:
-      - POSTGRES_DB=podfish
-      - DATABASE_HOST=podfish_postgres
-      - POSTGRES_USER=podfish
-      - POSTGRES_PASSWORD=podfish
+    env_file:
+      - ./app.env
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U podfish"]
       interval: 10s

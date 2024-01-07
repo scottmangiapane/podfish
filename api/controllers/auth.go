@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"os"
 	"podfish/global"
 	"podfish/middleware"
 	"podfish/models"
@@ -55,7 +56,7 @@ func PostSignIn(c *gin.Context) {
 		return
 	}
 
-	key := []byte("development key")
+	key := []byte(os.Getenv("JWT_HMAC_KEY"))
 	t := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"iat": time.Now().UTC().Unix(),
 		"sub": user.ID,

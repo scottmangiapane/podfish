@@ -3,6 +3,7 @@ package middleware
 import (
 	"fmt"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -20,7 +21,9 @@ func RequireAuth(c *gin.Context) {
 		return
 	}
 
-	getKey := func(token *jwt.Token) (interface{}, error) { return []byte("development key"), nil }
+	getKey := func(token *jwt.Token) (interface{}, error) {
+		return []byte(os.Getenv("JWT_HMAC_KEY")), nil
+	}
 	token, err := jwt.Parse(cookie, getKey)
 	if err != nil || !token.Valid {
 		fmt.Println(err)

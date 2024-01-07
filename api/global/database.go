@@ -14,10 +14,9 @@ var (
 )
 
 func InitDatabase() {
-	dsn := fmt.Sprintf("dbname=%s host=%s port=%s user=%s password=%s sslmode=disable TimeZone=UTC",
+	dsn := fmt.Sprintf("dbname=%s host=%s user=%s password=%s port=5432 sslmode=disable TimeZone=UTC",
 		os.Getenv("POSTGRES_DB"),
 		os.Getenv("DATABASE_HOST"),
-		os.Getenv("DATABASE_PORT"),
 		os.Getenv("POSTGRES_USER"),
 		os.Getenv("POSTGRES_PASSWORD"))
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
@@ -27,5 +26,11 @@ func InitDatabase() {
 
 	DB = db
 
-	DB.AutoMigrate(&models.Episode{}, &models.NowPlaying{}, &models.PlaybackPosition{}, &models.Subscription{}, &models.User{})
+	DB.AutoMigrate(
+		&models.Episode{},
+		&models.NowPlaying{},
+		&models.PlaybackPosition{},
+		&models.Subscription{},
+		&models.User{},
+	)
 }

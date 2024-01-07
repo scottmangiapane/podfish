@@ -12,11 +12,11 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
-// @BasePath /api/v1
-// @contact.name       Scott Mangiapane
-// @contact.url        https://github.com/scottmangiapane/podfish/issues
-// @license.name  GPL 3.0
-// @license.url   https://github.com/scottmangiapane/podfish/blob/master/LICENSE
+// @BasePath        /api/v1
+// @contact.name    Scott Mangiapane
+// @contact.url     https://github.com/scottmangiapane/podfish/issues
+// @license.name    GPL 3.0
+// @license.url     https://github.com/scottmangiapane/podfish/blob/master/LICENSE
 func main() {
 	global.InitDatabase()
 
