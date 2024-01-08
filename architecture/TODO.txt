@@ -1,3 +1,5 @@
+API
+
 - Simpler error handling for gin and gorm
 - Refresh JWT token as needed
 - Secure JWT token generation/verification key (also: env file?)
@@ -5,3 +7,7 @@
 - Support production builds in dockerfiles. Use build scripts? Don't want live reloading in prod.
 - Use actual migration files instead of GORM's auto-migrate.
 - HTTP security headers
+
+UI
+
+- Serve fonts
