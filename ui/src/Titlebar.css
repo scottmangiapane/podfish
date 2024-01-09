@@ -1,21 +1,14 @@
 .titlebar {
-    border-bottom: 1px solid rgba(0, 0, 0, 0.8);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    width: 100%;
+}
+
+.titlebar-content {
+    align-items: center;
     display: flex;
-    height: calc(38px - 16px);
+    height: calc(64px);
     justify-content: space-between;
-    padding: 8px 16px;
+    padding: 0 16px;
 }
 
-.titlebar-item > * {
-    position: absolute;
-    transform: translateX(-50%);
-    white-space: nowrap;
-}
-
-.titlebar-item-left > * {
-    transform: translateX(0);
-}
-
-.titlebar-item-right > * {
-    transform: translateX(-100%);
-}
+.titlebar-item > * { white-space: nowrap; }

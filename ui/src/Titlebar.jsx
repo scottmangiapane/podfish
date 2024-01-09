@@ -1,19 +1,17 @@
-import { Link } from 'react-router-dom';
-import './Titlebar.css';
+import { Link } from "react-router-dom";
+
+import "./Titlebar.css";
 
 function Titlebar() {
   return (
-    <p className='titlebar'>
-      <span className='titlebar-item titlebar-item-left'>
-        <Link to={`/`}>Home</Link>
-      </span>
-      <span className='titlebar-item'>
-        <span>Podfish</span>
-      </span>
-      <span className='titlebar-item titlebar-item-right'>
-      <Link to={`/sign-in`}>Sign In</Link>
-      </span>
-    </p>
+    <div className="titlebar">
+      <div className="app-content titlebar-content">
+        <Link className="titlebar-item" to={`/`}>Podfish</Link>
+        <Link className="titlebar-item" to={`/sign-in`}>
+          <button className="btn btn-pill">Sign In</button>
+        </Link>
+      </div>
+    </div>
   )
 }
 

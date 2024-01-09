@@ -1,19 +1,19 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
+import React from "react";
+import ReactDOM from "react-dom/client";
 import {
   createBrowserRouter,
   RouterProvider,
-} from 'react-router-dom';
+} from "react-router-dom";
 
-import Home from './routes/home.jsx';
-import Root from './routes/root.jsx';
-import SignIn from './routes/sign-in.jsx';
+import Home from "./routes/Home.jsx";
+import Root from "./routes/Root.jsx";
+import SignIn from "./routes/SignIn.jsx";
 
-import './index.css';
+import "./index.css";
 
 const router = createBrowserRouter([
   {
-    path: '/',
+    path: "/",
     element: <Root />,
     children: [
       {
@@ -28,8 +28,10 @@ const router = createBrowserRouter([
   },
 ]);
 
-ReactDOM.createRoot(document.getElementById('root')).render(
+ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <div className="app">
+      <RouterProvider router={router} />
+    </div>
   </React.StrictMode>,
 );

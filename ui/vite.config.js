@@ -7,5 +7,12 @@ export default defineConfig({
   server: {
     host: '0.0.0.0',
     port: 3000,
+    proxy: {
+      '/api': {
+        changeOrigin: true,
+        secure: false,
+        target: import.meta.env.UI_PROXY,
+      }
+    },
   }
 });

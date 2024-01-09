@@ -11,3 +11,4 @@ API
 UI
 
 - Serve fonts
+- Ensure adding/removing node dependencies is reflected in docker container
