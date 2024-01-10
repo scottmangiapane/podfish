@@ -53,7 +53,7 @@ func main() {
 	authorized.PATCH("/users/:id/email", controllers.PatchUserEmail)
 	authorized.PATCH("/users/:id/password", controllers.PatchUserPassword)
 
-	docs.SwaggerInfo.Title = "PodFish"
+	docs.SwaggerInfo.Title = "Podfish"
 	r.StaticFS("/docs", http.Dir("docs"))
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 

@@ -8,6 +8,7 @@ import {
 import Home from "./routes/Home.jsx";
 import Root from "./routes/Root.jsx";
 import SignIn from "./routes/SignIn.jsx";
+import SignUp from "./routes/SignUp.jsx";
 
 import "./index.css";
 
@@ -23,6 +24,10 @@ const router = createBrowserRouter([
       {
         path: "sign-in",
         element: <SignIn />,
+      },
+      {
+        path: "sign-up",
+        element: <SignUp />,
       },
     ]
   },

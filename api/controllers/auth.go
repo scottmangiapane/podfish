@@ -72,6 +72,7 @@ func PostSignIn(c *gin.Context) {
 	}
 
 	c.SetCookie("auth", s, 3600, "/", "localhost", false, true)
+	c.SetCookie("user", user.ID.String(), 3600, "/", "localhost", false, false)
 	c.JSON(http.StatusOK, user)
 }
 

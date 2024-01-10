@@ -1,0 +1,23 @@
+.subscription-grid {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.subscription-grid > * { min-width: 0; }
+
+@media only screen and (min-width: 576px) {
+    .subscription-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media only screen and (min-width: 768px) {
+    .subscription-grid { grid-template-columns: repeat(4, 1fr); }
+}
+
+@media only screen and (min-width: 992px) {
+    .subscription-grid { grid-template-columns: repeat(5, 1fr); }
+}
+
+@media only screen and (min-width: 1200px) {
+    .subscription-grid { grid-template-columns: repeat(6, 1fr); }
+}

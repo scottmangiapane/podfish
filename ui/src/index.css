@@ -62,12 +62,15 @@ input[type=email], input[type=password] {
     width: 100%;
 }
 
-.app-content { margin: 0 auto; }
+.app-content {
+    margin: 0 auto;
+    padding: 0 16px;
+}
 
 .app-body {
     height: calc(100% - 64px - 1px);
     overflow: auto;
-    padding: 16px;
+    padding: 16px 0;
 }
 
 .btn {
@@ -115,16 +118,24 @@ input[type=email], input[type=password] {
     padding: 1.5em;
 }
 
+.mr-3 { margin-right: 16px; }
+
+.mt-3 { margin-top: 16px; }
+
 /* Media */
 
-@media only screen and (min-width: 48em) {
-    .app-content { max-width: 40em; }
+@media only screen and (min-width: 768px) {
+    .app-content { max-width: 576px; }
 }
 
-@media only screen and (min-width: 64em) {
-    .app-content { max-width: 48em; }
+@media only screen and (min-width: 992px) {
+    .app-content { max-width: 768px; }
 }
 
-@media only screen and (min-width: 80em) {
-    .app-content { max-width: 64em; }
+@media only screen and (min-width: 1200px) {
+    .app-content { max-width: 992px; }
+}
+
+@media only screen and (min-width: 1400px) {
+    .app-content { max-width: 1200px; }
 }

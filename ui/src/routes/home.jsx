@@ -1,20 +1,34 @@
-import reactLogo from "../assets/react.svg";
-import viteLogo from "/vite.svg";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+import { getSubscriptions } from "../api-service";
+import Subscription from "../Subscription";
+
+import "./Home.css";
 
 function Home() {
-    return (
-        <div className="center">
-            <h3>Home Page</h3>
-            <div>
-                <a href="https://vitejs.dev" target="_blank">
-                <img src={viteLogo} className="logo" alt="Vite logo" />
-                </a>
-                <a href="https://react.dev" target="_blank">
-                <img src={reactLogo} className="logo" alt="React logo" />
-                </a>
-            </div>
-        </div>
-    );
+  const navigate = useNavigate();
+  const [subscriptions, setSubscriptions] = useState([]);
+
+  useEffect(() => {
+    getSubscriptions(navigate).then((data) => {
+      setSubscriptions(data);
+    });
+  }, []);
+
+  const content = [];
+  for (const subscription of subscriptions) {
+    content.push(<Subscription key={ subscription.id } rss={ subscription.rss }></Subscription>);
+  }
+
+  return (
+    <>
+      <div className="subscription-grid">
+        { content }
+      </div>
+      <button className="btn btn-pill mt-3">Add RSS Link</button>
+    </>
+  );
 }
 
 export default Home;

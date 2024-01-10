@@ -3,11 +3,13 @@ import { useEffect, useRef, useState } from "react";
 import "./SignIn.css";
 
 function SignIn() {
-  const emailRef = useRef(null);
-  const passwordRef = useRef(null);
-
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  const confirmPasswordRef = useRef(null);
+  const emailRef = useRef(null);
+  const passwordRef = useRef(null);
 
   useEffect(() => {
     emailRef.current.focus();
@@ -16,7 +18,7 @@ function SignIn() {
   async function submit(event) {
     event.preventDefault();
 
-    await fetch('/api/v1/auth/sign-in', {
+    await fetch('/api/v1/auth/sign-up', {
       method: 'POST',
       body: JSON.stringify({ email, password })
     })
@@ -43,11 +45,16 @@ function SignIn() {
           type="password"
           value={ password }
         />
-        <label className="checkbox-label">
-          <input type="checkbox" v-model="rememberEmail" />
-          Remember me
-        </label>
-        <button className="btn btn-pill" type="submit">Sign In</button>
+        <input
+          ref={ confirmPasswordRef }
+          autoComplete="on"
+          onChange={(e) => setConfirmPassword(e.target.value)}
+          placeholder="Confirm Password"
+          required="required"
+          type="password"
+          value={ confirmPassword }
+        />
+        <button className="btn btn-pill" type="submit">Sign Up</button>
       </form>
     </div>
   );

@@ -8,7 +8,6 @@
     display: flex;
     height: calc(64px);
     justify-content: space-between;
-    padding: 0 16px;
 }
 
 .titlebar-item > * { white-space: nowrap; }

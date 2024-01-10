@@ -4,16 +4,14 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
 
 type User struct {
-	gorm.Model
-	ID       uuid.UUID `gorm:"type:uuid;default:gen_random_uuid()"`
-	Email    string    `json:"email" gorm:"unique"`
-	Password string    `json:"-"`
+	Base
+	Email    string `json:"email" gorm:"unique"`
+	Password string `json:"-"`
 }
 
 func (user *User) BeforeSave(tx *gorm.DB) (err error) {
