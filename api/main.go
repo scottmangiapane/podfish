@@ -54,8 +54,10 @@ func main() {
 	authorized.PATCH("/users/:id/password", controllers.PatchUserPassword)
 
 	docs.SwaggerInfo.Title = "Podfish"
-	r.StaticFS("/docs", http.Dir("docs"))
+	r.StaticFS("/docs", gin.Dir("docs", false))
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
+
+	r.StaticFS("/file", gin.Dir("rss_data", false))
 
 	r.NoRoute(func(c *gin.Context) {
 		c.JSON(http.StatusNotFound, gin.H{"code": "NOT_FOUND", "message": "Not found"})

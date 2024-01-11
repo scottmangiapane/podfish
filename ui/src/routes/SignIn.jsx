@@ -1,8 +1,11 @@
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import "./SignIn.css";
 
 function SignIn() {
+  const navigate = useNavigate();
+
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
 
@@ -16,14 +19,19 @@ function SignIn() {
   async function submit(event) {
     event.preventDefault();
 
-    await fetch('/api/v1/auth/sign-in', {
+    const res = await fetch('/api/v1/auth/sign-in', {
       method: 'POST',
       body: JSON.stringify({ email, password })
-    })
+    });
+
+    if (res.ok) {
+      navigate('/');
+    }
   }
 
   return (
     <div className="center">
+      <h1>Sign In to Podfish</h1>
       <form onSubmit={ submit }>
         <input
           ref={ emailRef }

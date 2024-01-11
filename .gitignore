@@ -2,3 +2,10 @@
 **/.idea
 **/.vscode/
 pg_data/
+rss_data/
+
+api/docs/
+api/podfish
+
+ui/dist/
+ui/node_modules/

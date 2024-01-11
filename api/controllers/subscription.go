@@ -75,6 +75,7 @@ func PostSubscriptions(c *gin.Context) {
 		return
 	}
 
+	global.Sync(podcast)
 	c.JSON(http.StatusCreated, podcast)
 }
 

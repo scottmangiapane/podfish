@@ -6,8 +6,14 @@ async function callApi(navigate, resource, options={}) {
   return await res.json();
 }
 
+export function getSubscription(navigate, id) {
+  return callApi(navigate, `/api/v1/subscriptions/${ id }`, {
+    method: 'GET'
+  });
+}
+
 export function getSubscriptions(navigate) {
-  return callApi(navigate, '/api/v1/subscriptions', {
+  return callApi(navigate, `/api/v1/subscriptions`, {
     method: 'GET'
   });
 }

@@ -80,6 +80,7 @@ func PostSignIn(c *gin.Context) {
 // @Router /auth/sign-out [post]
 func PostSignOut(c *gin.Context) {
 	c.SetCookie("auth", "", -1, "/", "localhost", false, true)
+	c.SetCookie("user", "", -1, "/", "localhost", false, false)
 	c.Writer.WriteHeader(http.StatusNoContent)
 }
 

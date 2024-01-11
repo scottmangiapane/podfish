@@ -11,7 +11,7 @@ export default defineConfig(({ mode }) => {
       host: '0.0.0.0',
       port: 3000,
       proxy: {
-        '/api': {
+        '^\/(api|file)\/.*': {
           changeOrigin: true,
           secure: false,
           target: env.UI_PROXY_PASS,

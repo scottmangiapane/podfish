@@ -1,14 +1,19 @@
 API
 
-- Simpler error handling for gin and gorm
+- Better handling (simplify for gin and gorm, maybe use logging library)
 - Refresh JWT token as needed
 - Secure JWT token generation/verification key (also: env file?)
 - SameSite cookie attribute (example: `c.SetSameSite(http.SameSiteLaxMode)`)
 - Support production builds in dockerfiles. Use build scripts? Don't want live reloading in prod.
 - Use actual migration files instead of GORM's auto-migrate.
 - HTTP security headers
+- What to do if RSS feed is removed by podcast host (keep metadata in case it's temporary outage, but hide from user feeds?)
+- Sanitize images
+- "http.Dir" says it follows symlinks... Can malicious RSS feed with symlink for image read arbitrary files?
 
 UI
 
 - Serve fonts
-- Ensure adding/removing node dependencies is reflected in docker container
+- Ensure adding/removing node dependencies is reflected in docker container (is .dockerignore to blame?).
+    - Not possible? without giving up live reloading. data volume is immutable after initial build
+    - Explain in README

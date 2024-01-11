@@ -1,0 +1,8 @@
+.podcast-content {
+    display: flex;
+}
+
+.podcast-metadata > img {
+    height: 128px;
+    width: 128px;
+}

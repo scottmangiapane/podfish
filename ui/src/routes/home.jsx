@@ -18,11 +18,18 @@ function Home() {
 
   const content = [];
   for (const subscription of subscriptions) {
-    content.push(<Subscription key={ subscription.id } rss={ subscription.rss }></Subscription>);
+    content.push(
+      <Subscription
+        key={ subscription.id }
+        id={ subscription.id }
+        imageId={ subscription['image_id'] }
+        title={ subscription.title } />
+    );
   }
 
   return (
     <>
+      <h1>Subscriptions</h1>
       <div className="subscription-grid">
         { content }
       </div>

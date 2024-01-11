@@ -1,7 +1,4 @@
-.cover-icon { width: 100%; }
-
-.truncate {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+.subscription-cover {
+    aspect-ratio: 1;
+    width: 100%;
 }

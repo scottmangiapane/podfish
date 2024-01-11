@@ -44,7 +44,7 @@ a, a:hover { color: var(--link-color); }
 
 a:hover { text-decoration: underline; }
 
-h1, h2, h3, h4, h5, h6 { color: var(--theme-color); }
+h1, h2, h3, h4, h5, h6 { color: var(--text-color); }
 
 p { color: var(--text-color); }
 
@@ -122,6 +122,12 @@ input[type=email], input[type=password] {
 
 .mt-3 { margin-top: 16px; }
 
+.truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
 /* Media */
 
 @media only screen and (min-width: 768px) {
@@ -129,13 +135,13 @@ input[type=email], input[type=password] {
 }
 
 @media only screen and (min-width: 992px) {
-    .app-content { max-width: 768px; }
+    .app-content { max-width: 576px; }
 }
 
 @media only screen and (min-width: 1200px) {
-    .app-content { max-width: 992px; }
+    .app-content { max-width: 768px; }
 }
 
 @media only screen and (min-width: 1400px) {
-    .app-content { max-width: 1200px; }
+    .app-content { max-width: 992px; }
 }

@@ -8,6 +8,9 @@
 
 - ID (primary key, uuid)
 - RSS feed URL
+- Image ID
+- Title
+- Description
 
 Note: additional data (title, description, etc) may be cached here for performance
 
@@ -15,6 +18,9 @@ Note: additional data (title, description, etc) may be cached here for performan
 
 - ID (primary key, uuid)
 - FK to podcast ID
+- Title
+- Description
+- Date
 
 Note: additional data required to match with data from RSS feeds
 

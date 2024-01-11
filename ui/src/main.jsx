@@ -6,6 +6,7 @@ import {
 } from "react-router-dom";
 
 import Home from "./routes/Home.jsx";
+import Podcast from "./routes/Podcast.jsx";
 import Root from "./routes/Root.jsx";
 import SignIn from "./routes/SignIn.jsx";
 import SignUp from "./routes/SignUp.jsx";
@@ -19,14 +20,18 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <Home />,
+        element: <Home />
       },
       {
-        path: "sign-in",
+        path: "/subscriptions/:id",
+        element: <Podcast />
+      },
+      {
+        path: "/sign-in",
         element: <SignIn />,
       },
       {
-        path: "sign-up",
+        path: "/sign-up",
         element: <SignUp />,
       },
     ]
