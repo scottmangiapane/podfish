@@ -9,7 +9,7 @@ import (
 type Episode struct {
 	Base
 	PodcastID   uuid.UUID `json:"podcast_id"`
-	Podcast     Podcast
+	Podcast     Podcast   `json:"-"`
 	Title       string    `json:"title"`
 	Description string    `json:"description"`
 	Date        time.Time `json:"date"`

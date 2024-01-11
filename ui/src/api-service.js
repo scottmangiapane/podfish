@@ -6,6 +6,12 @@ async function callApi(navigate, resource, options={}) {
   return await res.json();
 }
 
+export function getEpisodes(navigate, id) {
+  return callApi(navigate, `/api/v1/episodes?podcast_id=${ id }`, {
+    method: 'GET'
+  });
+}
+
 export function getSubscription(navigate, id) {
   return callApi(navigate, `/api/v1/subscriptions/${ id }`, {
     method: 'GET'

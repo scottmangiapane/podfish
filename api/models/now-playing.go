@@ -4,7 +4,7 @@ import "github.com/google/uuid"
 
 type NowPlaying struct {
 	UserID    uuid.UUID `json:"user_id" gorm:"primaryKey"`
-	User      User
+	User      User      `json:"-"`
 	EpisodeID uuid.UUID `json:"episode_id" gorm:"primaryKey"`
-	Episode   Episode
+	Episode   Episode   `json:"-"`
 }

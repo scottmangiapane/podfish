@@ -4,7 +4,6 @@ import (
 	"encoding/xml"
 	"fmt"
 	"os"
-	"podfish/global"
 	"podfish/models"
 	"strings"
 )
@@ -69,7 +68,7 @@ func Sync(p models.Podcast) {
 
 	for _, item := range rss.Channel.Items {
 		var episode models.Episode
-		result := global.DB.FirstOrCreate(&episode, models.Episode{
+		result := DB.FirstOrCreate(&episode, models.Episode{
 			PodcastID:   p.ID,
 			Title:       item.Title,
 			Description: item.Description,
