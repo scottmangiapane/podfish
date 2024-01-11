@@ -34,3 +34,29 @@ func PostSync(c *gin.Context) {
 
 	c.Writer.WriteHeader(http.StatusNoContent)
 }
+
+// @Tags sync
+// @Router /sync/{id} [post]
+// @Param id path string true "Podcast ID"
+func PostSyncWithId(c *gin.Context) {
+	var subscriptions []models.Subscription
+	result := global.DB.Preload("Podcast").Find(&subscriptions, models.Subscription{
+		UserID: middleware.GetUser(c),
+	})
+	if result.Error != nil {
+		fmt.Println(result.Error)
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
+			"code":    "SERVER_ERROR",
+			"message": "Failed to get subscriptions",
+		})
+		return
+	}
+
+	for _, s := range subscriptions {
+		if s.PodcastID.String() == c.Param("id") {
+			global.Sync(s.Podcast)
+		}
+	}
+
+	c.Writer.WriteHeader(http.StatusNoContent)
+}

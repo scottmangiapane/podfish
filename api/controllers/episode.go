@@ -13,8 +13,8 @@ import (
 
 // @Tags episodes
 // @Router /episodes [get]
-// @Param limit query number false "Limit"
-// @Param offset query number false "Offset"
+// @Param limit query number false "Limit" default(10)
+// @Param offset query number false "Offset" default(0)
 // @Param podcast_id query string false "Podcast ID"
 func GetEpisodes(c *gin.Context) {
 	limit := 10

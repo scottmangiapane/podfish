@@ -53,8 +53,9 @@ func main() {
 	authorized.PATCH("/users/:id/email", controllers.PatchUserEmail)
 	authorized.PATCH("/users/:id/password", controllers.PatchUserPassword)
 
-	// TODO remove this
+	// TODO remove these
 	authorized.POST("/sync", controllers.PostSync)
+	authorized.POST("/sync/:id", controllers.PostSyncWithId)
 
 	docs.SwaggerInfo.Title = "Podfish"
 	r.StaticFS("/docs", gin.Dir("docs", false))

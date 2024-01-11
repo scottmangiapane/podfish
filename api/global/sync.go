@@ -6,6 +6,7 @@ import (
 	"os"
 	"podfish/models"
 	"strings"
+	"time"
 )
 
 type Rss struct {
@@ -52,13 +53,14 @@ func Sync(p models.Podcast) {
 	res, err = Fetch(image)
 	if err != nil {
 		fmt.Printf("Failed to fetch image for podcast %s\n%v\n", p.ID, err)
-	} else {
-		path := fmt.Sprintf("./rss_data/%s", p.ImageID)
-		err = os.WriteFile(path, res, 0644)
-		if err != nil {
-			fmt.Printf("Failed to write image %s\n", p.ImageID)
-			fmt.Println(err)
-		}
+		return
+	}
+
+	path := fmt.Sprintf("./rss_data/%s", p.ImageID)
+	err = os.WriteFile(path, res, 0644)
+	if err != nil {
+		fmt.Printf("Failed to write image %s\n", p.ImageID)
+		fmt.Println(err)
 	}
 
 	p.Title = strings.TrimSpace(rss.Channel.Title)
@@ -67,17 +69,25 @@ func Sync(p models.Podcast) {
 	DB.Save(&p)
 
 	for _, item := range rss.Channel.Items {
+		date, err := time.Parse("Mon, _2 Jan 2006 15:04:05 MST", item.Date)
+		if err != nil {
+			fmt.Printf("Failed to parse timestamp %s\n", item.Date)
+			fmt.Println(err)
+			continue
+		}
+
 		var episode models.Episode
 		result := DB.FirstOrCreate(&episode, models.Episode{
 			PodcastID:   p.ID,
 			Title:       item.Title,
 			Description: item.Description,
-			// TODO date
+			Date:        date,
+
 			// TODO episode ID
 			// TODO add constraint on episode ID and podcast ID
 		})
 		if result.Error != nil {
-			fmt.Printf("Failed to create episode %s for podcast\n", item.ID, p.ID)
+			fmt.Printf("Failed to create episode %s for podcast %s\n", item.ID, p.ID)
 			fmt.Println(result.Error)
 			return
 		}

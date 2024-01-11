@@ -33,6 +33,7 @@ function Podcast() {
         key={ episode.id }
         title={ episode.title }
         description={ episode.description }
+        date={ episode.date }
         />
     );
   }
