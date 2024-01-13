@@ -32,17 +32,17 @@ type Item struct {
 	Date        string `xml:"pubDate"`
 }
 
-func Sync(p models.Podcast) {
+func Sync(p models.Podcast) error {
 	res, err := Fetch(p.RSS)
 	if err != nil {
 		fmt.Printf("Failed to fetch RSS for podcast %s\n", p.ID)
-		return
+		return err
 	}
 
 	var rss Rss
 	if err := xml.Unmarshal(res, &rss); err != nil {
 		fmt.Printf("Failed to parse RSS for podcast %s\n", p.ID)
-		return
+		return err
 	}
 
 	image := strings.TrimSpace(rss.Channel.Image.Url)
@@ -52,8 +52,9 @@ func Sync(p models.Podcast) {
 
 	res, err = Fetch(image)
 	if err != nil {
-		fmt.Printf("Failed to fetch image for podcast %s\n%v\n", p.ID, err)
-		return
+		fmt.Printf("Failed to fetch image for podcast %s\n", p.ID)
+		fmt.Println(err)
+		return err
 	}
 
 	path := fmt.Sprintf("./rss_data/%s", p.ImageID)
@@ -61,12 +62,19 @@ func Sync(p models.Podcast) {
 	if err != nil {
 		fmt.Printf("Failed to write image %s\n", p.ImageID)
 		fmt.Println(err)
+		return err
 	}
 
 	p.Title = strings.TrimSpace(rss.Channel.Title)
 	p.Description = strings.TrimSpace(rss.Channel.Description)
 
-	DB.Save(&p)
+	result := DB.Save(&p)
+	// TODO fix this
+	if result.Error != nil {
+		fmt.Printf("Failed to create podcast for RSS feed %s\n", p.RSS)
+		fmt.Println(result.Error)
+		return err
+	}
 
 	for _, item := range rss.Channel.Items {
 		date, err := time.Parse("Mon, _2 Jan 2006 15:04:05 MST", item.Date)
@@ -89,7 +97,9 @@ func Sync(p models.Podcast) {
 		if result.Error != nil {
 			fmt.Printf("Failed to create episode %s for podcast %s\n", item.ID, p.ID)
 			fmt.Println(result.Error)
-			return
+			continue
 		}
 	}
+
+	return nil
 }

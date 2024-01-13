@@ -26,33 +26,24 @@ type creds struct {
 func PostSignIn(c *gin.Context) {
 	var r creds
 	if err := c.ShouldBindJSON(&r); err != nil {
-		middleware.AbortWithValidationError(c, err)
+		middleware.Abort(c, http.StatusUnprocessableEntity, "Request is invalid")
 		return
 	}
 
 	var user models.User
 	result := global.DB.First(&user, &models.User{Email: r.Email})
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-		c.JSON(http.StatusNotFound, gin.H{
-			"code":    "NOT_FOUND",
-			"message": "No user found with that email",
-		})
+		middleware.Abort(c, http.StatusNotFound, "No user found with that email")
 		return
 	}
 	if result.Error != nil {
 		fmt.Println(result.Error)
-		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
-			"code":    "SERVER_ERROR",
-			"message": "Failed to get user",
-		})
+		middleware.Abort(c, http.StatusInternalServerError, "Failed to get user")
 		return
 	}
 
 	if user.CheckPassword(r.Password) != nil {
-		c.JSON(http.StatusUnauthorized, gin.H{
-			"code":    "UNAUTHORIZED",
-			"message": "Password verification failed",
-		})
+		middleware.Abort(c, http.StatusUnauthorized, "Password verification failed")
 		return
 	}
 
@@ -64,10 +55,7 @@ func PostSignIn(c *gin.Context) {
 	s, err := t.SignedString(key)
 	if err != nil {
 		fmt.Println(err)
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"code":    "SERVER_ERROR",
-			"message": "Failed to create JWT",
-		})
+		middleware.Abort(c, http.StatusInternalServerError, "Failed to create JWT")
 		return
 	}
 
@@ -90,26 +78,20 @@ func PostSignOut(c *gin.Context) {
 func PostSignUp(c *gin.Context) {
 	var r creds
 	if err := c.ShouldBindJSON(&r); err != nil {
-		middleware.AbortWithValidationError(c, err)
+		middleware.Abort(c, http.StatusUnprocessableEntity, "Request is invalid")
 		return
 	}
 
 	result := global.DB.Where(&models.User{Email: r.Email}).First(&models.User{})
 	if !errors.Is(result.Error, gorm.ErrRecordNotFound) {
-		c.JSON(http.StatusConflict, gin.H{
-			"code":    "ALREADY_EXISTS",
-			"message": "Email is already in use",
-		})
+		middleware.Abort(c, http.StatusConflict, "Email is already in use")
 		return
 	}
 
 	user := models.User{Email: r.Email, Password: r.Password}
 	if result := global.DB.Create(&user); result.Error != nil {
 		fmt.Println(result.Error)
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"code":    "SERVER_ERROR",
-			"message": "Failed to create user",
-		})
+		middleware.Abort(c, http.StatusInternalServerError, "Failed to create user")
 		return
 	}
 

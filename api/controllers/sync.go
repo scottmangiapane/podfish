@@ -21,10 +21,7 @@ func PostSync(c *gin.Context) {
 	})
 	if result.Error != nil {
 		fmt.Println(result.Error)
-		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
-			"code":    "SERVER_ERROR",
-			"message": "Failed to get subscriptions",
-		})
+		middleware.Abort(c, http.StatusInternalServerError, "Failed to get subscriptions")
 		return
 	}
 
@@ -45,10 +42,7 @@ func PostSyncWithId(c *gin.Context) {
 	})
 	if result.Error != nil {
 		fmt.Println(result.Error)
-		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
-			"code":    "SERVER_ERROR",
-			"message": "Failed to get subscriptions",
-		})
+		middleware.Abort(c, http.StatusInternalServerError, "Failed to get subscriptions")
 		return
 	}
 

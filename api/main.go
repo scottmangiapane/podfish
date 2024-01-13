@@ -64,7 +64,7 @@ func main() {
 	r.StaticFS("/file", gin.Dir("rss_data", false))
 
 	r.NoRoute(func(c *gin.Context) {
-		c.JSON(http.StatusNotFound, gin.H{"code": "NOT_FOUND", "message": "Not found"})
+		middleware.Abort(c, http.StatusNotFound, "Not found")
 	})
 
 	r.Run("0.0.0.0:8080")

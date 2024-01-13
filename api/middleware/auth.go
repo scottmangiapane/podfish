@@ -14,10 +14,7 @@ import (
 func RequireAuth(c *gin.Context) {
 	cookie, err := c.Cookie("auth")
 	if err != nil || cookie == "" {
-		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
-			"code":    "UNAUTHORIZED",
-			"message": "Auth token is missing",
-		})
+		Abort(c, http.StatusUnauthorized, "Auth token is missing")
 		return
 	}
 
@@ -27,34 +24,26 @@ func RequireAuth(c *gin.Context) {
 	token, err := jwt.Parse(cookie, getKey)
 	if err != nil || !token.Valid {
 		fmt.Println(err)
-		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
-			"code":    "UNAUTHORIZED",
-			"message": "Failed to parse auth token",
-		})
+		Abort(c, http.StatusUnauthorized, "Failed to parse auth token")
+		return
 	}
 
 	issuedAt, err := token.Claims.GetIssuedAt()
 	if err != nil || issuedAt.Add(time.Hour).Before(time.Now()) {
-		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
-			"code":    "UNAUTHORIZED",
-			"message": "Auth token is expired",
-		})
+		Abort(c, http.StatusUnauthorized, "Auth token is expired")
+		return
 	}
 
 	userIdString, err := token.Claims.GetSubject()
 	if err != nil {
-		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
-			"code":    "UNAUTHORIZED",
-			"message": "Failed to set active user",
-		})
+		Abort(c, http.StatusUnauthorized, "Failed to set active user")
+		return
 	}
 
 	userId, err := uuid.Parse(userIdString)
 	if err != nil {
-		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
-			"code":    "UNAUTHORIZED",
-			"message": "Invalid user ID in auth token",
-		})
+		Abort(c, http.StatusUnauthorized, "Invalid user ID in auth token")
+		return
 	}
 
 	c.Set("user", userId)

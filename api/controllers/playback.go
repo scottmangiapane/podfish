@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"net/http"
+	"podfish/middleware"
 
 	"github.com/gin-gonic/gin"
 )
@@ -9,26 +10,17 @@ import (
 // @Tags now-playing
 // @Router /now-playing [get]
 func GetNowPlaying(c *gin.Context) {
-	c.JSON(http.StatusBadRequest, gin.H{
-		"code":    "NOT_IMPLEMENTED",
-		"message": "Not implemented",
-	})
+	middleware.Abort(c, http.StatusBadRequest, "Not implemented")
 }
 
 // @Tags now-playing
 // @Router /now-playing [put]
 func PutNowPlaying(c *gin.Context) {
-	c.JSON(http.StatusBadRequest, gin.H{
-		"code":    "NOT_IMPLEMENTED",
-		"message": "Not implemented",
-	})
+	middleware.Abort(c, http.StatusBadRequest, "Not implemented")
 }
 
 // @Tags now-playing
 // @Router /now-playing [delete]
 func DeleteNowPlaying(c *gin.Context) {
-	c.JSON(http.StatusBadRequest, gin.H{
-		"code":    "NOT_IMPLEMENTED",
-		"message": "Not implemented",
-	})
+	middleware.Abort(c, http.StatusBadRequest, "Not implemented")
 }

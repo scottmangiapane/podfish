@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"podfish/global"
+	"podfish/middleware"
 	"podfish/models"
 	"strconv"
 
@@ -21,10 +22,7 @@ func GetEpisodes(c *gin.Context) {
 	if c.Query("limit") != "" {
 		limitParam, err := strconv.Atoi(c.Query("limit"))
 		if err != nil {
-			c.AbortWithStatusJSON(http.StatusUnprocessableEntity, gin.H{
-				"code":    "BAD_REQUEST",
-				"message": "Invalid limit",
-			})
+			middleware.Abort(c, http.StatusUnprocessableEntity, "Invalid limit")
 			return
 		}
 		limit = limitParam
@@ -34,10 +32,7 @@ func GetEpisodes(c *gin.Context) {
 	if c.Query("offset") != "" {
 		offsetParam, err := strconv.Atoi(c.Query("offset"))
 		if err != nil {
-			c.AbortWithStatusJSON(http.StatusUnprocessableEntity, gin.H{
-				"code":    "BAD_REQUEST",
-				"message": "Invalid offset",
-			})
+			middleware.Abort(c, http.StatusUnprocessableEntity, "Invalid offset")
 			return
 		}
 		offset = offsetParam
@@ -47,10 +42,7 @@ func GetEpisodes(c *gin.Context) {
 	if c.Query("podcast_id") != "" {
 		podcastIdParam, err := uuid.Parse(c.Query("podcast_id"))
 		if err != nil {
-			c.AbortWithStatusJSON(http.StatusUnprocessableEntity, gin.H{
-				"code":    "BAD_REQUEST",
-				"message": "Invalid podcast ID",
-			})
+			middleware.Abort(c, http.StatusUnprocessableEntity, "Invalid podcast ID")
 			return
 		}
 		podcastId = podcastIdParam
@@ -64,10 +56,7 @@ func GetEpisodes(c *gin.Context) {
 		Find(&episodes, models.Episode{PodcastID: podcastId})
 	if result.Error != nil {
 		fmt.Println(result.Error)
-		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
-			"code":    "SERVER_ERROR",
-			"message": "Failed to get episodes",
-		})
+		middleware.Abort(c, http.StatusInternalServerError, "Failed to get episodes")
 		return
 	}
 
@@ -78,28 +67,19 @@ func GetEpisodes(c *gin.Context) {
 // @Router /episodes/{id} [get]
 // @Param id path string true "Episode ID"
 func GetEpisode(c *gin.Context) {
-	c.JSON(http.StatusBadRequest, gin.H{
-		"code":    "NOT_IMPLEMENTED",
-		"message": "Not implemented",
-	})
+	middleware.Abort(c, http.StatusBadRequest, "Not implemented")
 }
 
 // @Tags episodes
 // @Router /episodes/{id}/completed [patch]
 // @Param id path string true "Episode ID"
 func PatchEpisodeCompleted(c *gin.Context) {
-	c.JSON(http.StatusBadRequest, gin.H{
-		"code":    "NOT_IMPLEMENTED",
-		"message": "Not implemented",
-	})
+	middleware.Abort(c, http.StatusBadRequest, "Not implemented")
 }
 
 // @Tags episodes
 // @Router /episodes/{id}/playback-position [patch]
 // @Param id path string true "Episode ID"
 func PatchEpisodePlaybackPosition(c *gin.Context) {
-	c.JSON(http.StatusBadRequest, gin.H{
-		"code":    "NOT_IMPLEMENTED",
-		"message": "Not implemented",
-	})
+	middleware.Abort(c, http.StatusBadRequest, "Not implemented")
 }
