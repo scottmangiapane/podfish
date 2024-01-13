@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
 	"podfish/global"
@@ -9,6 +10,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+	"gorm.io/gorm"
 )
 
 // @Tags subscriptions
@@ -71,7 +73,28 @@ func PostSubscriptions(c *gin.Context) {
 // @Router /subscriptions/{id} [get]
 // @Param id path string true "Subscription ID"
 func GetSubscription(c *gin.Context) {
-	middleware.Abort(c, http.StatusBadRequest, "Not implemented")
+	id, err := uuid.Parse(c.Param("id"))
+	if err != nil {
+		middleware.Abort(c, http.StatusUnprocessableEntity, "Invalid subscription ID")
+		return
+	}
+
+	var subscription models.Subscription
+	result := global.DB.Preload("Podcast").First(&subscription, models.Subscription{
+		UserID:    middleware.GetUser(c),
+		PodcastID: id,
+	})
+	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+		middleware.Abort(c, http.StatusNotFound, "No subscription found with that ID")
+		return
+	}
+	if result.Error != nil {
+		fmt.Println(result.Error)
+		middleware.Abort(c, http.StatusInternalServerError, "Failed to get subscription")
+		return
+	}
+
+	c.JSON(http.StatusOK, subscription.Podcast)
 }
 
 // @Tags subscriptions
