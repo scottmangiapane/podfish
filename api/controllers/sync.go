@@ -26,7 +26,7 @@ func PostSync(c *gin.Context) {
 	}
 
 	for _, s := range subscriptions {
-		global.Sync(s.Podcast)
+		global.Sync(&s.Podcast)
 	}
 
 	c.Writer.WriteHeader(http.StatusNoContent)
@@ -48,7 +48,7 @@ func PostSyncWithId(c *gin.Context) {
 
 	for _, s := range subscriptions {
 		if s.PodcastID.String() == c.Param("id") {
-			global.Sync(s.Podcast)
+			global.Sync(&s.Podcast)
 		}
 	}
 

@@ -2,6 +2,7 @@ package main
 
 import (
 	"net/http"
+	"os"
 	"podfish/controllers"
 	"podfish/docs"
 	"podfish/global"
@@ -61,7 +62,7 @@ func main() {
 	r.StaticFS("/docs", gin.Dir("docs", false))
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 
-	r.StaticFS("/file", gin.Dir("rss_data", false))
+	r.StaticFS("/file", gin.Dir(os.Getenv("RSS_DATA_DIR"), false))
 
 	r.NoRoute(func(c *gin.Context) {
 		middleware.Abort(c, http.StatusNotFound, "Not found")

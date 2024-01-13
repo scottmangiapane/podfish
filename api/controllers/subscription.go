@@ -47,22 +47,28 @@ func PostSubscriptions(c *gin.Context) {
 		return
 	}
 
-	podcast := models.Podcast{RSS: r.RSS}
-	err := global.Sync(podcast)
-	if err != nil {
-		fmt.Println(err)
+	var podcast models.Podcast
+	result := global.DB.FirstOrCreate(&podcast, models.Podcast{RSS: r.RSS})
+	if result.Error != nil {
+		fmt.Println(result.Error)
 		middleware.Abort(c, http.StatusInternalServerError, "Failed to create podcast")
 		return
 	}
 
 	var subscription models.Subscription
-	result := global.DB.FirstOrCreate(&subscription, models.Subscription{
+	result = global.DB.FirstOrCreate(&subscription, models.Subscription{
 		UserID:    middleware.GetUser(c),
 		PodcastID: podcast.ID,
 	})
 	if result.Error != nil {
 		fmt.Println(result.Error)
 		middleware.Abort(c, http.StatusInternalServerError, "Failed to create subscription")
+		return
+	}
+
+	err := global.Sync(&podcast)
+	if err != nil {
+		middleware.Abort(c, http.StatusInternalServerError, "Failed to create podcast")
 		return
 	}
 

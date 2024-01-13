@@ -32,7 +32,7 @@ type Item struct {
 	Date        string `xml:"pubDate"`
 }
 
-func Sync(p models.Podcast) error {
+func Sync(p *models.Podcast) error {
 	res, err := Fetch(p.RSS)
 	if err != nil {
 		fmt.Printf("Failed to fetch RSS for podcast %s\n", p.ID)
@@ -57,7 +57,7 @@ func Sync(p models.Podcast) error {
 		return err
 	}
 
-	path := fmt.Sprintf("./rss_data/%s", p.ImageID)
+	path := fmt.Sprintf("%s/%s", os.Getenv("RSS_DATA_DIR"), p.ImageID)
 	err = os.WriteFile(path, res, 0644)
 	if err != nil {
 		fmt.Printf("Failed to write image %s\n", p.ImageID)
@@ -68,12 +68,11 @@ func Sync(p models.Podcast) error {
 	p.Title = strings.TrimSpace(rss.Channel.Title)
 	p.Description = strings.TrimSpace(rss.Channel.Description)
 
-	result := DB.Save(&p)
-	// TODO fix this
+	result := DB.Save(p)
 	if result.Error != nil {
-		fmt.Printf("Failed to create podcast for RSS feed %s\n", p.RSS)
+		fmt.Printf("Failed to save podcast for RSS feed %s\n", p.RSS)
 		fmt.Println(result.Error)
-		return err
+		return result.Error
 	}
 
 	for _, item := range rss.Channel.Items {
