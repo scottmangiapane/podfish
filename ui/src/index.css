@@ -1,4 +1,4 @@
-/* Palette */
+/* Variables */
 
 :root {
     --bg-color: white;
@@ -9,7 +9,14 @@
     --theme-color-dark-2: #388e3c;
 }
 
+:root {
+    --playbar-height: 96px;
+    --titlebar-height: 64px;
+}
+
 /* Resets */
+
+*, *:after, *:before { box-sizing: inherit; }
 
 a, a:active, a:focus, a:hover, a:visited { text-decoration: none; }
 
@@ -25,7 +32,10 @@ body, html, #root {
     width: 100%;
 }
 
-html { background-color: var(--bg-color); }
+html {
+    background-color: var(--bg-color);
+    box-sizing: border-box;
+}
 
 /* Text */
 
@@ -68,7 +78,7 @@ input[type=email], input[type=password] {
 }
 
 .app-body {
-    height: calc(100% - 64px - 1px);
+    height: calc(100% - var(--playbar-height) - var(--titlebar-height));
     overflow: auto;
     padding: 16px 0;
 }

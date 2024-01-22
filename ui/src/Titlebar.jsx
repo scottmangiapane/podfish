@@ -22,11 +22,9 @@ function Titlebar() {
   }
 
   return (
-    <div className="titlebar">
-      <div className="app-content titlebar-content">
-        <Link className="titlebar-item" to={`/`}>Podfish</Link>
-        { authButtons }
-      </div>
+    <div className="app-content titlebar">
+      <Link className="titlebar-item" to={`/`}>Podfish</Link>
+      { authButtons }
     </div>
   )
 }

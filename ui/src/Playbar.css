@@ -1,0 +1,10 @@
+.playbar {
+    align-items: center;
+    border-top: 1px solid rgba(0, 0, 0, 0.2);
+    display: flex;
+    height: var(--playbar-height);
+    justify-content: space-between;
+    width: 100%;
+}
+
+.playbar-item > * { white-space: nowrap; }

@@ -1,13 +1,10 @@
 .titlebar {
-    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
-    width: 100%;
-}
-
-.titlebar-content {
     align-items: center;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
     display: flex;
-    height: calc(64px);
+    height: var(--titlebar-height);
     justify-content: space-between;
+    width: 100%;
 }
 
 .titlebar-item > * { white-space: nowrap; }

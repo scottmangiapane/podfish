@@ -1,3 +1,9 @@
+UP NEXT
+
+- port consolidation any reverse proxy for prod deployment
+- rename podcast and subscription for consistency
+- make ui structure better for play bar
+
 SECURITY
 
 - Secure JWT token generation/verification key (also: env file?)
