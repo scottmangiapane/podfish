@@ -1,9 +1,12 @@
-import { useEffect, useRef, useState } from "react";
+import Cookies from "js-cookie";
+import { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import "./SignIn.css";
+import { RootContext } from '../Root';
 
 function SignIn() {
+  const { dispatch } = useContext(RootContext);
+
   const navigate = useNavigate();
 
   const emailRef = useRef(null);
@@ -25,6 +28,7 @@ function SignIn() {
     });
 
     if (res.ok) {
+      dispatch({ type: 'SET_USER', data: Cookies.get('user') });
       navigate('/');
     }
   }
@@ -32,7 +36,7 @@ function SignIn() {
   return (
     <div className="center">
       <h1>Sign In to Podfish</h1>
-      <form onSubmit={ submit }>
+      <form className="form" onSubmit={ submit }>
         <input
           ref={ emailRef }
           autoComplete="on"

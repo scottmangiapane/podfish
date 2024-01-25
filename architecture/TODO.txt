@@ -1,8 +1,8 @@
 UP NEXT
 
-- port consolidation any reverse proxy for prod deployment
-- rename podcast and subscription for consistency
 - make ui structure better for play bar
+- rename podcast and subscription for consistency
+- port consolidation any reverse proxy for prod deployment
 
 SECURITY
 

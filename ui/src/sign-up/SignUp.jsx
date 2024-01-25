@@ -1,7 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 
-import "./SignIn.css";
-
 function SignIn() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [email, setEmail] = useState('');
@@ -27,7 +25,7 @@ function SignIn() {
   return (
     <div className="center">
       <h1>Sign Up for Podfish</h1>
-      <form onSubmit={ submit }>
+      <form className="form" onSubmit={ submit }>
         <input
           ref={ emailRef }
           autoComplete="on"

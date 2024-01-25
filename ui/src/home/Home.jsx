@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { getSubscriptions } from "../api-service";
-import Subscription from "../Subscription";
+import Subscription from "./Subscription";
 
 import "./Home.css";
 

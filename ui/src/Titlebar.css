@@ -1,10 +1,14 @@
 .titlebar {
     align-items: center;
+    background-color: white;
     border-bottom: 1px solid rgba(0, 0, 0, 0.2);
     display: flex;
     height: var(--titlebar-height);
+    inset: 0 0 auto;
     justify-content: space-between;
+    position: fixed;
     width: 100%;
+    z-index: 1000;
 }
 
 .titlebar-item > * { white-space: nowrap; }

@@ -72,15 +72,11 @@ input[type=email], input[type=password] {
     width: 100%;
 }
 
+.app-body { padding-top: calc(16px + var(--titlebar-height)); }
+
 .app-content {
     margin: 0 auto;
     padding: 0 16px;
-}
-
-.app-body {
-    height: calc(100% - var(--playbar-height) - var(--titlebar-height));
-    overflow: auto;
-    padding: 16px 0;
 }
 
 .btn {
@@ -120,6 +116,14 @@ input[type=email], input[type=password] {
 
 .fill {
     height: 100%;
+    width: 100%;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-width: 360px;
     width: 100%;
 }
 

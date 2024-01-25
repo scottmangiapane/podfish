@@ -5,11 +5,11 @@ import {
   RouterProvider,
 } from "react-router-dom";
 
-import Home from "./routes/Home.jsx";
-import Podcast from "./routes/Podcast.jsx";
-import Root from "./routes/Root.jsx";
-import SignIn from "./routes/SignIn.jsx";
-import SignUp from "./routes/SignUp.jsx";
+import Home from "./home/Home.jsx";
+import Podcast from "./podcast/Podcast.jsx";
+import Root from "./Root.jsx";
+import SignIn from "./sign-in/SignIn.jsx";
+import SignUp from "./sign-up/SignUp.jsx";
 
 import "./index.css";
 
