@@ -22,7 +22,7 @@ function Root() {
     }
   }
 
-  const paddingBottom = state.nowPlaying ? 'calc(16px + var(--playbar-height))' : '16px';
+  const paddingBottom = state.nowPlaying && 'calc(16px + var(--playbar-height))';
 
   return (
     <>

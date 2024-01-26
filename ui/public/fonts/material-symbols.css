@@ -1,0 +1,22 @@
+@font-face {
+    font-family: 'Material Symbols';
+    font-style: normal;
+    font-weight: 100 700;
+    src: url("material-symbols.woff2") format('woff2');
+}
+
+.symbol {
+    direction: ltr;
+    display: inline-block;
+    font-family: 'Material Symbols';
+    font-feature-settings: 'liga';
+    font-size: 24px;
+    font-style: normal;
+    font-weight: normal;
+    letter-spacing: normal;
+    line-height: 1;
+    text-transform: none;
+    word-wrap: normal;
+    white-space: nowrap;
+    -webkit-font-smoothing: antialiased;
+}

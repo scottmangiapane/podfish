@@ -12,3 +12,17 @@
 }
 
 .playbar-item > * { white-space: nowrap; }
+
+.playbar-symbol {
+    color: var(--text-color);
+    font-variation-settings:
+    'FILL' 1,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 48
+}
+
+.playbar-symbol-group {
+    display: flex;
+    gap: 16px;
+}

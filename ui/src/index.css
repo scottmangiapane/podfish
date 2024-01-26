@@ -72,7 +72,10 @@ input[type=email], input[type=password] {
     width: 100%;
 }
 
-.app-body { padding-top: calc(16px + var(--titlebar-height)); }
+.app-body {
+    padding-bottom: 16px;
+    padding-top: calc(16px + var(--titlebar-height));
+}
 
 .app-content {
     margin: 0 auto;

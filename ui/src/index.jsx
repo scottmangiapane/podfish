@@ -8,6 +8,7 @@ import {
 import Home from "./home/Home.jsx";
 import Podcast from "./podcast/Podcast.jsx";
 import Root from "./Root.jsx";
+import Settings from "./settings/Settings.jsx";
 import SignIn from "./sign-in/SignIn.jsx";
 import SignUp from "./sign-up/SignUp.jsx";
 
@@ -23,8 +24,8 @@ const router = createBrowserRouter([
         element: <Home />
       },
       {
-        path: "/subscriptions/:id",
-        element: <Podcast />
+        path: "/settings",
+        element: <Settings />
       },
       {
         path: "/sign-in",
@@ -33,6 +34,10 @@ const router = createBrowserRouter([
       {
         path: "/sign-up",
         element: <SignUp />,
+      },
+      {
+        path: "/subscriptions/:id",
+        element: <Podcast />
       },
     ]
   },
