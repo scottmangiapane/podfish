@@ -54,7 +54,7 @@ func main() {
 	authorized.PATCH("/users/:id/email", controllers.PatchUserEmail)
 	authorized.PATCH("/users/:id/password", controllers.PatchUserPassword)
 
-	// TODO remove these
+	// TODO remove these, replace with background service
 	authorized.POST("/sync", controllers.PostSync)
 	authorized.POST("/sync/:id", controllers.PostSyncWithId)
 
@@ -68,5 +68,5 @@ func main() {
 		middleware.Abort(c, http.StatusNotFound, "Not found")
 	})
 
-	r.Run("0.0.0.0:8080")
+	r.Run("0.0.0.0:" + os.Getenv("API_PORT"))
 }

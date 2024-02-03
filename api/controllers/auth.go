@@ -8,6 +8,7 @@ import (
 	"podfish/global"
 	"podfish/middleware"
 	"podfish/models"
+	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -59,16 +60,18 @@ func PostSignIn(c *gin.Context) {
 		return
 	}
 
-	c.SetCookie("auth", s, 3600, "/", "localhost", false, true)
-	c.SetCookie("user", user.ID.String(), 3600, "/", "localhost", false, false)
+	secure := strings.EqualFold(os.Getenv("SECURE_COOKIES"), "true")
+	c.SetCookie("auth", s, 3600, "/", os.Getenv("UI_URL"), secure, true)
+	c.SetCookie("user", user.ID.String(), 3600, "/", os.Getenv("UI_URL"), secure, false)
 	c.JSON(http.StatusOK, user)
 }
 
 // @Tags auth
 // @Router /auth/sign-out [post]
 func PostSignOut(c *gin.Context) {
-	c.SetCookie("auth", "", -1, "/", "localhost", false, true)
-	c.SetCookie("user", "", -1, "/", "localhost", false, false)
+	secure := strings.EqualFold(os.Getenv("SECURE_COOKIES"), "true")
+	c.SetCookie("auth", "", -1, "/", os.Getenv("UI_URL"), secure, true)
+	c.SetCookie("user", "", -1, "/", os.Getenv("UI_URL"), secure, false)
 	c.Writer.WriteHeader(http.StatusNoContent)
 }
 

@@ -17,7 +17,7 @@ RUN go mod download && \
 
 COPY . .
 
-EXPOSE 8080
+EXPOSE ${API_PORT}
 
 # If docker-compose with volume mounting is used on macOS before the `docs` folder exists,
 # CompileDaemon enters an infinite loop. `-polling=true` fixes it.

@@ -9,6 +9,6 @@ RUN npm i
 
 COPY . .
 
-EXPOSE 3000
+EXPOSE ${UI_PORT}
 
 CMD ["npm", "run", "dev"]

@@ -9,12 +9,12 @@ export default defineConfig(({ mode }) => {
     plugins: [react()],
     server: {
       host: '0.0.0.0',
-      port: 3000,
+      port: env.UI_PORT,
       proxy: {
-        '^\/(api|file)\/.*': {
+        '^\/(api|file|swagger)\/.*': {
           changeOrigin: true,
-          secure: false,
-          target: env.UI_PROXY_PASS,
+          secure: env.SECURE_COOKIES, // TODO is this needed?
+          target: env.API_URL,
         }
       },
     }

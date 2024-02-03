@@ -8,9 +8,7 @@ services:
     depends_on:
       - postgres
     env_file:
-      - ./app.env
-    ports:
-      - 8080:8080
+      - ./.env
     restart: on-failure
     volumes:
       - ./api:/podfish-src
@@ -19,7 +17,7 @@ services:
   postgres:
     container_name: podfish_postgres
     env_file:
-      - ./app.env
+      - ./.env
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U podfish"]
       interval: 10s
@@ -33,9 +31,9 @@ services:
     build: ui
     container_name: podfish_ui
     env_file:
-      - ./app.env
+      - ./.env
     ports:
-      - 3000:3000
+      - ${UI_PORT}:${UI_PORT}
     restart: on-failure
     volumes:
       - ./ui:/podfish-src
