@@ -26,9 +26,9 @@ function Podcast() {
     return null;
   }
 
-  const content = [];
+  const episodeList = [];
   for (const episode of episodes) {
-    content.push(
+    episodeList.push(
       <Episode
         key={ episode.id }
         title={ episode.title }
@@ -39,12 +39,18 @@ function Podcast() {
   }
 
   return (
-    <>
-      <h1>{ podcast.title }</h1>
-      {/* <img src={ `/file/${ podcast['image_id'] }` }></img>
-      <p>{ podcast.description }</p> */}
-      { content }
-    </>
+    <div className="podcast-split">
+      <div className="podcast-split-left">
+        <div className="text-center">
+          <img className="podcast-cover" src={ `/file/${ podcast['image_id'] }` }></img>
+          <h1 className="break-word">{ podcast.title }</h1>
+        </div>
+        <p className="break-word">{ podcast.description }</p>
+      </div>
+      <div className="podcast-split-right">
+        <div className="episode-list">{ episodeList }</div>
+      </div>
+    </div>
   );
 }
 

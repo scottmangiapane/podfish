@@ -4,6 +4,7 @@
     --bg-color: white;
     --link-color: #2e8dd0;
     --text-color: #424242;
+    --text-color-light: #9e9e9e;
     --theme-color: #4caf50;
     --theme-color-dark-1: #43a047;
     --theme-color-dark-2: #388e3c;
@@ -82,22 +83,30 @@ input[type=email], input[type=password] {
     padding: 0 16px;
 }
 
+.break-word { word-wrap: break-word; }
+
 .btn {
     color: black;
     cursor: pointer;
-    padding-left: 16px;
-    padding-right: 16px;
 }
 
 .btn-pill {
     background-color: var(--theme-color);
     border-radius: 9999px;
     color: white;
+    padding-left: 16px;
+    padding-right: 16px;
 }
 
 .btn-pill:active { background-color: var(--theme-color-dark-2); }
 
 .btn-pill:hover:not(:active) { background-color: var(--theme-color-dark-1); }
+
+.btn-text {
+    background-color: transparent;
+    outline: none;
+    padding: 0;
+}
 
 .center {
     align-items: center;
@@ -137,7 +146,45 @@ input[type=email], input[type=password] {
 
 .mr-3 { margin-right: 16px; }
 
+.mb-2 { margin-bottom: 8px; }
+
+.mb-3 { margin-bottom: 16px; }
+
+.mt-2 { margin-top: 8px; }
+
 .mt-3 { margin-top: 16px; }
+
+.symbol {
+    color: var(--text-color);
+    font-size: 24px;
+    font-variation-settings:
+    'FILL' 1,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 24;
+}
+
+.symbol-big {
+    color: var(--theme-color);
+    font-size: 48px;
+    font-variation-settings:
+    'FILL' 1,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 48;
+}
+
+.symbol-outline {
+    font-variation-settings:
+    'FILL' 0,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 24;
+}
+
+.text-center { text-align: center; }
+
+.text-right { text-align: right; }
 
 .truncate {
     overflow: hidden;

@@ -30,6 +30,7 @@ func InitDatabase() {
 		&models.Episode{},
 		&models.NowPlaying{},
 		&models.PlaybackPosition{},
+		&models.Podcast{},
 		&models.Subscription{},
 		&models.User{},
 	)

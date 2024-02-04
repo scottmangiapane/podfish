@@ -36,7 +36,7 @@ const router = createBrowserRouter([
         element: <SignUp />,
       },
       {
-        path: "/subscriptions/:id",
+        path: "/podcasts/:id",
         element: <Podcast />
       },
     ]

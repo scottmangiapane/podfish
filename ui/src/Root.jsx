@@ -8,7 +8,7 @@ import Titlebar from "./Titlebar";
 export const RootContext = createContext();
 
 function Root() {
-  const initialState = { nowPlaying: null, user: Cookies.get('user') };
+  const initialState = { nowPlaying: true, user: Cookies.get('user') };
   const [state, dispatch] = useReducer(appReducer, initialState);
 
   function appReducer(state, action) {

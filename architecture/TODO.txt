@@ -6,7 +6,6 @@ UP NEXT
 
 SECURITY
 
-- Secure JWT token generation/verification key (also: env file?)
 - SameSite cookie attribute (example: `c.SetSameSite(http.SameSiteLaxMode)`)
 - HTTP security headers
 - Sanitize images
@@ -24,7 +23,6 @@ API
 
 UI
 
-- Serve fonts
 - Ensure adding/removing node dependencies is reflected in docker container (is .dockerignore to blame?).
     - Not possible? without giving up live reloading. data volume is immutable after initial build
     - Explain in README

@@ -1,1 +1,18 @@
-.episode { padding: 16px; }
+/* .episode {
+    display: flex;
+    gap: 16px;
+} */
+
+.episode-collapsed {
+    max-height: 4lh;
+    overflow-y: hidden;
+    /* TODO make this work */
+    text-overflow: ellipsis;
+}
+
+.episode-date { color: var(--text-color-light); }
+
+.episode-title {
+    color: black;
+    font-weight: bold;
+}

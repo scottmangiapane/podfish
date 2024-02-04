@@ -1,8 +1,8 @@
 function Settings() {
   return (
     <>
-        <h1>Settings</h1>
-        <p>Not yet implemented.</p>
+      <h1>Settings</h1>
+      <p>Not yet implemented.</p>
     </>
   );
 }

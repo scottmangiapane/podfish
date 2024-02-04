@@ -4,7 +4,7 @@ import "./Subscription.css";
 
 function Subscription({ id, imageId, title }) {
   return (
-    <Link to={`/subscriptions/${ id }`}>
+    <Link to={`/podcasts/${ id }`}>
       <img className="subscription-cover" src={ `/file/${ imageId }` }></img>
       <p className="truncate">{ title }</p>
     </Link>

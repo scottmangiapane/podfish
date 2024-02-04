@@ -19,11 +19,9 @@ function Titlebar() {
 
   if (state.user) {
     authButtons = (
-      <>
-        <Link className="titlebar-item" to={"/settings"}>
-          <button className="btn btn-pill">Settings</button>
-        </Link>
-      </>
+      <Link className="titlebar-item" to={"/settings"}>
+        <button className="btn btn-pill">Settings</button>
+      </Link>
     );
   }
 

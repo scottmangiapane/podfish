@@ -1,0 +1,33 @@
+.episode-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.podcast-cover {
+    aspect-ratio: 1;
+    max-width: 200px;
+    width: 25%;
+}
+
+.podcast-split-left {
+    width: 30%;
+}
+
+.podcast-split-right {
+    width: 70%;
+}
+
+.podcast-split {
+    display: flex;
+    gap: 16px;
+}
+
+.podcast-split > * {
+    flex-grow: 1;
+}
+
+.podcast-header {
+    display: flex;
+    gap: 16px;
+}
