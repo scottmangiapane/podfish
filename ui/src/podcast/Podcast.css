@@ -10,7 +10,7 @@
 }
 
 .podcast-list-item:not(:last-of-type) {
-    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    border-bottom: var(--br);
     padding-bottom: 16px;
 }
 
@@ -31,6 +31,11 @@
 
 @media only screen and (max-width: 992px) {
     .podcast-cover { max-width: 64px; }
+
+    .podcast-split-left {
+        border-bottom: var(--br);
+        padding-bottom: 16px;
+    }
 
     .podcast-header {
         align-items: center;

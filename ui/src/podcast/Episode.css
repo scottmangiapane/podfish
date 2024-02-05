@@ -9,7 +9,4 @@
     gap: 16px;
 }
 
-.episode-title {
-    color: black;
-    font-weight: bold;
-}
+.episode-title { font-weight: bold; }

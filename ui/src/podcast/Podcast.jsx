@@ -51,7 +51,7 @@ function Podcast() {
         <p className={ "break-word " + (isCollapsed && "truncate-l truncate-6l") }>
           { podcast.description }
         </p>
-        <span className="symbol" onClick={ () => setIsCollapsed(!isCollapsed) }>
+        <span className="symbol symbol-btn" onClick={ () => setIsCollapsed(!isCollapsed) }>
           { (isCollapsed) ? "expand_more" : "expand_less" }
         </span>
       </div>

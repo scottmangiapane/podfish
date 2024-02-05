@@ -1,7 +1,7 @@
 .playbar {
     align-items: center;
     background-color: white;
-    border-top: 1px solid rgba(0, 0, 0, 0.2);
+    border-top: var(--br);
     display: flex;
     height: var(--playbar-height);
     inset: auto 0 0;
@@ -20,3 +20,18 @@
     display: flex;
     gap: 16px;
 }
+
+.symbol-play-pause {
+    color: var(--theme-color) !important;
+    font-size: 48px !important;
+    font-variation-settings:
+    'FILL' 1,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 48
+    !important;
+}
+
+.symbol-play-pause:active { color: var(--theme-color-dark-2) !important; }
+
+.symbol-play-pause:hover:not(:active) { color: var(--theme-color-dark-1) !important; }

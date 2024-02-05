@@ -1,7 +1,7 @@
 .titlebar {
     align-items: center;
     background-color: white;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    border-bottom: var(--br);
     display: flex;
     height: var(--titlebar-height);
     inset: 0 0 auto;

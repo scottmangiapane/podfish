@@ -8,7 +8,7 @@ function Episode({ title, description, date }) {
   return (
     <>
       <div className="episode-header mb-2">
-        <span className="symbol symbol-outline">play_circle</span>
+        <span className="symbol symbol-btn symbol-outline">play_circle</span>
         <div style={{ minWidth: 0 }}> {/* `minWidth: 0` is necessary for truncation */}
           <p className="episode-title truncate">{ title }</p>
           <p className="episode-date truncate">{ new Date(date).toDateString() }</p>
@@ -18,7 +18,7 @@ function Episode({ title, description, date }) {
         <p className={ "break-word " + (isCollapsed && "truncate-l truncate-3l") }>
           { description }
         </p>
-        <span className="symbol" onClick={ () => setIsCollapsed(!isCollapsed) }>
+        <span className="symbol symbol-btn" onClick={ () => setIsCollapsed(!isCollapsed) }>
           { (isCollapsed) ? "expand_more" : "expand_less" }
         </span>
       </div>
