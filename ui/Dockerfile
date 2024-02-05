@@ -11,4 +11,4 @@ COPY . .
 
 EXPOSE ${UI_PORT}
 
-CMD ["npm", "run", "dev"]
+ENTRYPOINT ./run.sh

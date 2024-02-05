@@ -24,6 +24,7 @@ services:
       timeout: 5s
       retries: 5
     image: postgres:latest
+    restart: on-failure
     volumes:
       - ./pg_data:/var/lib/postgresql/data
 

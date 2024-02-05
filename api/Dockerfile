@@ -19,10 +19,4 @@ COPY . .
 
 EXPOSE ${API_PORT}
 
-# If docker-compose with volume mounting is used on macOS before the `docs` folder exists,
-# CompileDaemon enters an infinite loop. `-polling=true` fixes it.
-ENTRYPOINT CompileDaemon \
-    -build="swag init && go build -o /podfish" \
-    -command="/podfish" \
-    -exclude-dir="./docs" \
-    -polling=true
+ENTRYPOINT ./run.sh

@@ -4,9 +4,9 @@ import "./Subscription.css";
 
 function Subscription({ id, imageId, title }) {
   return (
-    <Link to={`/podcasts/${ id }`}>
+    <Link className="uncolored" to={`/podcasts/${ id }`}>
       <img className="subscription-cover" src={ `/file/${ imageId }` }></img>
-      <p className="truncate">{ title }</p>
+      <div className="truncate">{ title }</div>
     </Link>
   );
 }

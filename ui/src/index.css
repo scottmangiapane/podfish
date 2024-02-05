@@ -57,9 +57,7 @@ a, a:hover { color: var(--link-color); }
 
 a:hover { text-decoration: underline; }
 
-h1, h2, h3, h4, h5, h6 { color: var(--text-color); }
-
-p { color: var(--text-color); }
+button, h1, h2, h3, h4, h5, h6, input, label, p { color: var(--text-color); }
 
 /* Styles */
 
@@ -68,6 +66,12 @@ button, input[type=email], input[type=password] { padding: 8px; }
 input[type=email], input[type=password] {
     border: var(--br);
     border-radius: 8px;
+}
+
+.align-right {
+    margin-left: auto;
+    margin-right: 0;
+    width: fit-content;
 }
 
 .app {
@@ -184,18 +188,6 @@ input[type=email], input[type=password] {
 
 .symbol-btn:active, .symbol-btn:hover:not(:active) { color: var(--text-color-dark); }
 
-.align-center {
-    margin-left: auto;
-    margin-right: auto;
-    width: fit-content;
-}
-
-.align-right {
-    margin-left: auto;
-    margin-right: 0;
-    width: fit-content;
-}
-
 .text-light { color: var(--text-color-light); }
 
 .truncate {
@@ -217,6 +209,8 @@ input[type=email], input[type=password] {
 }
 .truncate-6l { max-height: 6lh; }
 .truncate-6l { -webkit-line-clamp: 6; }
+
+.uncolored, .uncolored:hover { color: var(--text-color); }
 
 /* Media */
 

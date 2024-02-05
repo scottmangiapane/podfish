@@ -21,12 +21,11 @@ type Channel struct {
 }
 
 type Image struct {
-	Url    string `xml:"url"`
-	UrlAlt string `xml:"href,attr"`
+	URL    string `xml:"url"`
+	AltURL string `xml:"href,attr"`
 }
 
 type Item struct {
-	// TODO lowercase IDs and similar params throughout all files
 	ID          string      `xml:"guid"`
 	Title       string      `xml:"title"`
 	Description string      `xml:"description"`
@@ -35,7 +34,7 @@ type Item struct {
 }
 
 type Enclosure struct {
-	Url  string `xml:"url,attr"`
+	URL  string `xml:"url,attr"`
 	Type string `xml:"type,attr"`
 }
 
@@ -52,9 +51,9 @@ func Sync(p *models.Podcast) error {
 		return err
 	}
 
-	image := strings.TrimSpace(rss.Channel.Image.Url)
+	image := strings.TrimSpace(rss.Channel.Image.URL)
 	if image == "" {
-		image = strings.TrimSpace(rss.Channel.Image.UrlAlt)
+		image = strings.TrimSpace(rss.Channel.Image.AltURL)
 	}
 
 	res, err = Fetch(image)
@@ -93,7 +92,7 @@ func Sync(p *models.Podcast) error {
 		var url string
 		for _, enclosure := range item.Enclosures {
 			if enclosure.Type == "audio/mpeg" {
-				url = enclosure.Url
+				url = enclosure.URL
 				break
 			}
 		}
