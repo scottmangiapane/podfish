@@ -26,10 +26,17 @@ type Image struct {
 }
 
 type Item struct {
-	ID          string `xml:"guid"`
-	Title       string `xml:"title"`
-	Description string `xml:"description"`
-	Date        string `xml:"pubDate"`
+	// TODO lowercase IDs and similar params throughout all files
+	ID          string      `xml:"guid"`
+	Title       string      `xml:"title"`
+	Description string      `xml:"description"`
+	Date        string      `xml:"pubDate"`
+	Enclosures  []Enclosure `xml:"enclosure"`
+}
+
+type Enclosure struct {
+	Url  string `xml:"url,attr"`
+	Type string `xml:"type,attr"`
 }
 
 func Sync(p *models.Podcast) error {
@@ -83,12 +90,21 @@ func Sync(p *models.Podcast) error {
 			continue
 		}
 
+		var url string
+		for _, enclosure := range item.Enclosures {
+			if enclosure.Type == "audio/mpeg" {
+				url = enclosure.Url
+				break
+			}
+		}
+
 		var episode models.Episode
 		result := DB.FirstOrCreate(&episode, models.Episode{
 			PodcastID:   p.ID,
 			Title:       item.Title,
 			Description: item.Description,
 			Date:        date,
+			URL:         url,
 
 			// TODO episode ID
 			// TODO add constraint on episode ID and podcast ID

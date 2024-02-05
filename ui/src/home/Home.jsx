@@ -11,8 +11,8 @@ function Home() {
   const [subscriptions, setSubscriptions] = useState([]);
 
   useEffect(() => {
-    getSubscriptions(navigate).then((data) => {
-      setSubscriptions(data);
+    getSubscriptions(navigate).then((res) => {
+      res.json().then((data) => setSubscriptions(data));
     });
   }, []);
 

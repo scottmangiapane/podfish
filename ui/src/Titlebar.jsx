@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { Link } from "react-router-dom";
 
-import { RootContext } from './Root';
+import { RootContext } from "./Root";
 
 import "./Titlebar.css";
 

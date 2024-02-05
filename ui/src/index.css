@@ -196,6 +196,8 @@ input[type=email], input[type=password] {
     width: fit-content;
 }
 
+.text-light { color: var(--text-color-light); }
+
 .truncate {
     overflow-x: hidden;
     text-overflow: ellipsis;

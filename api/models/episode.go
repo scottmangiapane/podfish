@@ -13,4 +13,5 @@ type Episode struct {
 	Title       string    `json:"title"`
 	Description string    `json:"description"`
 	Date        time.Time `json:"date"`
+	URL         string    `json:"url" gorm:"unique"`
 }

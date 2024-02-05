@@ -1,7 +1,5 @@
 .episode-content { margin-left: calc(24px + 16px); }
 
-.episode-date { color: var(--text-color-light); }
-
 .episode-header {
     align-items: center;
     display: flex;

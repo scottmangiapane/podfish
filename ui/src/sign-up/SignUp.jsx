@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { postSignUp } from "../api-service";
 
 function SignIn() {
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -13,13 +14,9 @@ function SignIn() {
     emailRef.current.focus();
   }, []);
 
-  async function submit(event) {
+  function submit(event) {
     event.preventDefault();
-
-    await fetch('/api/v1/auth/sign-up', {
-      method: 'POST',
-      body: JSON.stringify({ email, password })
-    })
+    postSignUp(email, password);
   }
 
   return (

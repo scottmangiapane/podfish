@@ -1,11 +1,19 @@
+import { useContext } from "react";
+
+import { RootContext } from "./Root";
+
 import "./Playbar.css";
 
 function Playbar() {
+  const { state } = useContext(RootContext);
+
+  const { episodeTitle, podcastTitle } = state.nowPlaying;
+
   return (
     <div className="app-content playbar">
       <div>
-        <p>Episode Title</p>
-        <p>Podcast Title</p>
+        <p className="truncate">{ episodeTitle }</p>
+        <p className="text-light truncate">{ podcastTitle }</p>
       </div>
       <div>
         <div className="align-center playbar-symbol-group">

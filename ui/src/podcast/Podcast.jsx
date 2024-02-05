@@ -15,11 +15,11 @@ function Podcast() {
   const [podcast, setPodcast] = useState(null);
 
   useEffect(() => {
-    getEpisodes(navigate, id).then((data) => {
-      setEpisodes(data);
+    getEpisodes(navigate, id).then((res) => {
+      res.json().then((data) => setEpisodes(data));
     });
-    getSubscription(navigate, id).then((data) => {
-      setPodcast(data);
+    getSubscription(navigate, id).then((res) => {
+      res.json().then((data) => setPodcast(data));
     });
   }, []);
 
@@ -30,12 +30,13 @@ function Podcast() {
   const episodeList = [];
   for (const episode of episodes) {
     episodeList.push(
-      <div className="podcast-list-item">
+      <div className="podcast-list-item" key={ episode.id }>
         <Episode
-          key={ episode.id }
+          id={ episode.id }
           title={ episode.title }
           description={ episode.description }
           date={ episode.date }
+          podcastTitle={ podcast.title }
           />
       </div>
     );

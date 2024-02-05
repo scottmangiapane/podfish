@@ -2,6 +2,7 @@ import Cookies from "js-cookie";
 import { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import { postSignIn } from "../api-service";
 import { RootContext } from '../Root';
 
 function SignIn() {
@@ -22,11 +23,7 @@ function SignIn() {
   async function submit(event) {
     event.preventDefault();
 
-    const res = await fetch('/api/v1/auth/sign-in', {
-      method: 'POST',
-      body: JSON.stringify({ email, password })
-    });
-
+    const res = await postSignIn(email, password);
     if (res.ok) {
       dispatch({ type: 'SET_USER', data: Cookies.get('user') });
       navigate('/');
