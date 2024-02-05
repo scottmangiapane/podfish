@@ -11,10 +11,9 @@
     z-index: 1000;
 }
 
-.playbar > * {
-    flex-basis: 100%;
-    min-width: 0;
-}
+.playbar > * { min-width: 0; }
+
+.playbar-stretch { flex: 1; }
 
 .playbar-symbol-group {
     align-items: center;
