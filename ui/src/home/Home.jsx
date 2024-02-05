@@ -29,7 +29,7 @@ function Home() {
 
   return (
     <>
-      <h1>Subscriptions</h1>
+      <h1 className="mt-0">Subscriptions</h1>
       <div className="subscription-grid">
         { content }
       </div>

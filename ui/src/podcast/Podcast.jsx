@@ -11,6 +11,7 @@ function Podcast() {
 
   const { id } = useParams();
   const [episodes, setEpisodes] = useState([]);
+  const [isCollapsed, setIsCollapsed] = useState(true);
   const [podcast, setPodcast] = useState(null);
 
   useEffect(() => {
@@ -29,26 +30,33 @@ function Podcast() {
   const episodeList = [];
   for (const episode of episodes) {
     episodeList.push(
-      <Episode
-        key={ episode.id }
-        title={ episode.title }
-        description={ episode.description }
-        date={ episode.date }
-        />
+      <div className="podcast-list-item">
+        <Episode
+          key={ episode.id }
+          title={ episode.title }
+          description={ episode.description }
+          date={ episode.date }
+          />
+      </div>
     );
   }
 
   return (
     <div className="podcast-split">
       <div className="podcast-split-left">
-        <div className="text-center">
-          <img className="podcast-cover" src={ `/file/${ podcast['image_id'] }` }></img>
-          <h1 className="break-word">{ podcast.title }</h1>
-        </div>
-        <p className="break-word">{ podcast.description }</p>
+        <img className="podcast-cover" src={ `/file/${ podcast['image_id'] }` }></img>
+        <h3 className="break-word">{ podcast.title }</h3>
+        <p className={ "break-word " + (isCollapsed && "truncate-l truncate-6l") }>
+          { podcast.description }
+        </p>
+        <span className="symbol" onClick={ () => setIsCollapsed(!isCollapsed) }>
+          { (isCollapsed) ? "expand_more" : "expand_less" }
+        </span>
       </div>
       <div className="podcast-split-right">
-        <div className="episode-list">{ episodeList }</div>
+        <div className="podcast-list">
+          { episodeList }
+        </div>
       </div>
     </div>
   );

@@ -13,7 +13,6 @@ export default defineConfig(({ mode }) => {
       proxy: {
         '^\/(api|file|swagger)\/.*': {
           changeOrigin: true,
-          secure: env.SECURE_COOKIES, // TODO is this needed?
           target: env.API_URL,
         }
       },

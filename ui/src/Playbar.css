@@ -10,11 +10,13 @@
     z-index: 1000;
 }
 
-.playbar > * { flex-grow: 1; }
+.playbar > * {
+    flex-basis: 100%;
+    min-width: 0;
+}
 
 .playbar-symbol-group {
     align-items: center;
     display: flex;
     gap: 16px;
-    width: fit-content;
 }

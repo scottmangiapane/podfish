@@ -23,7 +23,7 @@ a, a:active, a:focus, a:hover, a:visited { text-decoration: none; }
 
 button { border: none; }
 
-body, div, html, p {
+body, div, html, p, span {
     margin: 0;
     padding: 0;
 }
@@ -74,8 +74,8 @@ input[type=email], input[type=password] {
 }
 
 .app-body {
-    padding-bottom: 16px;
-    padding-top: calc(16px + var(--titlebar-height));
+    padding-bottom: 32px;
+    padding-top: calc(32px + var(--titlebar-height));
 }
 
 .app-content {
@@ -150,6 +150,8 @@ input[type=email], input[type=password] {
 
 .mb-3 { margin-bottom: 16px; }
 
+.mt-0 { margin-top: 0; }
+
 .mt-2 { margin-top: 8px; }
 
 .mt-3 { margin-top: 16px; }
@@ -182,15 +184,37 @@ input[type=email], input[type=password] {
     'opsz' 24;
 }
 
-.text-center { text-align: center; }
+.align-center {
+    margin-left: auto;
+    margin-right: auto;
+    width: fit-content;
+}
 
-.text-right { text-align: right; }
+.align-right {
+    margin-left: auto;
+    margin-right: 0;
+    width: fit-content;
+}
 
 .truncate {
-    overflow: hidden;
+    overflow-x: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
+
+/* Cross platform line truncation, no ellipses */
+.truncate-l { overflow-y: hidden; }
+.truncate-3l { max-height: 3lh; }
+.truncate-3l { -webkit-line-clamp: 3; }
+
+/* Ellipses for the browsers that support it */
+.truncate-l {
+    display: -webkit-box;
+    text-overflow: ellipsis;
+    -webkit-box-orient: vertical;
+}
+.truncate-6l { max-height: 6lh; }
+.truncate-6l { -webkit-line-clamp: 6; }
 
 /* Media */
 

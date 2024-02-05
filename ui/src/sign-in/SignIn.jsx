@@ -35,7 +35,7 @@ function SignIn() {
 
   return (
     <div className="center">
-      <h1>Sign In to Podfish</h1>
+      <h1 className="mt-0">Sign In to Podfish</h1>
       <form className="form" onSubmit={ submit }>
         <input
           ref={ emailRef }

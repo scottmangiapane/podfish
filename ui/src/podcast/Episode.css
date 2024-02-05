@@ -1,16 +1,13 @@
-/* .episode {
-    display: flex;
-    gap: 16px;
-} */
-
-.episode-collapsed {
-    max-height: 4lh;
-    overflow-y: hidden;
-    /* TODO make this work */
-    text-overflow: ellipsis;
-}
+.episode-content { margin-left: calc(24px + 16px); }
 
 .episode-date { color: var(--text-color-light); }
+
+.episode-header {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+}
 
 .episode-title {
     color: black;

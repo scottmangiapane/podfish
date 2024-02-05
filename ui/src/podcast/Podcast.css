@@ -1,33 +1,30 @@
-.episode-list {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-}
-
 .podcast-cover {
     aspect-ratio: 1;
-    max-width: 200px;
-    width: 25%;
+    max-width: 100%;
 }
 
-.podcast-split-left {
-    width: 30%;
+.podcast-list {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
 }
 
-.podcast-split-right {
-    width: 70%;
+.podcast-list-item:not(:last-of-type) {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    padding-bottom: 16px;
 }
 
 .podcast-split {
     display: flex;
-    gap: 16px;
+    gap: 32px;
 }
 
-.podcast-split > * {
-    flex-grow: 1;
+.podcast-split-left {
+    flex-basis: 30%;
+    min-width: 0;
 }
 
-.podcast-header {
-    display: flex;
-    gap: 16px;
+.podcast-split-right {
+    flex-basis: 70%;
+    min-width: 0;
 }
