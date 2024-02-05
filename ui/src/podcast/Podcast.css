@@ -38,9 +38,9 @@
     }
 
     .podcast-header {
-        align-items: center;
+        align-items: start;
         display: flex;
-        flex-direction: row-reverse;
+        flex-direction: row;
         gap: 16px;
         padding-bottom: 8px;
     }
@@ -49,5 +49,8 @@
 
     .podcast-split-left, .podcast-split-right { flex-basis: 100%; }
 
-    .podcast-title { flex: 1; }
+    .podcast-title {
+        flex: 1;
+        margin-top: 0;
+    }
 }

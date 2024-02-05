@@ -47,14 +47,16 @@ function Podcast() {
       <div className="podcast-split-left">
         <div className="podcast-header">
           <img className="podcast-cover" src={ `/file/${ podcast['image_id'] }` }></img>
-          <h3 className="break-word podcast-title">{ podcast.title }</h3>
+          <div>
+            <h3 className="break-word podcast-title">{ podcast.title }</h3>
+            <p className={ "break-word " + (isCollapsed && "truncate-l truncate-6l") }>
+              { podcast.description }
+            </p>
+            <span className="symbol symbol-btn" onClick={ () => setIsCollapsed(!isCollapsed) }>
+              { (isCollapsed) ? "expand_more" : "expand_less" }
+            </span>
+          </div>
         </div>
-        <p className={ "break-word " + (isCollapsed && "truncate-l truncate-6l") }>
-          { podcast.description }
-        </p>
-        <span className="symbol symbol-btn" onClick={ () => setIsCollapsed(!isCollapsed) }>
-          { (isCollapsed) ? "expand_more" : "expand_less" }
-        </span>
       </div>
       <div className="podcast-split-right">
         <div className="podcast-list">
