@@ -6,12 +6,12 @@ function Episode({ title, description, date }) {
   const [isCollapsed, setIsCollapsed] = useState(true);
 
   return (
-    <div>
+    <>
       <div className="episode-header mb-2">
         <span className="symbol symbol-outline">play_circle</span>
-        <div>
-          <p className="episode-title">{ title }</p>
-          <p className="episode-date">{ new Date(date).toDateString() }</p>
+        <div style={{ minWidth: 0 }}> {/* `minWidth: 0` is necessary for truncation */}
+          <p className="episode-title truncate">{ title }</p>
+          <p className="episode-date truncate">{ new Date(date).toDateString() }</p>
         </div>
       </div>
       <div className="episode-content">
@@ -22,7 +22,7 @@ function Episode({ title, description, date }) {
           { (isCollapsed) ? "expand_more" : "expand_less" }
         </span>
       </div>
-    </div>
+    </>
   );
 }
 

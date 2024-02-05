@@ -44,8 +44,10 @@ function Podcast() {
   return (
     <div className="podcast-split">
       <div className="podcast-split-left">
-        <img className="podcast-cover" src={ `/file/${ podcast['image_id'] }` }></img>
-        <h3 className="break-word">{ podcast.title }</h3>
+        <div className="podcast-header">
+          <img className="podcast-cover" src={ `/file/${ podcast['image_id'] }` }></img>
+          <h3 className="break-word podcast-title">{ podcast.title }</h3>
+        </div>
         <p className={ "break-word " + (isCollapsed && "truncate-l truncate-6l") }>
           { podcast.description }
         </p>

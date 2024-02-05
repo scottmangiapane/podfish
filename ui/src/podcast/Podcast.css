@@ -28,3 +28,21 @@
     flex-basis: 70%;
     min-width: 0;
 }
+
+@media only screen and (max-width: 992px) {
+    .podcast-cover { max-width: 64px; }
+
+    .podcast-header {
+        align-items: center;
+        display: flex;
+        flex-direction: row-reverse;
+        gap: 16px;
+        padding-bottom: 8px;
+    }
+
+    .podcast-split { flex-wrap: wrap; }
+
+    .podcast-split-left, .podcast-split-right { flex-basis: 100%; }
+
+    .podcast-title { flex: 1; }
+}

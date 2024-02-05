@@ -83,7 +83,10 @@ input[type=email], input[type=password] {
     padding: 0 16px;
 }
 
-.break-word { word-wrap: break-word; }
+.break-word {
+    min-width: 0;
+    word-wrap: break-word;
+}
 
 .btn {
     color: black;
@@ -223,13 +226,9 @@ input[type=email], input[type=password] {
 }
 
 @media only screen and (min-width: 992px) {
-    .app-content { max-width: 576px; }
-}
-
-@media only screen and (min-width: 1200px) {
     .app-content { max-width: 768px; }
 }
 
-@media only screen and (min-width: 1400px) {
+@media only screen and (min-width: 1200px) {
     .app-content { max-width: 992px; }
 }
