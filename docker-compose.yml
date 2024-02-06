@@ -2,18 +2,6 @@ version: '3.9'
 
 services:
 
-  api:
-    build: api
-    container_name: podfish_api
-    depends_on:
-      - postgres
-    env_file:
-      - ./.env
-    restart: on-failure
-    volumes:
-      - ./api:/podfish-src
-      - ./rss_data:/podfish-data
-
   postgres:
     container_name: podfish_postgres
     env_file:
@@ -24,12 +12,27 @@ services:
       timeout: 5s
       retries: 5
     image: postgres:latest
-    restart: on-failure
     volumes:
       - ./pg_data:/var/lib/postgresql/data
 
+  api:
+    build:
+      context: api
+      target: ${ENVIRONMENT}
+    container_name: podfish_api
+    depends_on:
+      - postgres
+    env_file:
+      - ./.env
+    restart: on-failure
+    volumes:
+      - ./api:/podfish-src
+      - ./rss_data:/podfish-data
+
   ui:
-    build: ui
+    build:
+      context: ui
+      target: ${ENVIRONMENT}
     container_name: podfish_ui
     env_file:
       - ./.env

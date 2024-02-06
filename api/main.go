@@ -54,7 +54,7 @@ func main() {
 	authorized.PATCH("/users/:id/email", controllers.PatchUserEmail)
 	authorized.PATCH("/users/:id/password", controllers.PatchUserPassword)
 
-	// TODO remove these, replace with background service
+	// TODO for testing purposes only, replace with background service
 	authorized.POST("/sync", controllers.PostSync)
 	authorized.POST("/sync/:id", controllers.PostSyncWithId)
 

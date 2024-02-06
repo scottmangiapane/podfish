@@ -1,7 +1,6 @@
 UP NEXT
 
 - rename podcast and subscription for consistency
-- turn off hot-reloading during prod
 - actually play tracks
 
 SECURITY
