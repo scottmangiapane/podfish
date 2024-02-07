@@ -22,6 +22,19 @@ type creds struct {
 }
 
 // @Tags auth
+// @Router /auth/reset-password [post]
+func PostResetPassword(c *gin.Context) {
+	middleware.Abort(c, http.StatusBadRequest, "Not implemented")
+}
+
+// @Tags auth
+// @Router /auth/reset-password/{token} [patch]
+// @Param token path string true "Token"
+func PatchResetPasswordWithToken(c *gin.Context) {
+	middleware.Abort(c, http.StatusBadRequest, "Not implemented")
+}
+
+// @Tags auth
 // @Router /auth/sign-in [post]
 // @Param request body controllers.creds true "Request body"
 func PostSignIn(c *gin.Context) {
@@ -34,7 +47,7 @@ func PostSignIn(c *gin.Context) {
 	var user models.User
 	result := global.DB.First(&user, &models.User{Email: r.Email})
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-		middleware.Abort(c, http.StatusNotFound, "No user found with that email")
+		middleware.Abort(c, http.StatusNotFound, "No user found for that email")
 		return
 	}
 	if result.Error != nil {

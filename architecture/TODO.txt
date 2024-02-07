@@ -1,6 +1,5 @@
 UP NEXT
 
-- rename podcast and subscription for consistency
 - actually play tracks
 
 SECURITY

@@ -27,7 +27,10 @@ func main() {
 	r := gin.Default()
 	r.SetTrustedProxies(nil)
 
+	// Auth
 	v1 := r.Group("/api/v1")
+	v1.POST("/auth/reset-password", controllers.PostResetPassword)
+	v1.PATCH("/auth/reset-password/:token", controllers.PatchResetPasswordWithToken)
 	v1.POST("/auth/sign-in", controllers.PostSignIn)
 	v1.POST("/auth/sign-out", controllers.PostSignOut)
 	v1.POST("/auth/sign-up", controllers.PostSignUp)
@@ -35,28 +38,34 @@ func main() {
 	authorized := v1.Group("/")
 	authorized.Use(middleware.RequireAuth)
 
+	// Episodes
 	authorized.GET("/episodes", controllers.GetEpisodes)
 	authorized.GET("/episodes/:id", controllers.GetEpisode)
 	authorized.PATCH("/episodes/:id/completed", controllers.PatchEpisodeCompleted)
 	authorized.PATCH("/episodes/:id/playback-position", controllers.PatchEpisodePlaybackPosition)
 
+	// Now Playing
 	authorized.GET("/now-playing", controllers.GetNowPlaying)
 	authorized.PUT("/now-playing", controllers.PutNowPlaying)
 	authorized.DELETE("/now-playing", controllers.DeleteNowPlaying)
 
+	// Stream
+	authorized.GET("/stream", controllers.GetStream)
+
+	// Subscriptions
 	authorized.GET("/subscriptions", controllers.GetSubscriptions)
 	authorized.POST("/subscriptions", controllers.PostSubscriptions)
 	authorized.GET("/subscriptions/:id", controllers.GetSubscription)
 	authorized.DELETE("/subscriptions/:id", controllers.DeleteSubscription)
 
-	authorized.POST("/reset-password", controllers.PostResetPassword)
-	authorized.POST("/reset-password/:token", controllers.PostResetPasswordWithToken)
-	authorized.PATCH("/users/:id/email", controllers.PatchUserEmail)
-	authorized.PATCH("/users/:id/password", controllers.PatchUserPassword)
-
+	// Sync
 	// TODO for testing purposes only, replace with background service
 	authorized.POST("/sync", controllers.PostSync)
 	authorized.POST("/sync/:id", controllers.PostSyncWithId)
+
+	// Users
+	authorized.PATCH("/users/:id/email", controllers.PatchUserEmail)
+	authorized.PATCH("/users/:id/password", controllers.PatchUserPassword)
 
 	docs.SwaggerInfo.Title = "Podfish"
 	r.StaticFS("/docs", gin.Dir("docs", false))

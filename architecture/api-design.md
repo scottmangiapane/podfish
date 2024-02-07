@@ -2,6 +2,8 @@ All routes are prefixed with `/api/v1`.
 
 # Authentication
 
+- POST /auth/reset-password
+- PATCH /auth/reset-password/{token}
 - POST /auth/sign-in
 - POST /auth/sign-out
 - POST /auth/sign-up
@@ -19,16 +21,9 @@ All routes are prefixed with `/api/v1`.
 - PUT /now-playing
 - DELETE /now-playing
 
-Note: actual MP3 file will be streamed to client directly from 3rd party servers.
+# Stream
 
-# Users
-
-- POST /reset-password
-- PATCH /reset-password/{token}
-- PATCH /users/{id}/email
-- PATCH /users/{id}/password
-
-Note: password resets are separate since the user ID isn't known before sign-in.
+- GET /stream
 
 # Subscriptions
 
@@ -38,3 +33,10 @@ Note: password resets are separate since the user ID isn't known before sign-in.
 - DELETE /subscriptions/{id}
 
 Note: ability to request metadata refresh may be needed if backend service is slow.
+
+# Users
+
+- PATCH /users/{id}/email
+- PATCH /users/{id}/password
+
+Note: password resets are separate since the user ID isn't known before sign-in.

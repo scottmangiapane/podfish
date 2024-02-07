@@ -33,7 +33,7 @@ ENTRYPOINT [ "npm", "run", "dev" ]
 
 FROM nginx as prod
 
-COPY nginx.conf /etc/nginx/templates/default.conf.template
+COPY nginx.conf /etc/nginx/templates/podfish.conf.template
 COPY --from=build /podfish-src/dist /usr/share/nginx/html
 
 EXPOSE ${UI_PORT}

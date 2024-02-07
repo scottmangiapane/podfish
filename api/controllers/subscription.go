@@ -68,7 +68,7 @@ func PostSubscriptions(c *gin.Context) {
 
 	err := global.Sync(&podcast)
 	if err != nil {
-		middleware.Abort(c, http.StatusInternalServerError, "Failed to create podcast")
+		middleware.Abort(c, http.StatusInternalServerError, "Failed to sync podcast")
 		return
 	}
 
@@ -77,11 +77,11 @@ func PostSubscriptions(c *gin.Context) {
 
 // @Tags subscriptions
 // @Router /subscriptions/{id} [get]
-// @Param id path string true "Subscription ID"
+// @Param id path string true "Podcast ID"
 func GetSubscription(c *gin.Context) {
 	id, err := uuid.Parse(c.Param("id"))
 	if err != nil {
-		middleware.Abort(c, http.StatusUnprocessableEntity, "Invalid subscription ID")
+		middleware.Abort(c, http.StatusUnprocessableEntity, "Invalid podcast ID")
 		return
 	}
 
@@ -91,7 +91,7 @@ func GetSubscription(c *gin.Context) {
 		PodcastID: id,
 	})
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-		middleware.Abort(c, http.StatusNotFound, "No subscription found with that ID")
+		middleware.Abort(c, http.StatusNotFound, "No subscription found for that podcast ID")
 		return
 	}
 	if result.Error != nil {
@@ -105,11 +105,11 @@ func GetSubscription(c *gin.Context) {
 
 // @Tags subscriptions
 // @Router /subscriptions/{id} [delete]
-// @Param id path string true "Subscription ID"
+// @Param id path string true "Podcast ID"
 func DeleteSubscription(c *gin.Context) {
 	id, err := uuid.Parse(c.Param("id"))
 	if err != nil {
-		middleware.Abort(c, http.StatusUnprocessableEntity, "Invalid subscription ID")
+		middleware.Abort(c, http.StatusUnprocessableEntity, "Invalid podcast ID")
 		return
 	}
 
