@@ -32,6 +32,4 @@
     !important;
 }
 
-.symbol-play-pause:active { color: var(--theme-color-dark-2) !important; }
-
-.symbol-play-pause:hover:not(:active) { color: var(--theme-color-dark-1) !important; }
+.symbol-play-pause:active { color: var(--theme-color-dark) !important; }

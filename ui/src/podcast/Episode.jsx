@@ -23,7 +23,7 @@ function Episode({ id, title, description, date, podcastTitle }) {
   return (
     <>
       <div className="episode-header mb-2">
-        <span className="symbol symbol-btn symbol-outline" onClick={ play }>
+        <span className="btn symbol symbol-outline" onClick={ play }>
             play_circle
         </span>
         <div style={{ minWidth: 0 }}> {/* `minWidth: 0` is necessary for truncation */}
@@ -35,7 +35,7 @@ function Episode({ id, title, description, date, podcastTitle }) {
         <p className={ "break-word " + (isCollapsed && "truncate-l truncate-3l") }>
           { description }
         </p>
-        <span className="symbol symbol-btn" onClick={ () => setIsCollapsed(!isCollapsed) }>
+        <span className="btn symbol" onClick={ () => setIsCollapsed(!isCollapsed) }>
           { (isCollapsed) ? "expand_more" : "expand_less" }
         </span>
       </div>
