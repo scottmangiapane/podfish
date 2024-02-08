@@ -14,6 +14,7 @@ import (
 
 // @Tags sync
 // @Router /sync [post]
+// @Success 204
 func PostSync(c *gin.Context) {
 	var subscriptions []models.Subscription
 	result := global.DB.Preload("Podcast").Find(&subscriptions, models.Subscription{
@@ -29,12 +30,13 @@ func PostSync(c *gin.Context) {
 		global.Sync(&s.Podcast)
 	}
 
-	c.Writer.WriteHeader(http.StatusNoContent)
+	c.JSON(http.StatusNoContent, nil)
 }
 
 // @Tags sync
 // @Router /sync/{id} [post]
 // @Param id path string true "Podcast ID"
+// @Success 204
 func PostSyncWithId(c *gin.Context) {
 	var subscriptions []models.Subscription
 	result := global.DB.Preload("Podcast").Find(&subscriptions, models.Subscription{
@@ -52,5 +54,5 @@ func PostSyncWithId(c *gin.Context) {
 		}
 	}
 
-	c.Writer.WriteHeader(http.StatusNoContent)
+	c.JSON(http.StatusNoContent, nil)
 }

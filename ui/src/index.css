@@ -172,6 +172,8 @@ input[type=email], input[type=password] {
 
 .symbol {
     color: var(--text-color);
+    /* TODO is this needed? Should hide icon text while loading. */
+    font-display: block;
     font-size: 24px;
     font-variation-settings:
     'FILL' 1,

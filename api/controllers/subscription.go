@@ -15,6 +15,7 @@ import (
 
 // @Tags subscriptions
 // @Router /subscriptions [get]
+// @Success 200 {object} []models.Podcast
 func GetSubscriptions(c *gin.Context) {
 	var subscriptions []models.Subscription
 	result := global.DB.Preload("Podcast").Find(&subscriptions, models.Subscription{
@@ -26,7 +27,7 @@ func GetSubscriptions(c *gin.Context) {
 		return
 	}
 
-	var podcasts []models.Podcast
+	podcasts := []models.Podcast{}
 	for _, s := range subscriptions {
 		podcasts = append(podcasts, s.Podcast)
 	}
@@ -37,6 +38,7 @@ func GetSubscriptions(c *gin.Context) {
 // @Tags subscriptions
 // @Router /subscriptions [post]
 // @Param request body controllers.PostSubscriptions.request true "Request body"
+// @Success 201 {object} models.Podcast
 func PostSubscriptions(c *gin.Context) {
 	type request struct {
 		RSS string `json:"rss" binding:"required,url"`
@@ -58,7 +60,7 @@ func PostSubscriptions(c *gin.Context) {
 	var subscription models.Subscription
 	result = global.DB.FirstOrCreate(&subscription, models.Subscription{
 		UserID:    middleware.GetUser(c),
-		PodcastID: podcast.ID,
+		PodcastID: podcast.PodcastID,
 	})
 	if result.Error != nil {
 		fmt.Println(result.Error)
@@ -66,6 +68,7 @@ func PostSubscriptions(c *gin.Context) {
 		return
 	}
 
+	// TODO make this async, maybe with a "syncing..." indicator in UI
 	err := global.Sync(&podcast)
 	if err != nil {
 		middleware.Abort(c, http.StatusInternalServerError, "Failed to sync podcast")
@@ -78,6 +81,7 @@ func PostSubscriptions(c *gin.Context) {
 // @Tags subscriptions
 // @Router /subscriptions/{id} [get]
 // @Param id path string true "Podcast ID"
+// @Success 200 {object} models.Podcast
 func GetSubscription(c *gin.Context) {
 	id, err := uuid.Parse(c.Param("id"))
 	if err != nil {
@@ -106,6 +110,7 @@ func GetSubscription(c *gin.Context) {
 // @Tags subscriptions
 // @Router /subscriptions/{id} [delete]
 // @Param id path string true "Podcast ID"
+// @Success 204
 func DeleteSubscription(c *gin.Context) {
 	id, err := uuid.Parse(c.Param("id"))
 	if err != nil {
@@ -123,5 +128,5 @@ func DeleteSubscription(c *gin.Context) {
 		return
 	}
 
-	c.Writer.WriteHeader(http.StatusNoContent)
+	c.JSON(http.StatusNoContent, nil)
 }

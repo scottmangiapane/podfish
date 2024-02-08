@@ -2,16 +2,19 @@ package models
 
 import (
 	"os"
+	"podfish/models/templates"
 	"strconv"
 
+	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
 
 type User struct {
-	Base
-	Email    string `json:"email" gorm:"unique"`
-	Password string `json:"-"`
+	UserID   uuid.UUID `json:"user_id" gorm:"primarykey;type:uuid;default:gen_random_uuid()"`
+	Email    string    `json:"email" gorm:"unique"`
+	Password string    `json:"-"`
+	templates.Timestamps
 }
 
 func (user *User) BeforeSave(tx *gorm.DB) (err error) {

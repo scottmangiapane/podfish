@@ -1,27 +1,43 @@
-import { useEffect, useRef, useState } from "react";
+import Cookies from "js-cookie";
+import { useContext, useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import { postSignUp } from "../api-service";
+import { RootContext } from '../Root';
 
 function SignIn() {
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const { dispatch, state } = useContext(RootContext);
+
+  const navigate = useNavigate();
+  if (state.user) {
+    navigate('/');
+  }
 
   const confirmPasswordRef = useRef(null);
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
 
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
   useEffect(() => {
     emailRef.current.focus();
   }, []);
 
-  function submit(event) {
+  async function submit(event) {
     event.preventDefault();
-    postSignUp(email, password);
+
+    const res = await postSignUp(email, password);
+    if (res.ok) {
+      dispatch({ type: 'SET_USER', data: Cookies.get('user') });
+      navigate('/');
+    }
   }
 
   return (
     <div className="center">
-      <h1 className="mt-0">Sign Up for Podfish</h1>
+      <h1 className="mt-0">Sign Up</h1>
       <form className="form" onSubmit={ submit }>
         <input
           ref={ emailRef }

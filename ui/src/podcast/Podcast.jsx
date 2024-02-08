@@ -30,9 +30,9 @@ function Podcast() {
   const episodeList = [];
   for (const episode of episodes) {
     episodeList.push(
-      <div className="podcast-list-item" key={ episode.id }>
+      <div className="podcast-list-item" key={ episode["episode_id"] }>
         <Episode
-          id={ episode.id }
+          id={ episode["episode_id"] }
           title={ episode.title }
           description={ episode.description }
           date={ episode.date }
@@ -55,6 +55,7 @@ function Podcast() {
             <span className="btn symbol" onClick={ () => setIsCollapsed(!isCollapsed) }>
               { (isCollapsed) ? "expand_more" : "expand_less" }
             </span>
+            {/* TODO unsubscribe button? */}
           </div>
         </div>
       </div>

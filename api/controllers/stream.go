@@ -7,5 +7,5 @@ import (
 // @Tags stream
 // @Router /stream [get]
 func GetStream(c *gin.Context) {
-
+	// TODO
 }

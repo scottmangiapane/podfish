@@ -17,6 +17,7 @@ import (
 // @Param limit query number false "Limit" default(10)
 // @Param offset query number false "Offset" default(0)
 // @Param podcast_id query string false "Podcast ID"
+// @Success 200 {object} []models.Episode
 func GetEpisodes(c *gin.Context) {
 	limit := 10
 	if c.Query("limit") != "" {
@@ -50,7 +51,7 @@ func GetEpisodes(c *gin.Context) {
 
 	var episodes []models.Episode
 	result := global.DB.
-		Order("date DESC, id").
+		Order("date DESC, episode_id").
 		Limit(limit).
 		Offset(offset).
 		Find(&episodes, models.Episode{PodcastID: podcastId})

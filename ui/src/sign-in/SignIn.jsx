@@ -6,9 +6,12 @@ import { postSignIn } from "../api-service";
 import { RootContext } from '../Root';
 
 function SignIn() {
-  const { dispatch } = useContext(RootContext);
+  const { dispatch, state } = useContext(RootContext);
 
   const navigate = useNavigate();
+  if (state.user) {
+    navigate('/');
+  }
 
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
@@ -32,7 +35,7 @@ function SignIn() {
 
   return (
     <div className="center">
-      <h1 className="mt-0">Sign In to Podfish</h1>
+      <h1 className="mt-0">Sign In</h1>
       <form className="form" onSubmit={ submit }>
         <input
           ref={ emailRef }

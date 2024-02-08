@@ -37,6 +37,7 @@ func PatchResetPasswordWithToken(c *gin.Context) {
 // @Tags auth
 // @Router /auth/sign-in [post]
 // @Param request body controllers.creds true "Request body"
+// @Success 200 {object} models.User
 func PostSignIn(c *gin.Context) {
 	var r creds
 	if err := c.ShouldBindJSON(&r); err != nil {
@@ -64,7 +65,7 @@ func PostSignIn(c *gin.Context) {
 	key := []byte(os.Getenv("JWT_HMAC_KEY"))
 	t := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"iat": time.Now().UTC().Unix(),
-		"sub": user.ID,
+		"sub": user.UserID,
 	})
 	s, err := t.SignedString(key)
 	if err != nil {
@@ -75,22 +76,24 @@ func PostSignIn(c *gin.Context) {
 
 	secure := strings.EqualFold(os.Getenv("SECURE_COOKIES"), "true")
 	c.SetCookie("auth", s, 3600, "/", os.Getenv("UI_URL"), secure, true)
-	c.SetCookie("user", user.ID.String(), 3600, "/", os.Getenv("UI_URL"), secure, false)
+	c.SetCookie("user", user.UserID.String(), 3600, "/", os.Getenv("UI_URL"), secure, false)
 	c.JSON(http.StatusOK, user)
 }
 
 // @Tags auth
 // @Router /auth/sign-out [post]
+// @Success 204
 func PostSignOut(c *gin.Context) {
 	secure := strings.EqualFold(os.Getenv("SECURE_COOKIES"), "true")
 	c.SetCookie("auth", "", -1, "/", os.Getenv("UI_URL"), secure, true)
 	c.SetCookie("user", "", -1, "/", os.Getenv("UI_URL"), secure, false)
-	c.Writer.WriteHeader(http.StatusNoContent)
+	c.JSON(http.StatusNoContent, nil)
 }
 
 // @Tags auth
 // @Router /auth/sign-up [post]
 // @Param request body controllers.creds true "Request body"
+// @Success 201 {object} models.User
 func PostSignUp(c *gin.Context) {
 	var r creds
 	if err := c.ShouldBindJSON(&r); err != nil {

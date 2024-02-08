@@ -41,13 +41,13 @@ type Enclosure struct {
 func Sync(p *models.Podcast) error {
 	res, err := Fetch(p.RSS)
 	if err != nil {
-		fmt.Printf("Failed to fetch RSS for podcast %s\n", p.ID)
+		fmt.Printf("Failed to fetch RSS for podcast %s\n", p.PodcastID)
 		return err
 	}
 
 	var rss Rss
 	if err := xml.Unmarshal(res, &rss); err != nil {
-		fmt.Printf("Failed to parse RSS for podcast %s\n", p.ID)
+		fmt.Printf("Failed to parse RSS for podcast %s\n", p.PodcastID)
 		return err
 	}
 
@@ -58,7 +58,7 @@ func Sync(p *models.Podcast) error {
 
 	res, err = Fetch(image)
 	if err != nil {
-		fmt.Printf("Failed to fetch image for podcast %s\n", p.ID)
+		fmt.Printf("Failed to fetch image for podcast %s\n", p.PodcastID)
 		fmt.Println(err)
 		return err
 	}
@@ -99,7 +99,7 @@ func Sync(p *models.Podcast) error {
 
 		var episode models.Episode
 		result := DB.FirstOrCreate(&episode, models.Episode{
-			PodcastID:   p.ID,
+			PodcastID:   p.PodcastID,
 			Title:       item.Title,
 			Description: item.Description,
 			Date:        date,
@@ -109,7 +109,7 @@ func Sync(p *models.Podcast) error {
 			// TODO add constraint on episode ID and podcast ID
 		})
 		if result.Error != nil {
-			fmt.Printf("Failed to create episode %s for podcast %s\n", item.ID, p.ID)
+			fmt.Printf("Failed to create episode %s for podcast %s\n", item.ID, p.PodcastID)
 			fmt.Println(result.Error)
 			continue
 		}

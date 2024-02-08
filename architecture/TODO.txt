@@ -1,5 +1,7 @@
 UP NEXT
 
+- custom error page at least in prod (ex: https://pod.scottmangiapane.com/podcasts/undefined)
+- speed up loading time of symbols font (minimized file to only include symbols I use?)
 - actually play tracks
 
 SECURITY
@@ -8,7 +10,7 @@ SECURITY
 - HTTP security headers
 - Sanitize images
 - "http.Dir" says it follows symlinks... Can malicious RSS feed with symlink for image read arbitrary files?
-- prevent RSS feeds (or images within feed) to invalid domains (localhost, docker hostnames, etc)
+- prevent RSS feeds (or images within feed) to invalid domains (localhost, docker hostnames like "api:3000", 0.0.0.0, etc)
 
 API
 
