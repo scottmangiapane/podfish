@@ -97,6 +97,7 @@ func Sync(p *models.Podcast) error {
 			}
 		}
 
+		// TODO make this a bulk update instead of potentially 100s of DB calls
 		var episode models.Episode
 		result := DB.FirstOrCreate(&episode, models.Episode{
 			PodcastID:   p.PodcastID,

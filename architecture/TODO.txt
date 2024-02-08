@@ -1,5 +1,6 @@
 UP NEXT
 
+- linting
 - custom error page at least in prod (ex: https://pod.scottmangiapane.com/podcasts/undefined)
 - speed up loading time of symbols font (minimized file to only include symbols I use?)
 - actually play tracks

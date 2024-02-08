@@ -5,6 +5,7 @@ import {
   RouterProvider,
 } from "react-router-dom";
 
+import Error from "./error/Error.jsx";
 import Home from "./home/Home.jsx";
 import Podcast from "./podcast/Podcast.jsx";
 import Root from "./Root.jsx";
@@ -18,6 +19,7 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <Root />,
+    errorElement: <Error />,
     children: [
       {
         path: "/",
@@ -29,11 +31,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/sign-in",
-        element: <SignIn />,
+        element: <SignIn />
       },
       {
         path: "/sign-up",
-        element: <SignUp />,
+        element: <SignUp />
       },
       {
         path: "/podcasts/:id",
