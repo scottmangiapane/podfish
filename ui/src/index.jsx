@@ -5,13 +5,13 @@ import {
   RouterProvider,
 } from "react-router-dom";
 
-import Error from "./error/Error.jsx";
-import Home from "./home/Home.jsx";
-import Podcast from "./podcast/Podcast.jsx";
-import Root from "./Root.jsx";
-import Settings from "./settings/Settings.jsx";
-import SignIn from "./sign-in/SignIn.jsx";
-import SignUp from "./sign-up/SignUp.jsx";
+import Error from "./error/Error";
+import Home from "./home/Home";
+import Podcast from "./podcast/Podcast";
+import Root from "./Root";
+import Settings from "./settings/Settings";
+import SignIn from "./sign-in/SignIn";
+import SignUp from "./sign-up/SignUp";
 
 import "./index.css";
 

@@ -9,9 +9,6 @@ function SignIn() {
   const { dispatch, state } = useContext(RootContext);
 
   const navigate = useNavigate();
-  if (state.user) {
-    navigate('/');
-  }
 
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
@@ -20,6 +17,9 @@ function SignIn() {
   const [password, setPassword] = useState('');
 
   useEffect(() => {
+    if (state.user) {
+      navigate('/');
+    }
     emailRef.current.focus();
   }, []);
 

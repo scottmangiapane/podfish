@@ -1,0 +1,41 @@
+.slider {
+    --bar-size: 4px;
+    --bar-padding: 4px;
+    --marker-size: 16px;
+}
+
+.slider {
+    height: var(--marker-size);
+    position: relative;
+}
+
+.slider-bar, .slider-bar *, .slider-marker {
+    left: 0;
+    position: absolute;
+    top: 0;
+    user-select: none;
+    width: 100%;
+}
+
+.slider-bar {
+    cursor: pointer;
+    height: calc(var(--bar-size) + 2 * var(--bar-padding));
+    top: calc(var(--marker-size) / 2 - var(--bar-size) / 2 - var(--bar-padding));
+}
+
+.slider-bar-bg {
+    background-color: #e0e0e0;
+    border-radius: 9999px;
+    height: var(--bar-size);
+    top: var(--bar-padding);
+}
+
+.slider-bar-bg-active { background-color: #64b5f6; }
+
+.slider-marker {
+    background: #2196f3;
+    border-radius: 50%;
+    cursor: grab;
+    height: var(--marker-size);
+    width: var(--marker-size);
+}

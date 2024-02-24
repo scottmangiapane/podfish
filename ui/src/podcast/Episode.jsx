@@ -11,7 +11,7 @@ function Episode({ episode, podcast }) {
   const navigate = useNavigate();
   const [isCollapsed, setIsCollapsed] = useState(true);
 
-  const play = () => {
+  function play() {
     dispatch({ type: 'SET_NOW_PLAYING', data: {
       episodeId: episode['episode_id'],
       episodeTitle: episode.title,
