@@ -40,12 +40,10 @@ export default function Slider({ onChange, onInput, value }) {
   }, []);
 
   function onClick(event) {
-    const barWidth = barRef.current.offsetWidth;
+    const barWidth = barRef.current.clientWidth;
     const barX = barRef.current.getBoundingClientRect().left;
-    const markerWidth = markerRef.current.offsetWidth;
 
-    let percent = 100 * (event.clientX - barX - markerWidth / 2) / barWidth;
-    percent = percent / getScalingFactor();
+    let percent = 100 * (event.clientX - barX) / barWidth;
     percent = Math.max(0, percent);
     percent = Math.min(100, percent);
 
@@ -64,15 +62,15 @@ export default function Slider({ onChange, onInput, value }) {
   }
 
   function onMouseMove(event) {
-    const bar = barRef.current;
+    const barWidth = barRef.current.clientWidth;
     const isMouseDown = isMouseDownRef.current;
+    const markerWidth = markerRef.current.clientWidth;
     const mouse = mouseRef.current;
 
     if (isMouseDown) {
       const delta = event.clientX - mouse.event.clientX;
 
-      let percent = 100 * (mouse.offset + delta) / bar.offsetWidth;
-      percent = percent / getScalingFactor();
+      let percent = 100 * (mouse.offset + delta + markerWidth / 2) / barWidth;
       percent = Math.max(0, percent);
       percent = Math.min(100, percent);
 
@@ -89,31 +87,24 @@ export default function Slider({ onChange, onInput, value }) {
     }
   }
 
-  function getScalingFactor() {
-    const bar = barRef.current;
-    const marker = markerRef.current;
-    if (bar === null || marker === null) {
-      return 0;
-    }
-
-    return (bar.offsetWidth - marker.offsetWidth) / bar.offsetWidth;
-  }
-
-  const percent = valuePendingRef.current * getScalingFactor();
+  const percent = valuePendingRef.current
   return (
     <div className="slider">
       <div ref={ barRef } className="slider-bar" onClick={ onClick }>
         <div className="slider-bar-bg"></div>
         <div
           className="slider-bar-bg slider-bar-bg-active"
-          style={{ width: 'calc(' + percent + '%' + ' + var(--marker-size) / 2)' }}>
+          style={{ width: `calc( ${ percent }%)` }}>
         </div>
       </div>
       <div
         ref={ markerRef }
         className="slider-marker"
         onMouseDown={ onMouseDown }
-        style={{ left: percent + '%' }}>
+        style={{
+          backgroundColor: isMouseDownRef.current && 'var(--accent-color-dark)',
+          left: `calc(${ percent }% - var(--marker-size) / 2)`
+        }}>
       </div>
     </div>
   );

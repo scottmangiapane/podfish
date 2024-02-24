@@ -1,6 +1,9 @@
 /* Variables */
 
 :root {
+    --accent-color: #2196f3;
+    --accent-color-light: #64b5f6;
+    --accent-color-dark: #1976d2;
     --bg-color: white;
     --link-color: #2e8dd0;
     --text-color: #424242;

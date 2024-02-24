@@ -18,12 +18,7 @@ function Playbar() {
   }
 
   function changePlaybackPosition(percent) {
-    console.log(percent)
     setPlaybackPosition(percent);
-  }
-
-  function changePlaybackPositionPending(percent) {
-    console.log('(' + percent + ')')
   }
 
   function spacebarPressed(event) {
@@ -72,7 +67,6 @@ function Playbar() {
             max="1000"
             value={ playbackPosition }
             onChange={ changePlaybackPosition }
-            onInput = { changePlaybackPositionPending }
           />
           <p>0:00</p>
         </div>

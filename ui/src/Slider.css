@@ -6,6 +6,7 @@
 
 .slider {
     height: var(--marker-size);
+    margin: 0 calc(var(--marker-size) / 2);
     position: relative;
     width: 100%;
 }
@@ -31,10 +32,10 @@
     top: var(--bar-padding);
 }
 
-.slider-bar-bg-active { background-color: #64b5f6; }
+.slider-bar-bg-active { background-color: var(--accent-color-light); }
 
 .slider-marker {
-    background: #2196f3;
+    background: var(--accent-color);
     border-radius: 50%;
     cursor: grab;
     height: var(--marker-size);
