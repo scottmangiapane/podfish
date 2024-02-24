@@ -36,7 +36,7 @@ function Playbar() {
       audioRef.current.pause();
       setIsPaused(true);
     }
-  };
+  }
 
   useEffect(() => {
     document.addEventListener('keydown', spacebarPressed);

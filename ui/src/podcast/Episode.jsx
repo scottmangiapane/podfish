@@ -20,7 +20,7 @@ function Episode({ episode, podcast }) {
       podcastTitle: podcast.title
     } });
     putNowPlaying(navigate, episode['episode_id']);
-  };
+  }
 
   return (
     <>

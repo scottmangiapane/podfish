@@ -66,6 +66,9 @@ button, h1, h2, h3, h4, h5, h6, input, label, p { color: var(--text-color); }
 
 /* Styles */
 
+/* prevents page from being dragged while slider is used on mobile */
+body { overflow-x: hidden; }
+
 button, input[type=email], input[type=password] { padding: 8px; }
 
 input[type=email], input[type=password] {

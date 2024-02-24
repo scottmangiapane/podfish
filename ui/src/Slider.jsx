@@ -32,10 +32,14 @@ export default function Slider({ onChange, onInput, value }) {
 
   useEffect(() => {
     document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('touchmove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
+    document.addEventListener('touchend', onMouseUp);
     return () => {
       document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('touchmove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
+      document.removeEventListener('touchend', onMouseUp);
     };
   }, []);
 
@@ -49,14 +53,14 @@ export default function Slider({ onChange, onInput, value }) {
     });
     setIsMouseDown(true);
 
-    const percent = calculatePercent(event.clientX)
+    const percent = calculatePercent(event.clientX || event.touches?.[0]?.clientX);
     setValuePending(percent);
     onInput && onInput(percent);
   }
 
   function onMouseMove(event) {
     if (isMouseDownRef.current) {
-      const percent = calculatePercent(event.clientX)
+      const percent = calculatePercent(event.clientX || event.touches?.[0]?.clientX);
       setValuePending(percent);
       onInput && onInput(percent);
     }
@@ -81,7 +85,7 @@ export default function Slider({ onChange, onInput, value }) {
 
   const percent = valuePendingRef.current
   return (
-    <div className="slider" onMouseDown={ onMouseDown }>
+    <div className="slider" onMouseDown={ onMouseDown } onTouchStart={ onMouseDown }>
       <div ref={ barRef } className="slider-bar">
         <div className="slider-bar-bg"></div>
         <div
