@@ -31,13 +31,7 @@ function Podcast() {
   for (const episode of episodes) {
     episodeList.push(
       <div className="podcast-list-item" key={ episode["episode_id"] }>
-        <Episode
-          id={ episode["episode_id"] }
-          title={ episode.title }
-          description={ episode.description }
-          date={ episode.date }
-          podcastTitle={ podcast.title }
-          />
+        <Episode episode={ episode } podcast={ podcast } />
       </div>
     );
   }

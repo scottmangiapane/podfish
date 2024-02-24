@@ -19,10 +19,11 @@ function Root() {
       res.json().then((data) => {
         if (res.ok && Object.keys(data).length > 0) {
           dispatch({ type: 'SET_NOW_PLAYING', data: {
-            episodeId: data['episode_id'],
-            episodeTitle: data['episode_title'],
-            podcastId: data['podcast_id'],
-            podcastTitle: data['podcast_title']
+            episodeId: data.episode['episode_id'],
+            episodeTitle: data.episode.title,
+            episodeUrl: data.episode.url,
+            podcastId: data.podcast['podcast_id'],
+            podcastTitle: data.podcast.title
           } });
         } else {
           dispatch({ type: 'SET_NOW_PLAYING', data: null });
@@ -37,8 +38,8 @@ function Root() {
         if (action.data === null) {
           return { ...state, nowPlaying: null };
         } else {
-          const { id, episodeTitle, podcastTitle } = action.data;
-          return { ...state, nowPlaying: { id, episodeTitle, podcastTitle } }
+          const { id, episodeTitle, episodeUrl, podcastTitle } = action.data;
+          return { ...state, nowPlaying: { id, episodeTitle, episodeUrl, podcastTitle } }
         }
       case 'SET_USER':
         return { ...state, user: action.data }

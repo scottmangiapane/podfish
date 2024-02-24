@@ -56,7 +56,7 @@ function SignIn() {
           value={ password }
         />
         <label className="checkbox-label">
-          <input type="checkbox" v-model="rememberEmail" />
+          <input type="checkbox" />
           Remember me
         </label>
         <button className="btn btn-pill" type="submit">Sign In</button>

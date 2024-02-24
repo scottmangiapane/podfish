@@ -32,16 +32,12 @@ func GetNowPlaying(c *gin.Context) {
 	}
 
 	type response struct {
-		EpisodeID    uuid.UUID `json:"episode_id"`
-		EpisodeTitle string    `json:"episode_title"`
-		PodcastID    uuid.UUID `json:"podcast_id"`
-		PodcastTitle string    `json:"podcast_title"`
+		Episode models.Episode `json:"episode"`
+		Podcast models.Podcast `json:"podcast"`
 	}
 	r := response{
-		EpisodeID:    nowPlaying.EpisodeID,
-		EpisodeTitle: nowPlaying.Episode.Title,
-		PodcastID:    nowPlaying.Episode.PodcastID,
-		PodcastTitle: nowPlaying.Episode.Podcast.Title,
+		Episode: nowPlaying.Episode,
+		Podcast: nowPlaying.Episode.Podcast,
 	}
 	c.JSON(http.StatusOK, r)
 }

@@ -21,10 +21,6 @@ All routes are prefixed with `/api/v1`.
 - PUT /now-playing
 - DELETE /now-playing
 
-# Stream
-
-- GET /stream
-
 # Subscriptions
 
 - GET /subscriptions

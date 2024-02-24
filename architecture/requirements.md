@@ -35,6 +35,7 @@
 
 (likely to be implemented, but not for launch)
 
+- OPML import
 - search for podcasts in subscriptions
 - import podcasts from another app
 - queueing system / "Up Next"

@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useRef, useState } from "react";
 
 import { RootContext } from "./Root";
 
@@ -6,16 +6,24 @@ import "./Playbar.css";
 
 function Playbar() {
   const { state } = useContext(RootContext);
-  const [isPaused, setIsPaused] = useState(false);
+  const audioRef = useRef(null);
+  const [isPaused, setIsPaused] = useState(true);
 
-  const { episodeTitle, podcastTitle } = state.nowPlaying;
+  const { episodeTitle, episodeUrl, podcastTitle } = state.nowPlaying;
 
   const playPause = () => {
-    setIsPaused(!isPaused);
+    if (isPaused) {
+      audioRef.current.play();
+      setIsPaused(false);
+    } else {
+      audioRef.current.pause();
+      setIsPaused(true);
+    }
   };
 
   return (
     <div className="app-content playbar">
+      <audio ref={ audioRef } src={ episodeUrl } preload="metadata"></audio>
       <div className="playbar-stretch">
         <p className="truncate">{ episodeTitle }</p>
         <p className="text-light truncate">{ podcastTitle }</p>

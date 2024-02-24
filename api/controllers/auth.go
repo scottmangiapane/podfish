@@ -48,7 +48,7 @@ func PostSignIn(c *gin.Context) {
 	var user models.User
 	result := global.DB.First(&user, &models.User{Email: r.Email})
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-		middleware.Abort(c, http.StatusNotFound, "No user found for that email")
+		middleware.Abort(c, http.StatusNotFound, "No user found with that email")
 		return
 	}
 	if result.Error != nil {

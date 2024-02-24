@@ -22,7 +22,7 @@ func PostSync(c *gin.Context) {
 	})
 	if result.Error != nil {
 		fmt.Println(result.Error)
-		middleware.Abort(c, http.StatusInternalServerError, "Failed to get subscriptions")
+		middleware.Abort(c, http.StatusInternalServerError, "Failed to sync")
 		return
 	}
 
@@ -44,7 +44,7 @@ func PostSyncWithId(c *gin.Context) {
 	})
 	if result.Error != nil {
 		fmt.Println(result.Error)
-		middleware.Abort(c, http.StatusInternalServerError, "Failed to get subscriptions")
+		middleware.Abort(c, http.StatusInternalServerError, "Failed to sync")
 		return
 	}
 

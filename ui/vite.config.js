@@ -19,7 +19,7 @@ export default defineConfig(({ mode }) => {
       host: '0.0.0.0',
       port: env.UI_PORT,
       proxy: {
-        '^\/(api|file|swagger)\/.*': {
+        '^/(api|file|swagger)/.*': {
           changeOrigin: true,
           target: env.API_URL,
         }

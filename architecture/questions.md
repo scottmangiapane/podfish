@@ -1,11 +1,5 @@
 What is the structure of RSS file? How much variation do I have to handle?
 
-How to play audio in browser?
-
-How to communicate with audio host server?
-- streaming audio
-- requesting specific timestamp in track
-
 How to wrap website in native Android app?
 
 How to wrap website in native iOS app?

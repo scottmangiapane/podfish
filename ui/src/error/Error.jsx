@@ -1,14 +1,10 @@
 import { isRouteErrorResponse, useRouteError } from "react-router-dom";
 
-import Titlebar from "..//Titlebar";
-
 function Error() {
   const error = useRouteError();
   if (!isRouteErrorResponse(error)) {
       throw error;
   }
-
-  console.log(error);
 
   return (
     <>

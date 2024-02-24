@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
 	"podfish/global"
@@ -10,6 +11,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+	"gorm.io/gorm"
 )
 
 // @Tags episodes
@@ -68,7 +70,25 @@ func GetEpisodes(c *gin.Context) {
 // @Router /episodes/{id} [get]
 // @Param id path string true "Episode ID"
 func GetEpisode(c *gin.Context) {
-	middleware.Abort(c, http.StatusBadRequest, "Not implemented")
+	id, err := uuid.Parse(c.Param("id"))
+	if err != nil {
+		middleware.Abort(c, http.StatusUnprocessableEntity, "Invalid episode ID")
+		return
+	}
+
+	var episode models.Episode
+	result := global.DB.First(&episode, models.Episode{EpisodeID: id})
+	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+		middleware.Abort(c, http.StatusNotFound, "No episode found with that ID")
+		return
+	}
+	if result.Error != nil {
+		fmt.Println(result.Error)
+		middleware.Abort(c, http.StatusInternalServerError, "Failed to get episode")
+		return
+	}
+
+	c.JSON(http.StatusOK, episode)
 }
 
 // @Tags episodes

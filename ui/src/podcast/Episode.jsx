@@ -6,18 +6,20 @@ import { RootContext } from '../Root';
 
 import "./Episode.css";
 
-function Episode({ id, title, description, date, podcastTitle }) {
+function Episode({ episode, podcast }) {
   const { dispatch } = useContext(RootContext);
   const navigate = useNavigate();
   const [isCollapsed, setIsCollapsed] = useState(true);
 
   const play = () => {
     dispatch({ type: 'SET_NOW_PLAYING', data: {
-      id,
-      episodeTitle: title,
-      podcastTitle
+      episodeId: episode['episode_id'],
+      episodeTitle: episode.title,
+      episodeUrl: episode.url,
+      podcastId: podcast['podcast_id'],
+      podcastTitle: podcast.title
     } });
-    putNowPlaying(navigate, id);
+    putNowPlaying(navigate, episode['episode_id']);
   };
 
   return (
@@ -27,13 +29,13 @@ function Episode({ id, title, description, date, podcastTitle }) {
             play_circle
         </span>
         <div style={{ minWidth: 0 }}> {/* `minWidth: 0` is necessary for truncation */}
-          <p className="episode-title truncate">{ title }</p>
-          <p className="text-light truncate">{ new Date(date).toDateString() }</p>
+          <p className="episode-title truncate">{ episode.title }</p>
+          <p className="text-light truncate">{ new Date(episode.date).toDateString() }</p>
         </div>
       </div>
       <div className="episode-content">
         <p className={ "break-word " + (isCollapsed && "truncate-l truncate-3l") }>
-          { description }
+          { episode.description }
         </p>
         <span className="btn symbol" onClick={ () => setIsCollapsed(!isCollapsed) }>
           { (isCollapsed) ? "expand_more" : "expand_less" }

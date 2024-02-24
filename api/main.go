@@ -49,9 +49,6 @@ func main() {
 	authorized.PUT("/now-playing", controllers.PutNowPlaying)
 	authorized.DELETE("/now-playing", controllers.DeleteNowPlaying)
 
-	// Stream
-	authorized.GET("/stream", controllers.GetStream)
-
 	// Subscriptions
 	authorized.GET("/subscriptions", controllers.GetSubscriptions)
 	authorized.POST("/subscriptions", controllers.PostSubscriptions)

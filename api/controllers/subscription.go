@@ -95,7 +95,7 @@ func GetSubscription(c *gin.Context) {
 		PodcastID: id,
 	})
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-		middleware.Abort(c, http.StatusNotFound, "No subscription found for that podcast ID")
+		middleware.Abort(c, http.StatusNotFound, "No subscription found with that podcast ID")
 		return
 	}
 	if result.Error != nil {
@@ -122,6 +122,10 @@ func DeleteSubscription(c *gin.Context) {
 		UserID:    middleware.GetUser(c),
 		PodcastID: id,
 	})
+	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+		middleware.Abort(c, http.StatusNotFound, "No subscription found with that podcast ID")
+		return
+	}
 	if result.Error != nil {
 		fmt.Println(result.Error)
 		middleware.Abort(c, http.StatusInternalServerError, "Failed to delete subscription")
