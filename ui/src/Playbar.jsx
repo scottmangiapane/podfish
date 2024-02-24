@@ -18,7 +18,12 @@ function Playbar() {
   }
 
   function changePlaybackPosition(percent) {
+    console.log(percent)
     setPlaybackPosition(percent);
+  }
+
+  function changePlaybackPositionPending(percent) {
+    console.log('(' + percent + ')')
   }
 
   function spacebarPressed(event) {
@@ -52,7 +57,7 @@ function Playbar() {
         <p className="truncate">{ episodeTitle }</p>
         <p className="text-light truncate">{ podcastTitle }</p>
       </div>
-      <div>
+      <div className="center playbar-stretch">
         <div className="playbar-symbol-group">
           <span className="btn symbol">replay_10</span>
           <span className="btn symbol symbol-play-pause" onClick={ togglePlayPause }>
@@ -60,12 +65,17 @@ function Playbar() {
           </span>
           <span className="btn symbol">forward_30</span>
         </div>
-        <Slider
-          min="0"
-          max="1000"
-          value={ playbackPosition }
-          onChange={ changePlaybackPosition }
-        />
+        <div className="playbar-labeled-slider">
+          <p>0:00</p>
+          <Slider
+            min="0"
+            max="1000"
+            value={ playbackPosition }
+            onChange={ changePlaybackPosition }
+            onInput = { changePlaybackPositionPending }
+          />
+          <p>0:00</p>
+        </div>
       </div>
       <div className="playbar-stretch">
         <div className="align-right">

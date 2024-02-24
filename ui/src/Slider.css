@@ -7,6 +7,7 @@
 .slider {
     height: var(--marker-size);
     position: relative;
+    width: 100%;
 }
 
 .slider-bar, .slider-bar *, .slider-marker {
