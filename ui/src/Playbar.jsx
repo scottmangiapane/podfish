@@ -43,19 +43,17 @@ function Playbar() {
 
   useEffect(() => {
     const audio = audioRef.current;
-    audio.addEventListener('durationchange', durationChange);
-    audio.addEventListener('pause', pause);
-    audio.addEventListener('play', play);
-    audio.addEventListener('seeked', seeked);
-    audio.addEventListener('seeking', seeking);
-    audio.addEventListener('timeupdate', timeUpdate);
+    audio.addEventListener('durationchange', audioDurationChange);
+    audio.addEventListener('ended', audioEnded);
+    audio.addEventListener('pause', audioPause);
+    audio.addEventListener('play', audioPlay);
+    audio.addEventListener('timeupdate', audioTimeUpdate);
     return () => {
-      audio.removeEventListener('durationchange', durationChange);
-      audio.removeEventListener('pause', pause);
-      audio.removeEventListener('play', play);
-      audio.removeEventListener('seeked', seeked);
-      audio.removeEventListener('seeking', seeking);
-      audio.removeEventListener('timeupdate', timeUpdate);
+      audio.removeEventListener('durationchange', audioDurationChange);
+      audio.removeEventListener('ended', audioEnded);
+      audio.removeEventListener('pause', audioPause);
+      audio.removeEventListener('play', audioPlay);
+      audio.removeEventListener('timeupdate', audioTimeUpdate);
     }
   }, []);
 
@@ -64,46 +62,56 @@ function Playbar() {
     return () => { document.removeEventListener('keydown', spacebarPressed) }
   }, []);
 
-  function durationChange() { setDuration(audioRef.current.duration); }
+  function audioEnded() { /* TODO */ }
 
-  function pause() { setIsPaused(true); }
+  function audioDurationChange() { setDuration(audioRef.current.duration); }
 
-  function play() { setIsPaused(false); }
+  function audioPause() { setIsPaused(true); }
 
-  function seeked() {}
+  function audioPlay() { setIsPaused(false); }
 
-  function seeking() {}
+  function audioTimeUpdate() { setCurrentTime(audioRef.current.currentTime); }
 
-  function timeUpdate() { setCurrentTime(audioRef.current.currentTime); }
+  function skipToTime(seconds) {
+    seconds = Math.max(0, seconds);
+    seconds = Math.min(audioRef.current.duration, seconds);
+    audioRef.current.currentTime = seconds;
+  }
 
   const { episodeTitle, episodeUrl, podcastTitle } = state.nowPlaying;
   return (
     <div className="app-content playbar">
       <audio ref={ audioRef } src={ episodeUrl } preload="metadata"></audio>
-      <div className="playbar-stretch">
+      <div className="flex-1">
         <p className="truncate">{ episodeTitle }</p>
         <p className="text-light truncate">{ podcastTitle }</p>
       </div>
-      <div className="center playbar-stretch">
+      <div className="center flex-2">
         <div className="playbar-symbol-group">
-          <span className="btn symbol">replay_10</span>
+          <span
+            className="btn symbol"
+            onClick={ () => { skipToTime(currentTime - 10); } }>
+              replay_10
+          </span>
           <span className="btn symbol symbol-play-pause" onClick={ togglePlayPause }>
             { (isPausedRef.current) ? "play_circle" : "pause_circle" }
           </span>
-          <span className="btn symbol">forward_30</span>
+          <span
+            className="btn symbol"
+            onClick={ () => { skipToTime(currentTime + 30); } }>
+              forward_30
+          </span>
         </div>
         <div className="playbar-labeled-slider">
           <p>{ secondsToTimestamp(currentTime) }</p>
           <Slider
-            min="0"
-            max="1000"
+            onChange={ (percent) => { skipToTime(audioRef.current.duration * percent / 100) } }
             value={ 100 * currentTime / duration }
-            onChange={ () => { /* TODO */ } }
           />
           <p>{ secondsToTimestamp(duration) }</p>
         </div>
       </div>
-      <div className="playbar-stretch">
+      <div className="flex-1">
         <div className="align-right">
           <span className="btn symbol">volume_up</span>
           {/* <span className="btn symbol">volume_down</span> */}

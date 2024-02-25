@@ -19,7 +19,11 @@ export default function Slider({ onChange, onInput, value }) {
     _setValuePending(data);
   }
 
-  useEffect(() => setValuePending(value), [value]);
+  useEffect(() => {
+    if (!isMouseDownRef.current) {
+      setValuePending(value);
+    }
+  }, [value]);
 
   useEffect(() => {
     document.addEventListener('mousemove', onMouseMove);

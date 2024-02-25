@@ -151,6 +151,10 @@ input[type=email], input[type=password] {
     width: 100%;
 }
 
+.flex-1 { flex: 1; }
+
+.flex-2 { flex: 2; }
+
 .form {
     display: flex;
     flex-direction: column;

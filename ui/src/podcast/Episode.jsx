@@ -26,7 +26,7 @@ function Episode({ episode, podcast }) {
     <>
       <div className="episode-header mb-2">
         <span className="btn symbol symbol-outline" onClick={ play }>
-            play_circle
+          play_circle
         </span>
         <div style={{ minWidth: 0 }}> {/* `minWidth: 0` is necessary for truncation */}
           <p className="episode-title truncate">{ episode.title }</p>
