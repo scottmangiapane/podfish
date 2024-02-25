@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 
 import "./Slider.css";
 
-export default function Slider({ onChange, onInput, value }) {
+export default function Slider({ labelEnd, labelStart, onChange, onInput, value }) {
   const barRef = useRef(null);
   const markerRef = useRef(null);
 
@@ -76,7 +76,7 @@ export default function Slider({ onChange, onInput, value }) {
   }
 
   const percent = valuePendingRef.current
-  return (
+  const content = (
     <div className="slider" onMouseDown={ onMouseDown } onTouchStart={ onMouseDown }>
       <div ref={ barRef } className="slider-bar">
         <div className="slider-bar-bg"></div>
@@ -93,6 +93,18 @@ export default function Slider({ onChange, onInput, value }) {
           left: `calc(${ percent }% - var(--marker-size) / 2)`
         }}>
       </div>
+    </div>
+  );
+
+  if (labelEnd === undefined && labelStart === undefined) {
+    return content;
+  }
+
+  return (
+    <div className="labeled-slider">
+      <p>{ labelStart }</p>
+        { content }
+      <p>{ labelEnd }</p>
     </div>
   );
 }

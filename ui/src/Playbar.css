@@ -13,14 +13,6 @@
 
 .playbar > * { min-width: 0; }
 
-.playbar-labeled-slider {
-    align-items: center;
-    display: flex;
-    flex-direction: row;
-    gap: 8px;
-    width: 100%;
-}
-
 .playbar-stretch { flex: 1; }
 
 .playbar-symbol-group {

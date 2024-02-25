@@ -102,14 +102,12 @@ function Playbar() {
               forward_30
           </span>
         </div>
-        <div className="playbar-labeled-slider">
-          <p>{ secondsToTimestamp(currentTime) }</p>
-          <Slider
-            onChange={ (percent) => { skipToTime(audioRef.current.duration * percent / 100) } }
-            value={ 100 * currentTime / duration }
-          />
-          <p>{ secondsToTimestamp(duration) }</p>
-        </div>
+        <Slider
+          labelEnd={ secondsToTimestamp(duration) }
+          labelStart={ secondsToTimestamp(currentTime) }
+          onChange={ (percent) => { skipToTime(audioRef.current.duration * percent / 100) } }
+          value={ 100 * currentTime / duration }
+        />
       </div>
       <div className="flex-1">
         <div className="align-right">

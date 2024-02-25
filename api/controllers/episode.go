@@ -69,6 +69,7 @@ func GetEpisodes(c *gin.Context) {
 // @Tags episodes
 // @Router /episodes/{id} [get]
 // @Param id path string true "Episode ID"
+// @Success 200 {object} models.Episode
 func GetEpisode(c *gin.Context) {
 	id, err := uuid.Parse(c.Param("id"))
 	if err != nil {

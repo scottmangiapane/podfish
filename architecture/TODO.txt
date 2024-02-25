@@ -1,11 +1,7 @@
 UP NEXT
 
-- Make audio start automatically
-- Finish playback controls
-- Linting
-- Simplified error handling (especially checking if gorm returned "not found" for 404, then 500 as fallback)
-- Recursive custom error page (ex: https://pod.scottmangiapane.com/podcasts/undefined)
-- Speed up loading time of symbols font (minimized file to only include symbols I use?)
+- Playbar is hidden after sign-in, fixes with refresh
+- Connect UI to playback position API
 
 SECURITY
 
@@ -17,7 +13,7 @@ SECURITY
 
 API
 
-- Better error handling (simplify for gin and gorm, maybe use logging library)
+- Simplified error handling (especially checking if gorm returned "not found" for 404, then 500 as fallback)
 - Refresh JWT token as needed
 - Use actual migration files instead of GORM's auto-migrate.
 - What to do if RSS feed is removed by podcast host (keep metadata in case it's temporary outage, but hide from user feeds?). Or if single episode is removed.
@@ -28,3 +24,8 @@ UI
 - Ensure adding/removing node dependencies is reflected in docker container (is .dockerignore to blame?).
     - Not possible? without giving up live reloading. data volume is immutable after initial build
     - Explain in README
+- Pagination on episode list page
+- Make audio start automatically
+- Recursive custom error page (ex: https://pod.scottmangiapane.com/podcasts/undefined)
+- Speed up loading time of symbols font (minimized file to only include symbols I use?)
+- Speed up loading time of cover art (resize images?)

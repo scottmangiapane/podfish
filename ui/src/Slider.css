@@ -1,3 +1,11 @@
+.labeled-slider {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    width: 100%;
+}
+
 .slider {
     --bar-size: 4px;
     --bar-padding: 4px;
