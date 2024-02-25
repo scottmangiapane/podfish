@@ -8,7 +8,9 @@ import "./Playbar.css";
 function Playbar() {
   const { state } = useContext(RootContext);
   const audioRef = useRef(null);
-  const [playbackPosition, setPlaybackPosition] = useState(30);
+
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
 
   const [_isPaused, _setIsPaused] = useState(true);
   const isPausedRef = useRef(_isPaused);
@@ -17,8 +19,11 @@ function Playbar() {
     _setIsPaused(data);
   }
 
-  function changePlaybackPosition(percent) {
-    setPlaybackPosition(percent);
+  function secondsToTimestamp(seconds) {
+    // TODO
+    // show hours if applicable
+    // what if podcast episode is longer than a day?
+    return new Date(seconds * 1000).toISOString().slice(11, 19);
   }
 
   function spacebarPressed(event) {
@@ -31,20 +36,47 @@ function Playbar() {
   function togglePlayPause() {
     if (isPausedRef.current) {
       audioRef.current.play();
-      setIsPaused(false);
     } else {
       audioRef.current.pause();
-      setIsPaused(true);
     }
   }
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    audio.addEventListener('durationchange', durationChange);
+    audio.addEventListener('pause', pause);
+    audio.addEventListener('play', play);
+    audio.addEventListener('seeked', seeked);
+    audio.addEventListener('seeking', seeking);
+    audio.addEventListener('timeupdate', timeUpdate);
+    return () => {
+      audio.removeEventListener('durationchange', durationChange);
+      audio.removeEventListener('pause', pause);
+      audio.removeEventListener('play', play);
+      audio.removeEventListener('seeked', seeked);
+      audio.removeEventListener('seeking', seeking);
+      audio.removeEventListener('timeupdate', timeUpdate);
+    }
+  }, []);
 
   useEffect(() => {
     document.addEventListener('keydown', spacebarPressed);
     return () => { document.removeEventListener('keydown', spacebarPressed) }
   }, []);
 
-  const { episodeTitle, episodeUrl, podcastTitle } = state.nowPlaying;
+  function durationChange() { setDuration(audioRef.current.duration); }
 
+  function pause() { setIsPaused(true); }
+
+  function play() { setIsPaused(false); }
+
+  function seeked() {}
+
+  function seeking() {}
+
+  function timeUpdate() { setCurrentTime(audioRef.current.currentTime); }
+
+  const { episodeTitle, episodeUrl, podcastTitle } = state.nowPlaying;
   return (
     <div className="app-content playbar">
       <audio ref={ audioRef } src={ episodeUrl } preload="metadata"></audio>
@@ -61,14 +93,14 @@ function Playbar() {
           <span className="btn symbol">forward_30</span>
         </div>
         <div className="playbar-labeled-slider">
-          <p>0:00</p>
+          <p>{ secondsToTimestamp(currentTime) }</p>
           <Slider
             min="0"
             max="1000"
-            value={ playbackPosition }
-            onChange={ changePlaybackPosition }
+            value={ 100 * currentTime / duration }
+            onChange={ () => { /* TODO */ } }
           />
-          <p>0:00</p>
+          <p>{ secondsToTimestamp(duration) }</p>
         </div>
       </div>
       <div className="playbar-stretch">

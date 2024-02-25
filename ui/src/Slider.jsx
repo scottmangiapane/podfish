@@ -6,29 +6,20 @@ export default function Slider({ onChange, onInput, value }) {
   const barRef = useRef(null);
   const markerRef = useRef(null);
 
-  // state can't be accessed inside event listeners created by useEffect
-  const [_mouse, _setMouse] = useState({});
-  const mouseRef = useRef(_mouse);
-  function setMouse(data) {
-    mouseRef.current = data;
-    _setMouse(data);
-  }
+  // ref is used because state isn't updated inside of event listeners created by useEffect
+  const mouseRef = useRef({});
+  const isMouseDownRef = useRef(false);
 
-  // state can't be accessed inside event listeners created by useEffect
-  const [_isMouseDown, _setIsMouseDown] = useState(false);
-  const isMouseDownRef = useRef(_isMouseDown);
-  function setIsMouseDown(data) {
-    isMouseDownRef.current = data;
-    _setIsMouseDown(data);
-  }
-
-  // state can't be accessed inside event listeners created by useEffect
+  // ref is used because state isn't updated inside of event listeners created by useEffect
+  // state is still needed to trigger re-renders
   const [_valuePending, _setValuePending] = useState(value);
   const valuePendingRef = useRef(_valuePending);
   function setValuePending(data) {
     valuePendingRef.current = data;
     _setValuePending(data);
   }
+
+  useEffect(() => setValuePending(value), [value]);
 
   useEffect(() => {
     document.addEventListener('mousemove', onMouseMove);
@@ -45,13 +36,10 @@ export default function Slider({ onChange, onInput, value }) {
 
   function onMouseDown(event) {
     const marker = markerRef.current;
-
     marker.style.cursor = 'grabbing';
-    setMouse({
-      event,
-      offset: marker.offsetLeft
-    });
-    setIsMouseDown(true);
+
+    mouseRef.current ={ event, offset: marker.offsetLeft };
+    isMouseDownRef.current = true;
 
     const percent = calculatePercent(event.clientX || event.touches?.[0]?.clientX);
     setValuePending(percent);
@@ -69,7 +57,7 @@ export default function Slider({ onChange, onInput, value }) {
   function onMouseUp() {
     if (isMouseDownRef.current) {
       markerRef.current.style.cursor = null;
-      setIsMouseDown(false);
+      isMouseDownRef.current = false;
       onChange && onChange(valuePendingRef.current);
     }
   }
