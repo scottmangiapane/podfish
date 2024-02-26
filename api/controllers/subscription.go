@@ -1,12 +1,14 @@
 package controllers
 
 import (
+	"bytes"
 	"errors"
 	"fmt"
 	"net/http"
 	"podfish/global"
 	"podfish/middleware"
 	"podfish/models"
+	"sort"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
@@ -18,9 +20,11 @@ import (
 // @Success 200 {object} []models.Podcast
 func GetSubscriptions(c *gin.Context) {
 	var subscriptions []models.Subscription
-	result := global.DB.Preload("Podcast").Find(&subscriptions, models.Subscription{
-		UserID: middleware.GetUser(c),
-	})
+	result := global.DB.
+		Preload("Podcast").
+		Find(&subscriptions, models.Subscription{
+			UserID: middleware.GetUser(c),
+		})
 	if result.Error != nil {
 		fmt.Println(result.Error)
 		middleware.Abort(c, http.StatusInternalServerError, "Failed to get subscriptions")
@@ -31,6 +35,12 @@ func GetSubscriptions(c *gin.Context) {
 	for _, s := range subscriptions {
 		podcasts = append(podcasts, s.Podcast)
 	}
+	sort.Slice(podcasts, func(i, j int) bool {
+		if podcasts[i].Title != podcasts[j].Title {
+			return podcasts[i].Title < podcasts[j].Title
+		}
+		return bytes.Compare(subscriptions[i].PodcastID[:], subscriptions[j].PodcastID[:]) < 0
+	})
 
 	c.JSON(http.StatusOK, podcasts)
 }
