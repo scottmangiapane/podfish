@@ -2,12 +2,12 @@ import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { putNowPlaying } from "../api-service";
-import { RootContext } from '../Root';
+import { AppContext } from '../App';
 
 import "./Episode.css";
 
 function Episode({ episode, podcast }) {
-  const { dispatch } = useContext(RootContext);
+  const { dispatch } = useContext(AppContext);
   const navigate = useNavigate();
   const [isCollapsed, setIsCollapsed] = useState(true);
 

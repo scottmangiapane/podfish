@@ -1,12 +1,12 @@
 import { useContext, useEffect, useRef, useState } from "react";
 
-import { RootContext } from "./Root";
+import { AppContext } from "./App";
 import Slider from "./Slider";
 
 import "./Playbar.css";
 
 function Playbar() {
-  const { state } = useContext(RootContext);
+  const { state } = useContext(AppContext);
   const audioRef = useRef(null);
 
   const [currentTime, setCurrentTime] = useState(0);
@@ -42,24 +42,25 @@ function Playbar() {
   }
 
   useEffect(() => {
+    skipToTime(state.nowPlaying.timestamp);
+  }, []);
+
+  useEffect(() => {
     const audio = audioRef.current;
     audio.addEventListener('durationchange', audioDurationChange);
     audio.addEventListener('ended', audioEnded);
     audio.addEventListener('pause', audioPause);
     audio.addEventListener('play', audioPlay);
     audio.addEventListener('timeupdate', audioTimeUpdate);
+    document.addEventListener('keydown', spacebarPressed);
     return () => {
       audio.removeEventListener('durationchange', audioDurationChange);
       audio.removeEventListener('ended', audioEnded);
       audio.removeEventListener('pause', audioPause);
       audio.removeEventListener('play', audioPlay);
       audio.removeEventListener('timeupdate', audioTimeUpdate);
+      document.removeEventListener('keydown', spacebarPressed);
     }
-  }, []);
-
-  useEffect(() => {
-    document.addEventListener('keydown', spacebarPressed);
-    return () => { document.removeEventListener('keydown', spacebarPressed) }
   }, []);
 
   function audioEnded() { /* TODO */ }

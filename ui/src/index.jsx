@@ -8,6 +8,7 @@ import {
 import Error from "./error/Error";
 import Home from "./home/Home";
 import Podcast from "./podcast/Podcast";
+import App from "./App";
 import Root from "./Root";
 import Settings from "./settings/Settings";
 import SignIn from "./sign-in/SignIn";
@@ -23,26 +24,34 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <Home />
+        element: <App />,
+        children: [
+          {
+            path: "/",
+            element: <Home />
+          },
+          {
+            path: "settings",
+            element: <Settings />
+          },
+          {
+            path: "podcasts/:id",
+            element: <Podcast />
+          }
+        ]
       },
       {
-        path: "/settings",
-        element: <Settings />
+        path: "sign-in",
+        element: <SignIn />,
+        errorElement: <Error />
       },
       {
-        path: "/sign-in",
-        element: <SignIn />
-      },
-      {
-        path: "/sign-up",
-        element: <SignUp />
-      },
-      {
-        path: "/podcasts/:id",
-        element: <Podcast />
-      },
+        path: "sign-up",
+        element: <SignUp />,
+        errorElement: <Error />
+      }
     ]
-  },
+  }
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(

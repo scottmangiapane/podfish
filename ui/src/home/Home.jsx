@@ -33,7 +33,7 @@ function Home() {
       <div className="subscription-grid">
         { content }
       </div>
-      <button className="btn btn-pill mt-3">Add RSS Link</button>
+      <button className="btn btn-pill mt-3">Add Subscription</button>
     </>
   );
 }
