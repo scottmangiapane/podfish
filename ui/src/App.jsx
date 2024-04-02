@@ -39,8 +39,8 @@ function App() {
         if (action.data === null) {
           return { ...state, nowPlaying: null };
         } else {
-          const { id, episodeTitle, episodeUrl, podcastTitle } = action.data;
-          return { ...state, nowPlaying: { id, episodeTitle, episodeUrl, podcastTitle } }
+          const { episodeId, episodeTitle, episodeUrl, podcastTitle } = action.data;
+          return { ...state, nowPlaying: { episodeId, episodeTitle, episodeUrl, podcastTitle } }
         }
       default:
         return initialState;

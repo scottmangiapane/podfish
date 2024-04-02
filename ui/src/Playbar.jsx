@@ -42,7 +42,7 @@ function Playbar() {
   }
 
   useEffect(() => {
-    skipToTime(state.nowPlaying.timestamp);
+    // skipToTime(state.nowPlaying.timestamp);
   }, []);
 
   useEffect(() => {
