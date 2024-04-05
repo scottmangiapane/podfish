@@ -39,14 +39,14 @@ func PatchResetPasswordWithToken(c *gin.Context) {
 // @Param request body controllers.creds true "Request body"
 // @Success 200 {object} models.User
 func PostSignIn(c *gin.Context) {
-	var r creds
-	if err := c.ShouldBindJSON(&r); err != nil {
+	var req creds
+	if err := c.ShouldBindJSON(&req); err != nil {
 		middleware.Abort(c, http.StatusUnprocessableEntity, "Request is invalid")
 		return
 	}
 
 	var user models.User
-	result := global.DB.First(&user, &models.User{Email: r.Email})
+	result := global.DB.First(&user, &models.User{Email: req.Email})
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
 		middleware.Abort(c, http.StatusNotFound, "No user found with that email")
 		return
@@ -57,7 +57,7 @@ func PostSignIn(c *gin.Context) {
 		return
 	}
 
-	if user.CheckPassword(r.Password) != nil {
+	if user.CheckPassword(req.Password) != nil {
 		middleware.Abort(c, http.StatusUnauthorized, "Password verification failed")
 		return
 	}
@@ -95,19 +95,19 @@ func PostSignOut(c *gin.Context) {
 // @Param request body controllers.creds true "Request body"
 // @Success 201 {object} models.User
 func PostSignUp(c *gin.Context) {
-	var r creds
-	if err := c.ShouldBindJSON(&r); err != nil {
+	var req creds
+	if err := c.ShouldBindJSON(&req); err != nil {
 		middleware.Abort(c, http.StatusUnprocessableEntity, "Request is invalid")
 		return
 	}
 
-	result := global.DB.Where(&models.User{Email: r.Email}).First(&models.User{})
+	result := global.DB.Where(&models.User{Email: req.Email}).First(&models.User{})
 	if !errors.Is(result.Error, gorm.ErrRecordNotFound) {
 		middleware.Abort(c, http.StatusConflict, "Email is already in use")
 		return
 	}
 
-	user := models.User{Email: r.Email, Password: r.Password}
+	user := models.User{Email: req.Email, Password: req.Password}
 	if result := global.DB.Create(&user); result.Error != nil {
 		fmt.Println(result.Error)
 		middleware.Abort(c, http.StatusInternalServerError, "Failed to create user")

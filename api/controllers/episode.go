@@ -124,8 +124,8 @@ func PatchEpisodeCurrentTime(c *gin.Context) {
 	type request struct {
 		CurrentTime uint `json:"current_time" binding:"gte=0"`
 	}
-	var r request
-	if err := c.ShouldBindJSON(&r); err != nil {
+	var req request
+	if err := c.ShouldBindJSON(&req); err != nil {
 		middleware.Abort(c, http.StatusUnprocessableEntity, "Request is invalid")
 		return
 	}
@@ -133,7 +133,7 @@ func PatchEpisodeCurrentTime(c *gin.Context) {
 	position := models.Position{
 		UserID:       middleware.GetUser(c),
 		EpisodeID:    id,
-		CurrentTime:  r.CurrentTime,
+		CurrentTime:  req.CurrentTime,
 		LastListened: time.Now(),
 	}
 	result := global.DB.Save(&position)

@@ -53,14 +53,14 @@ func PostSubscriptions(c *gin.Context) {
 	type request struct {
 		RSS string `json:"rss" binding:"required,url"`
 	}
-	var r request
-	if err := c.ShouldBindJSON(&r); err != nil {
+	var req request
+	if err := c.ShouldBindJSON(&req); err != nil {
 		middleware.Abort(c, http.StatusUnprocessableEntity, "Request is invalid")
 		return
 	}
 
 	var podcast models.Podcast
-	result := global.DB.FirstOrCreate(&podcast, models.Podcast{RSS: r.RSS})
+	result := global.DB.FirstOrCreate(&podcast, models.Podcast{RSS: req.RSS})
 	if result.Error != nil {
 		fmt.Println(result.Error)
 		middleware.Abort(c, http.StatusInternalServerError, "Failed to create podcast")

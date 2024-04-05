@@ -7,6 +7,7 @@ import (
 	"podfish/global"
 	"podfish/middleware"
 	"podfish/models"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
@@ -31,41 +32,68 @@ func GetNowPlaying(c *gin.Context) {
 		return
 	}
 
-	r := models.EpisodePodcastPosition{
+	res := models.EpisodePodcastPosition{
 		Episode:  nowPlaying.Position.Episode,
 		Podcast:  nowPlaying.Position.Episode.Podcast,
 		Position: &nowPlaying.Position,
 	}
-	c.JSON(http.StatusOK, r)
+	c.JSON(http.StatusOK, res)
 }
 
 // @Tags now-playing
 // @Router /now-playing [put]
 // @Param request body controllers.PutNowPlaying.request true "Request body"
-// @Success 204
+// @Success 200 {object} models.EpisodePodcastPosition
 func PutNowPlaying(c *gin.Context) {
 	type request struct {
 		EpisodeID uuid.UUID `json:"episode_id" binding:"required,uuid"`
 	}
-	var r request
-	if err := c.ShouldBindJSON(&r); err != nil {
+	var req request
+	if err := c.ShouldBindJSON(&req); err != nil {
 		middleware.Abort(c, http.StatusUnprocessableEntity, "Request is invalid")
 		return
 	}
 
-	// TODO what if never listened to episode before? make atomic transaction
-	nowPlaying := models.NowPlaying{
-		PositionUserID:    middleware.GetUser(c),
-		PositionEpisodeID: r.EpisodeID,
+	result := global.DB.Save(&models.Position{
+		UserID:       middleware.GetUser(c),
+		EpisodeID:    req.EpisodeID,
+		LastListened: time.Now(),
+	})
+	if result.Error != nil {
+		fmt.Println(result.Error)
+		middleware.Abort(c, http.StatusInternalServerError, "Failed to set last listened")
+		return
 	}
-	result := global.DB.Save(&nowPlaying)
+
+	result = global.DB.Save(&models.NowPlaying{
+		PositionUserID:    middleware.GetUser(c),
+		PositionEpisodeID: req.EpisodeID,
+	})
 	if result.Error != nil {
 		fmt.Println(result.Error)
 		middleware.Abort(c, http.StatusInternalServerError, "Failed to set current episode")
 		return
 	}
+	var nowPlaying models.NowPlaying
+	result = global.DB.
+		Preload("Position.Episode.Podcast").
+		First(&nowPlaying, &models.NowPlaying{PositionUserID: middleware.GetUser(c)})
+	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+		c.JSON(http.StatusNoContent, nil)
+		return
+	}
+	if result.Error != nil {
+		fmt.Println(result.Error)
+		middleware.Abort(c, http.StatusInternalServerError, "Failed to get current episode")
+		return
+	}
 
-	c.JSON(http.StatusOK, nowPlaying)
+	res := models.EpisodePodcastPosition{
+		Episode:  nowPlaying.Position.Episode,
+		Podcast:  nowPlaying.Position.Episode.Podcast,
+		Position: &nowPlaying.Position,
+	}
+	c.JSON(http.StatusOK, res)
 }
 
 // @Tags now-playing
