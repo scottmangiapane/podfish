@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"errors"
 	"fmt"
 	"net/http"
 	"podfish/global"
@@ -12,7 +11,6 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
-	"gorm.io/gorm"
 )
 
 // @Tags episodes
@@ -51,14 +49,12 @@ func GetEpisodes(c *gin.Context) {
 		}
 		podcastId = podcastIdParam
 	}
-	var episodes []models.EpisodePosition
+	var episodes []models.EpisodePosition = []models.EpisodePosition{}
 	result := global.DB.
 		Table("episodes").
-		Joins(
-			"LEFT JOIN positions ON episodes.episode_id = positions.episode_id",
-			// global.DB.Where(&models.Position{UserID: middleware.GetUser(c)}), // TODO not working
-		).
-		// Where("positions.user_id = ?", middleware.GetUser(c)).
+		Joins("LEFT JOIN positions "+
+			"ON episodes.episode_id = positions.episode_id "+
+			"AND positions.user_id = ?", middleware.GetUser(c)).
 		Where(&models.Episode{PodcastID: podcastId}).
 		Order("date DESC, episodes.episode_id").
 		Limit(limit).
@@ -87,22 +83,19 @@ func GetEpisode(c *gin.Context) {
 	var episode models.EpisodePosition
 	result := global.DB.
 		Table("episodes").
-		Joins(
-			"LEFT JOIN positions ON episodes.episode_id = positions.episode_id",
-			// global.DB.Where(&models.Position{UserID: middleware.GetUser(c)}), // TODO not working
-		).
-		// Where("positions.user_id = ?", middleware.GetUser(c)).
+		Joins("LEFT JOIN positions "+
+			"ON episodes.episode_id = positions.episode_id "+
+			"AND positions.user_id = ?", middleware.GetUser(c)).
 		Where(&models.Episode{EpisodeID: id}).
 		Scan(&episode)
 
-	// TODO not working with Scan, needs First
-	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-		middleware.Abort(c, http.StatusNotFound, "No episode found with that ID")
-		return
-	}
 	if result.Error != nil {
 		fmt.Println(result.Error)
 		middleware.Abort(c, http.StatusInternalServerError, "Failed to get episode")
+		return
+	}
+	if episode.Episode.EpisodeID == uuid.Nil {
+		middleware.Abort(c, http.StatusNotFound, "No episode found with that ID")
 		return
 	}
 
