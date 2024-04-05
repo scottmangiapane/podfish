@@ -42,7 +42,7 @@ func main() {
 	authorized.GET("/episodes", controllers.GetEpisodes)
 	authorized.GET("/episodes/:id", controllers.GetEpisode)
 	authorized.PATCH("/episodes/:id/completed", controllers.PatchEpisodeCompleted)
-	authorized.PATCH("/episodes/:id/playback-position", controllers.PatchEpisodePlaybackPosition)
+	authorized.PATCH("/episodes/:id/current-time", controllers.PatchEpisodeCurrentTime)
 
 	// Now Playing
 	authorized.GET("/now-playing", controllers.GetNowPlaying)

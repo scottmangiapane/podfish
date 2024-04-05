@@ -15,7 +15,8 @@ API
 
 - Simplified error handling (especially checking if gorm returned "not found" for 404, then 500 as fallback)
 - Refresh JWT token as needed
-- Use actual migration files instead of GORM's auto-migrate.
+- Use actual migration files instead of GORM's auto-migrate
+- Validate new RSS feeds are actually RSS
 - What to do if RSS feed is removed by podcast host (keep metadata in case it's temporary outage, but hide from user feeds?). Or if single episode is removed.
 - Remove `/sync`
 

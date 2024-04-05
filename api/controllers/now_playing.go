@@ -15,12 +15,12 @@ import (
 
 // @Tags now-playing
 // @Router /now-playing [get]
-// @Success 200 {object} controllers.GetNowPlaying.response
+// @Success 200 {object} models.EpisodePodcastPosition
 func GetNowPlaying(c *gin.Context) {
 	var nowPlaying models.NowPlaying
 	result := global.DB.
-		Preload("Episode.Podcast").
-		First(&nowPlaying, models.NowPlaying{UserID: middleware.GetUser(c)})
+		Preload("Position.Episode.Podcast").
+		First(&nowPlaying, &models.NowPlaying{PositionUserID: middleware.GetUser(c)})
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
 		c.JSON(http.StatusNoContent, nil)
 		return
@@ -31,13 +31,10 @@ func GetNowPlaying(c *gin.Context) {
 		return
 	}
 
-	type response struct {
-		Episode models.Episode `json:"episode"`
-		Podcast models.Podcast `json:"podcast"`
-	}
-	r := response{
-		Episode: nowPlaying.Episode,
-		Podcast: nowPlaying.Episode.Podcast,
+	r := models.EpisodePodcastPosition{
+		Episode:  nowPlaying.Position.Episode,
+		Podcast:  nowPlaying.Position.Episode.Podcast,
+		Position: &nowPlaying.Position,
 	}
 	c.JSON(http.StatusOK, r)
 }
@@ -56,9 +53,10 @@ func PutNowPlaying(c *gin.Context) {
 		return
 	}
 
+	// TODO what if never listened to episode before? make atomic transaction
 	nowPlaying := models.NowPlaying{
-		UserID:    middleware.GetUser(c),
-		EpisodeID: r.EpisodeID,
+		PositionUserID:    middleware.GetUser(c),
+		PositionEpisodeID: r.EpisodeID,
 	}
 	result := global.DB.Save(&nowPlaying)
 	if result.Error != nil {
@@ -67,13 +65,13 @@ func PutNowPlaying(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusNoContent, nil)
+	c.JSON(http.StatusOK, nowPlaying)
 }
 
 // @Tags now-playing
 // @Router /now-playing [delete]
 // @Success 204
 func DeleteNowPlaying(c *gin.Context) {
-	global.DB.Delete(models.NowPlaying{UserID: middleware.GetUser(c)})
+	global.DB.Delete(models.NowPlaying{PositionUserID: middleware.GetUser(c)})
 	c.JSON(http.StatusNoContent, nil)
 }

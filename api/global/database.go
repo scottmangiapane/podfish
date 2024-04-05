@@ -29,8 +29,8 @@ func InitDatabase() {
 	DB.AutoMigrate(
 		&models.Episode{},
 		&models.NowPlaying{},
-		&models.PlaybackPosition{},
 		&models.Podcast{},
+		&models.Position{},
 		&models.Subscription{},
 		&models.User{},
 	)

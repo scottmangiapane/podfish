@@ -28,7 +28,8 @@ function Podcast() {
   }
 
   const episodeList = [];
-  for (const episode of episodes) {
+  // TODO do something with position
+  for (const { episode, position } of episodes) {
     episodeList.push(
       <div className="podcast-list-item" key={ episode["episode_id"] }>
         <Episode episode={ episode } podcast={ podcast } />

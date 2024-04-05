@@ -3,8 +3,7 @@ package models
 import "github.com/google/uuid"
 
 type NowPlaying struct {
-	UserID    uuid.UUID `json:"user_id" gorm:"primaryKey"`
-	User      User      `json:"-"`
-	EpisodeID uuid.UUID `json:"episode_id"`
-	Episode   Episode   `json:"-"`
+	PositionUserID    uuid.UUID `json:"-" gorm:"primaryKey"`
+	PositionEpisodeID uuid.UUID `json:"-"`
+	Position          Position  `json:"-"`
 }
