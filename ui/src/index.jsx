@@ -11,6 +11,7 @@ import Podcast from "./podcast/Podcast";
 import App from "./App";
 import Root from "./Root";
 import Settings from "./settings/Settings";
+import Subscribe from "./subscribe/Subscribe";
 import SignIn from "./sign-in/SignIn";
 import SignUp from "./sign-up/SignUp";
 
@@ -33,6 +34,10 @@ const router = createBrowserRouter([
           {
             path: "settings",
             element: <Settings />
+          },
+          {
+            path: "subscribe",
+            element: <Subscribe />
           },
           {
             path: "podcasts/:id",
