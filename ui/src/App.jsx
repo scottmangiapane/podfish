@@ -1,10 +1,8 @@
-import Cookies from "js-cookie";
 import { createContext, useEffect, useReducer } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 
 import { getNowPlaying } from "./api-service";
 import Playbar from "./Playbar";
-import Titlebar from "./Titlebar";
 
 export const AppContext = createContext();
 
@@ -51,13 +49,10 @@ function App() {
 
   return (
     <AppContext.Provider value={{ state, dispatch }}>
-      <Titlebar />
-      <div className="app-body" style={{ paddingBottom }}>
-        <div className="app-content">
-          <Outlet />
-        </div>
+      <div className="app-content" style={{ paddingBottom }}>
+        <Outlet />
+        { state.nowPlaying && <Playbar />}
       </div>
-      { state.nowPlaying && <Playbar />}
     </AppContext.Provider>
   );
 }

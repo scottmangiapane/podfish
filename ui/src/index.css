@@ -87,10 +87,7 @@ input[type=email], input[type=password] {
     width: 100%;
 }
 
-.app-body {
-    padding-bottom: 32px;
-    padding-top: calc(32px + var(--titlebar-height));
-}
+.app-body { padding: 32px 0; }
 
 .app-content {
     margin: 0 auto;
@@ -179,6 +176,8 @@ input[type=email], input[type=password] {
 .mt-2 { margin-top: 8px; }
 
 .mt-3 { margin-top: 16px; }
+
+.root-content { padding-top: calc(32px + var(--titlebar-height)); }
 
 .symbol {
     color: var(--text-color);

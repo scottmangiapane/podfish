@@ -13,7 +13,7 @@ All routes are prefixed with `/api/v1`.
 - GET /episodes
 - GET /episodes/{id}
 - PATCH /episodes/{id}/completed
-- PATCH /episodes/{id}/playback-position
+- PATCH /episodes/{id}/current-time
 
 # Now playing
 

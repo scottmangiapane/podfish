@@ -1,5 +1,7 @@
 UP NEXT
 
+- Error handling in UI for sign up / sign in
+- Better documentation
 - Playbar is hidden after sign-in, fixes with refresh
 - Connect UI to playback position API
 
