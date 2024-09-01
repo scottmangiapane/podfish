@@ -1,5 +1,3 @@
-version: '3.9'
-
 services:
 
   postgres:
@@ -38,7 +36,7 @@ services:
     env_file:
       - ./.env
     ports:
-      - ${UI_PORT}:${UI_PORT}
+      - 127.0.0.1:${UI_PORT}:${UI_PORT}
     restart: on-failure
     stop_grace_period: 3s
     volumes:
