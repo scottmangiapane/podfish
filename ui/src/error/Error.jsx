@@ -7,7 +7,6 @@ function Error() {
   }
 
   return (
-    // TODO padding / margins
     <div className="root-content">
       <div className="app-content">
         <h1 className="mt-0">{ error.status } - { error.statusText }</h1>

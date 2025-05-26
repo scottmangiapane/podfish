@@ -10,6 +10,7 @@ services:
       timeout: 3s
       retries: 10
     image: postgres:latest
+    restart: always
     volumes:
       - ./pg_data:/var/lib/postgresql/data
 
@@ -23,7 +24,7 @@ services:
         condition: service_healthy
     env_file:
       - ./.env
-    restart: on-failure
+    restart: always
     stop_grace_period: 3s
     volumes:
       - ./api:/podfish-src
@@ -38,7 +39,7 @@ services:
       - ./.env
     ports:
       - 127.0.0.1:${UI_PORT}:${UI_PORT}
-    restart: on-failure
+    restart: always
     stop_grace_period: 3s
     volumes:
       - ./ui:/podfish-src

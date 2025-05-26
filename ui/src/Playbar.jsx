@@ -19,11 +19,13 @@ function Playbar() {
     _setIsPaused(data);
   }
 
-  function secondsToTimestamp(seconds) {
-    // TODO
-    // show hours if applicable
-    // what if podcast episode is longer than a day?
-    return new Date(seconds * 1000).toISOString().slice(11, 19);
+  function secondsToTimestamp(totalSeconds) {
+    const h = Math.floor(totalSeconds / 3600).toString().padStart(2, '0');
+    const m = Math.floor((totalSeconds % 3600) / 60).toString().padStart(2, '0');
+    const s = Math.floor(totalSeconds % 60).toString().padStart(2, '0');
+    return (totalSeconds > 3600)
+      ? `${h}:${m}:${s}`
+      : `${m}:${s}`;
   }
 
   function spacebarPressed(event) {
