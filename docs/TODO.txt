@@ -1,5 +1,11 @@
 UP NEXT
 
+- Review Typescript strictness (https://www.typescriptlang.org/docs/handbook/2/basic-types.html)
+- Better documentation
+- Full-width playbar on mobile
+- Implement "Subscribe" page
+- Connect UI to playback position API
+- Pagination on episode list page
 - Error handling in UI for sign up / sign in
 - Better documentation
 - Playbar is hidden after sign-in, fixes with refresh

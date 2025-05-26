@@ -11,7 +11,7 @@ Podfish is a self-hostable podcast client. It lets you browse your favorite podc
 
 Getting started is easy. Just run:
 ```
-docker-compose up
+docker compose up
 ```
 
 Common settings such as the environment (dev/prod), ports, keys, and more can be set in the `.env` file.

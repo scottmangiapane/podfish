@@ -8,10 +8,12 @@ function Error() {
 
   return (
     // TODO padding / margins
-    <>
-      <h1 className="mt-0">{ error.status } - { error.statusText }</h1>
-      <p>{ error.data }</p>
-    </>
+    <div className="root-content">
+      <div className="app-content">
+        <h1 className="mt-0">{ error.status } - { error.statusText }</h1>
+        <p>{ error.data }</p>
+      </div>
+    </div>
   );
 }
 

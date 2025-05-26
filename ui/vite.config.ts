@@ -3,8 +3,8 @@ import { defineConfig, loadEnv } from 'vite';
 
 import react from '@vitejs/plugin-react-swc';
 
-export default defineConfig(({ mode }) => {
-  // eslint-disable-next-line no-undef
+export default defineConfig(({ mode }: { mode: string }) => {
+
   const env = loadEnv(mode, process.cwd(), '');
 
   return {
@@ -18,7 +18,7 @@ export default defineConfig(({ mode }) => {
     },
     server: {
       host: '0.0.0.0',
-      port: env.UI_PORT,
+      port: Number(env.UI_PORT),
       proxy: {
         '^/(api|file|swagger)/.*': {
           changeOrigin: true,

@@ -5,10 +5,10 @@ services:
     env_file:
       - ./.env
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U podfish"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
     image: postgres:latest
     volumes:
       - ./pg_data:/var/lib/postgresql/data
@@ -19,7 +19,8 @@ services:
       target: ${ENVIRONMENT}
     container_name: podfish_api
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
     env_file:
       - ./.env
     restart: on-failure

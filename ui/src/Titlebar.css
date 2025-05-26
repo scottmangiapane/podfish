@@ -12,3 +12,5 @@
 }
 
 .titlebar-item > * { white-space: nowrap; }
+
+.titlebar-logo { height: 100%; width: 50px; }

@@ -20,8 +20,8 @@ function Home() {
   for (const subscription of subscriptions) {
     content.push(
       <Subscription
-        key={ subscription["podcast_id"] }
-        id={ subscription["podcast_id"] }
+        key={ subscription['podcast_id'] }
+        id={ subscription['podcast_id'] }
         imageId={ subscription['image_id'] }
         title={ subscription.title } />
     );

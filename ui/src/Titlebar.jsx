@@ -27,7 +27,9 @@ function Titlebar() {
 
   return (
     <div className="app-content titlebar">
-      <Link className="titlebar-item" to={"/"}>🐠 Podfish</Link>
+      <Link className="titlebar-item" to={"/"}>
+        <img className="titlebar-logo" src="/logo.svg"></img>
+      </Link>
       { authButtons }
     </div>
   )
