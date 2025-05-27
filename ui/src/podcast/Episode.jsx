@@ -1,5 +1,6 @@
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import sanitizeHtml from "sanitize-html";
 
 import { putNowPlaying } from "../api-service";
 import { AppContext } from '../App';
@@ -22,6 +23,11 @@ function Episode({ episode, podcast }) {
     putNowPlaying(navigate, episode['episode_id']);
   }
 
+  const cleanDescription = sanitizeHtml(episode.description, {
+    allowedTags: [],
+    allowedAttributes: {},
+  });
+
   return (
     <>
       <div className="episode-header mb-2">
@@ -35,7 +41,7 @@ function Episode({ episode, podcast }) {
       </div>
       <div className="episode-content">
         <p className={ "break-word " + (isCollapsed && "truncate-l truncate-3l") }>
-          { episode.description }
+          { cleanDescription }
         </p>
         <span className="btn symbol" onClick={ () => setIsCollapsed(!isCollapsed) }>
           { (isCollapsed) ? "expand_more" : "expand_less" }

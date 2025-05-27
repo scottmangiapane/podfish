@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import sanitizeHtml from "sanitize-html";
 
 import { getEpisodes, getSubscription } from "../api-service";
 import Episode from "./Episode";
@@ -37,6 +38,11 @@ function Podcast() {
     );
   }
 
+  const cleanDescription = sanitizeHtml(podcast.description, {
+    allowedTags: [],
+    allowedAttributes: {},
+  });
+
   return (
     <div className="podcast-split">
       <div className="podcast-split-left">
@@ -45,7 +51,7 @@ function Podcast() {
           <div className="break-word">
             <h3 className="break-word podcast-title">{ podcast.title }</h3>
             <p className={ "break-word " + (isCollapsed && "truncate-l truncate-6l") }>
-              { podcast.description }
+              { cleanDescription }
             </p>
             <span className="btn symbol" onClick={ () => setIsCollapsed(!isCollapsed) }>
               { (isCollapsed) ? "expand_more" : "expand_less" }
