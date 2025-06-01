@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-import { getSubscriptions, TSubscription } from "../api-service";
+import { getSubscriptions, type TSubscription } from "../api-service";
 import Subscription from "./Subscription";
 
 import "./Home.css";

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import sanitizeHtml from "sanitize-html";
 
-import { putNowPlaying, TEpisode, TSubscription } from "../api-service";
+import { putNowPlaying, type TEpisode, type TSubscription } from "../api-service";
 import { useAppContext } from '../App';
 
 import "./Episode.css";

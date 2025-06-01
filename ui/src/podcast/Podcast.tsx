@@ -1,9 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactElement } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import sanitizeHtml from "sanitize-html";
 
-import { getEpisodes, getSubscription, TEpisodePosition } from "../api-service";
-import { TSubscription } from "../api-service";
+import { getEpisodes, getSubscription, type TEpisodePosition, type TSubscription } from "../api-service";
 import Episode from "./Episode";
 
 import "./Podcast.css";
@@ -25,9 +24,9 @@ function Podcast() {
     return null;
   }
 
-  const episodeList: JSX.Element[] = [];
-  // TODO do something with position
-  for (const { episode, position } of episodes) {
+  const episodeList: ReactElement[] = [];
+  // TODO replace { episode } with { episode, position } as needed
+  for (const { episode } of episodes) {
     episodeList.push(
       <div className="podcast-list-item" key={ episode["episode_id"] }>
         <Episode episode={ episode } podcast={ podcast } />
