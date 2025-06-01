@@ -1,16 +1,3 @@
-UP NEXT
-
-- Review Typescript strictness (https://www.typescriptlang.org/docs/handbook/2/basic-types.html)
-- Better documentation
-- Full-width playbar on mobile
-- Implement "Subscribe" page
-- Connect UI to playback position API
-- Pagination on episode list page
-- Error handling in UI for sign up / sign in
-- Better documentation
-- Playbar is hidden after sign-in, fixes with refresh
-- Connect UI to playback position API
-
 SECURITY
 
 - SameSite cookie attribute (example: `c.SetSameSite(http.SameSiteLaxMode)`)
@@ -30,11 +17,15 @@ API
 
 UI
 
+- Full-width playbar on mobile
+- Connect UI to playback position API
+- Pagination on episode list page
+- Implement "Subscribe" page
+- Error handling in UI for sign up / sign in
+- Playbar is hidden after sign-in, fixes with refresh
 - Ensure adding/removing node dependencies is reflected in docker container (is .dockerignore to blame?).
     - Not possible? without giving up live reloading. data volume is immutable after initial build
     - Explain in README
-- Pagination on episode list page
-- Make audio start automatically
 - Recursive custom error page (ex: https://pod.scottmangiapane.com/podcasts/undefined)
 - Speed up loading time of symbols font (minimized file to only include symbols I use?)
 - Speed up loading time of cover art (resize images?)
