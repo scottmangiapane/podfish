@@ -1,16 +1,20 @@
 import { useEffect, useRef, useState } from "react";
 
+import { useRootContext } from "@/Root";
+
 import "@/Slider.css";
 
 interface TSliderProps {
   labelEnd: string;
   labelStart: string;
-  onChange: ((value: number) => void) | null;
-  onInput: ((value: number) => void) | null;
+  onChange?: (value: number) => void;
+  onInput?: (value: number) => void;
   value: number;
 }
 
 export default function Slider({ labelEnd, labelStart, onChange, onInput, value }: TSliderProps) {
+  const { state } = useRootContext();
+
   const barRef = useRef<HTMLDivElement | null>(null);
   const markerRef = useRef<HTMLDivElement | null>(null);
 
@@ -96,7 +100,10 @@ export default function Slider({ labelEnd, labelStart, onChange, onInput, value 
 
   const percent = valuePendingRef.current
   const content = (
-    <div className="slider" onMouseDown={ onPointerDown } onTouchStart={ onPointerDown }>
+    <div
+      className={ "slider " + ((state.isMobile) ? "slider-mobile" : "") }
+      onMouseDown={ onPointerDown }
+      onTouchStart={ onPointerDown }>
       <div ref={ barRef } className="slider-bar">
         <div className="slider-bar-bg"></div>
         <div
@@ -115,7 +122,7 @@ export default function Slider({ labelEnd, labelStart, onChange, onInput, value 
     </div>
   );
 
-  if (labelEnd === undefined && labelStart === undefined) {
+  if (state.isMobile) {
     return content;
   }
 

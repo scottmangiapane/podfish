@@ -49,3 +49,13 @@
     height: var(--marker-size);
     width: var(--marker-size);
 }
+
+.slider-mobile {
+    margin: 0;
+    position: absolute;
+    inset: calc(-1 * var(--marker-size) / 2) auto 0 0;
+}
+
+.slider-mobile .slider { margin: 0; }
+
+.slider-mobile .slider-bar-bg { border-radius: 0%; }

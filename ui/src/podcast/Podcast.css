@@ -29,7 +29,7 @@
     min-width: 0;
 }
 
-@media only screen and (max-width: 992px) {
+@media only screen and (max-width: calc(992px - 1px)) {
     .podcast-cover { max-width: 64px; }
 
     .podcast-split-left {

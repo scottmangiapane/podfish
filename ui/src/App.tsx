@@ -12,6 +12,7 @@ interface TAppContext {
 type TAction =
   | { type: 'SET_NOW_PLAYING'; data: TNowPlaying | null };
 
+// TODO can this be replaced with TNowPlaying from types file?
 interface TNowPlaying {
   episodeId: string;
   episodeTitle: string;

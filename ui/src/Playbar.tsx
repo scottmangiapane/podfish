@@ -1,14 +1,16 @@
 import { useEffect, useRef, useState } from "react";
 
 import { useAppContext } from "@/App";
+import { useRootContext } from "@/Root";
 import Slider from "@/Slider";
 
 import "@/Playbar.css";
 
 function Playbar() {
-  const { state } = useAppContext();
-  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const { state: appState } = useAppContext();
+  const { state: rootState } = useRootContext();
 
+  const audioRef = useRef<HTMLAudioElement | null>(null);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
 
@@ -44,9 +46,9 @@ function Playbar() {
   }
 
   useEffect(() => {
-    // if (state.nowPlaying.timestamp) {
-    //   console.log(state.nowPlaying.timestamp);
-    //   skipToTime(state.nowPlaying.timestamp);
+    // if (appState.nowPlaying.timestamp) {
+    //   console.log(appState.nowPlaying.timestamp);
+    //   skipToTime(appState.nowPlaying.timestamp);
     // }
   }, []);
 
@@ -95,45 +97,62 @@ function Playbar() {
     audio.currentTime = seconds;
   }
 
-  if (!state.nowPlaying) return null;
-  const { episodeTitle, episodeUrl, podcastTitle } = state.nowPlaying;
+  const slider = (
+    <Slider
+      labelEnd={ secondsToTimestamp(duration) }
+      labelStart={ secondsToTimestamp(currentTime) }
+      onChange={ (percent: number) => { skipToTime(audioRef.current!.duration * percent / 100) } }
+      value={ 100 * currentTime / duration }
+    />
+  );
+
+  if (!appState.nowPlaying) return null;
+  const { episodeTitle, episodeUrl, podcastTitle } = appState.nowPlaying;
+
+  const mobileControls = (
+    <span className="btn symbol symbol-play-pause" onClick={ togglePlayPause }>
+      { (isPausedRef.current) ? "play_circle" : "pause_circle" }
+    </span>
+  );
+
+  const desktopControls = <>
+    <div className="center flex-2">
+      <div className="playbar-symbol-group">
+        <span
+          className="btn symbol"
+          onClick={ () => { skipToTime(currentTime - 10); } }>
+            replay_10
+        </span>
+        <span className="btn symbol symbol-play-pause" onClick={ togglePlayPause }>
+          { (isPausedRef.current) ? "play_circle" : "pause_circle" }
+        </span>
+        <span
+          className="btn symbol"
+          onClick={ () => { skipToTime(currentTime + 30); } }>
+            forward_30
+        </span>
+      </div>
+      { slider }
+    </div>
+    <div className="flex-1">
+      <div className="align-right">
+        <span className="btn symbol">volume_up</span>
+        {/* <span className="btn symbol">volume_down</span> */}
+        {/* <span className="btn symbol">volume_mute</span> */}
+      </div>
+    </div>
+  </>;
+
   return (
-    <div className="app-content playbar">
+    <div>
       <audio ref={ audioRef } src={ episodeUrl } preload="metadata"></audio>
-      <div className="flex-1">
-        <p className="truncate">{ episodeTitle }</p>
-        <p className="text-light truncate">{ podcastTitle }</p>
-      </div>
-      <div className="center flex-2">
-        <div className="playbar-symbol-group">
-          <span
-            className="btn symbol"
-            onClick={ () => { skipToTime(currentTime - 10); } }>
-              replay_10
-          </span>
-          <span className="btn symbol symbol-play-pause" onClick={ togglePlayPause }>
-            { (isPausedRef.current) ? "play_circle" : "pause_circle" }
-          </span>
-          <span
-            className="btn symbol"
-            onClick={ () => { skipToTime(currentTime + 30); } }>
-              forward_30
-          </span>
+      <div className="playbar app-content">
+        { rootState.isMobile && slider }
+        <div className="flex-1">
+          <p className="truncate">{ episodeTitle }</p>
+          <p className="text-light truncate">{ podcastTitle }</p>
         </div>
-        <Slider
-          labelEnd={ secondsToTimestamp(duration) }
-          labelStart={ secondsToTimestamp(currentTime) }
-          onChange={ (percent: number) => { skipToTime(audioRef.current!.duration * percent / 100) } }
-          onInput={ null }
-          value={ 100 * currentTime / duration }
-        />
-      </div>
-      <div className="flex-1">
-        <div className="align-right">
-          <span className="btn symbol">volume_up</span>
-          {/* <span className="btn symbol">volume_down</span> */}
-          {/* <span className="btn symbol">volume_mute</span> */}
-        </div>
+        { rootState.isMobile ? mobileControls : desktopControls }
       </div>
     </div>
   )
