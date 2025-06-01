@@ -2,10 +2,11 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import sanitizeHtml from "sanitize-html";
 
-import { putNowPlaying, type TEpisode, type TSubscription } from "../api-service";
-import { useAppContext } from '../App';
+import { putNowPlaying } from "@/api-service";
+import { useAppContext } from '@/App';
+import type { TEpisode, TSubscription } from "@/types";
 
-import "./Episode.css";
+import "@/podcast/Episode.css";
 
 interface TEpisodeProps {
   episode: TEpisode;

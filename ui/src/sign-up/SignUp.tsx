@@ -2,8 +2,8 @@ import Cookies from "js-cookie";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { postSignUp } from "../api-service";
-import { useRootContext } from '../Root';
+import { postSignUp } from "@/api-service";
+import { useRootContext } from '@/Root';
 
 function SignIn() {
   const { dispatch, state } = useRootContext();

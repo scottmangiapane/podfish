@@ -1,10 +1,10 @@
 # Podfish
 
-Podfish is a self-hostable podcast client. It lets you browse your favorite podcasts, play episodes, keep track of which episodes you've heard already, and more. It aims to be like Google Podcasts minus the discovery features.
-
 <p align="center">
 <img src="ui/public/logo.svg" width=20%>
 </p>
+
+Podfish is a self-hostable podcast client. It lets you browse your favorite podcasts, play episodes, keep track of which episodes you've heard already, and more. It aims to be like Google Podcasts minus the discovery features.
 
 # Screenshots
 
@@ -17,6 +17,14 @@ Getting started is easy. Just run:
 ```
 docker compose up
 ```
+
+Most changes will be automatically reapplied when developing locally, but some changes (ex: installing a node module) require a rebuild. Containers can be rebuilt like so:
+```
+docker compose down
+docker compose build --no-cache ui
+docker compose up
+```
+Backend changes work the same way but with `api` instead of `ui`.
 
 Common settings such as the environment (dev/prod), ports, keys, and more can be set in the `.env` file.
 

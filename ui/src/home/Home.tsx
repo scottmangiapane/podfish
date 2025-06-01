@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-import { getSubscriptions, type TSubscription } from "../api-service";
-import Subscription from "./Subscription";
+import { getSubscriptions } from "@/api-service";
+import Subscription from "@/home/Subscription";
+import type { TSubscription } from "@/types";
 
-import "./Home.css";
+import "@/home/Home.css";
 
 function Home() {
   const navigate = useNavigate();

@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 
-import { useAppContext } from "./App";
-import Slider from "./Slider";
+import { useAppContext } from "@/App";
+import Slider from "@/Slider";
 
-import "./Playbar.css";
+import "@/Playbar.css";
 
 function Playbar() {
   const { state } = useAppContext();

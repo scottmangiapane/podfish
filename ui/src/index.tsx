@@ -5,17 +5,17 @@ import {
   RouterProvider,
 } from "react-router-dom";
 
-import Error from "./error/Error";
-import Home from "./home/Home";
-import Podcast from "./podcast/Podcast";
-import App from "./App";
-import Root from "./Root";
-import Settings from "./settings/Settings";
-import Subscribe from "./subscribe/Subscribe";
-import SignIn from "./sign-in/SignIn";
-import SignUp from "./sign-up/SignUp";
+import App from "@/App";
+import Error from "@/error/Error";
+import Home from "@/home/Home";
+import Podcast from "@/podcast/Podcast";
+import Root from "@/Root";
+import Settings from "@/settings/Settings";
+import SignIn from "@/sign-in/SignIn";
+import SignUp from "@/sign-up/SignUp";
+import Subscribe from "@/subscribe/Subscribe";
 
-import "./index.css";
+import "@/index.css";
 
 const router = createBrowserRouter([
   {

@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-import "./Subscription.css";
+import "@/home/Subscription.css";
 
 interface TSubscriptionProps {
   id: string;

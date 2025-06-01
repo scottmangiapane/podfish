@@ -2,10 +2,11 @@ import { useEffect, useState, type ReactElement } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import sanitizeHtml from "sanitize-html";
 
-import { getEpisodes, getSubscription, type TEpisodePosition, type TSubscription } from "../api-service";
-import Episode from "./Episode";
+import { getEpisodes, getSubscription } from "@/api-service";
+import Episode from "@/podcast/Episode";
+import type { TEpisodePosition, TSubscription } from "@/types";
 
-import "./Podcast.css";
+import "@/podcast/Podcast.css";
 
 function Podcast() {
   const navigate = useNavigate();

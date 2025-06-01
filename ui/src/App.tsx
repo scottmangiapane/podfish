@@ -1,8 +1,8 @@
 import { createContext, useContext, useEffect, useReducer } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 
-import { getNowPlaying } from "./api-service";
-import Playbar from "./Playbar";
+import { getNowPlaying } from "@/api-service";
+import Playbar from "@/Playbar";
 
 interface TAppContext {
   state: TState,

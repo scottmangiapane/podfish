@@ -2,7 +2,7 @@ import Cookies from "js-cookie";
 import { createContext, useContext, useReducer } from "react";
 import { Outlet } from "react-router-dom";
 
-import Titlebar from "./Titlebar";
+import Titlebar from "@/Titlebar";
 
 interface TRootContext {
   state: TState;

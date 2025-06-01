@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 
-import "./Slider.css";
+import "@/Slider.css";
 
 interface TSliderProps {
   labelEnd: string;
