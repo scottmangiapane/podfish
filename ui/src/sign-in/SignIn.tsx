@@ -1,17 +1,17 @@
 import Cookies from "js-cookie";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { postSignIn } from "../api-service";
-import { RootContext } from "../Root";
+import { useRootContext } from "../Root";
 
 function SignIn() {
-  const { dispatch, state } = useContext(RootContext);
+  const { dispatch, state } = useRootContext();
 
   const navigate = useNavigate();
 
-  const emailRef = useRef(null);
-  const passwordRef = useRef(null);
+  const emailRef = useRef<HTMLInputElement | null>(null);
+  const passwordRef = useRef<HTMLInputElement | null>(null);
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -20,10 +20,10 @@ function SignIn() {
     if (state.user) {
       navigate('/');
     }
-    emailRef.current.focus();
+    emailRef.current?.focus();
   }, []);
 
-  async function submit(event) {
+  async function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     const res = await postSignIn(email, password);
@@ -42,7 +42,7 @@ function SignIn() {
           autoComplete="on"
           onChange={(e) => setEmail(e.target.value)}
           placeholder="Email"
-          required="required"
+          required={ true }
           type="email"
           value={ email }
         />
@@ -51,7 +51,7 @@ function SignIn() {
           autoComplete="on"
           onChange={(e) => setPassword(e.target.value)}
           placeholder="Password"
-          required="required"
+          required={ true }
           type="password"
           value={ password }
         />

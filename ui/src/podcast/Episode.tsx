@@ -1,14 +1,20 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import sanitizeHtml from "sanitize-html";
 
-import { putNowPlaying } from "../api-service";
-import { AppContext } from '../App';
+import { putNowPlaying, TEpisode, TSubscription } from "../api-service";
+import { useAppContext } from '../App';
 
 import "./Episode.css";
 
-function Episode({ episode, podcast }) {
-  const { dispatch } = useContext(AppContext);
+interface TEpisodeProps {
+  episode: TEpisode;
+  podcast: TSubscription;
+}
+
+function Episode({ episode, podcast }: TEpisodeProps) {
+  const { dispatch } = useAppContext();
+
   const navigate = useNavigate();
   const [isCollapsed, setIsCollapsed] = useState(true);
 
@@ -18,7 +24,8 @@ function Episode({ episode, podcast }) {
       episodeTitle: episode.title,
       episodeUrl: episode.url,
       podcastId: podcast['podcast_id'],
-      podcastTitle: podcast.title
+      podcastTitle: podcast.title,
+      // TODO include current timestamp
     } });
     putNowPlaying(navigate, episode['episode_id']);
   }

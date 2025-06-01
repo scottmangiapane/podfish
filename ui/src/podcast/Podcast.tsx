@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import sanitizeHtml from "sanitize-html";
 
-import { getEpisodes, getSubscription } from "../api-service";
+import { getEpisodes, getSubscription, TEpisodePosition } from "../api-service";
+import { TSubscription } from "../api-service";
 import Episode from "./Episode";
 
 import "./Podcast.css";
@@ -11,24 +12,20 @@ function Podcast() {
   const navigate = useNavigate();
 
   const { id } = useParams();
-  const [episodes, setEpisodes] = useState([]);
+  const [episodes, setEpisodes] = useState<TEpisodePosition[]>([]);
   const [isCollapsed, setIsCollapsed] = useState(true);
-  const [podcast, setPodcast] = useState(null);
+  const [podcast, setPodcast] = useState<TSubscription | null>(null);
 
   useEffect(() => {
-    getEpisodes(navigate, id).then((res) => {
-      res.json().then((data) => setEpisodes(data));
-    });
-    getSubscription(navigate, id).then((res) => {
-      res.json().then((data) => setPodcast(data));
-    });
+    getEpisodes(navigate, id!).then((res) => setEpisodes(res.data));
+    getSubscription(navigate, id!).then((res) => setPodcast(res.data));
   }, []);
 
   if (!podcast) {
     return null;
   }
 
-  const episodeList = [];
+  const episodeList: JSX.Element[] = [];
   // TODO do something with position
   for (const { episode, position } of episodes) {
     episodeList.push(

@@ -1,25 +1,25 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
-import { AppContext } from "./App";
+import { useAppContext } from "./App";
 import Slider from "./Slider";
 
 import "./Playbar.css";
 
 function Playbar() {
-  const { state } = useContext(AppContext);
-  const audioRef = useRef(null);
+  const { state } = useAppContext();
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
 
   const [_isPaused, _setIsPaused] = useState(true);
   const isPausedRef = useRef(_isPaused);
-  function setIsPaused(data) {
-    isPausedRef.current = data;
-    _setIsPaused(data);
+  function setIsPaused(isPaused: boolean) {
+    isPausedRef.current = isPaused;
+    _setIsPaused(isPaused);
   }
 
-  function secondsToTimestamp(totalSeconds) {
+  function secondsToTimestamp(totalSeconds: number) {
     const h = Math.floor(totalSeconds / 3600).toString().padStart(2, '0');
     const m = Math.floor((totalSeconds % 3600) / 60).toString().padStart(2, '0');
     const s = Math.floor(totalSeconds % 60).toString().padStart(2, '0');
@@ -28,7 +28,7 @@ function Playbar() {
       : `${m}:${s}`;
   }
 
-  function spacebarPressed(event) {
+  function spacebarPressed(event: KeyboardEvent) {
     if (event.code === 'Space') {
       event.preventDefault();
       togglePlayPause();
@@ -37,18 +37,22 @@ function Playbar() {
 
   function togglePlayPause() {
     if (isPausedRef.current) {
-      audioRef.current.play();
+      audioRef.current?.play();
     } else {
-      audioRef.current.pause();
+      audioRef.current?.pause();
     }
   }
 
   useEffect(() => {
-    // skipToTime(state.nowPlaying.timestamp);
+    // if (state.nowPlaying.timestamp) {
+    //   console.log(state.nowPlaying.timestamp);
+    //   skipToTime(state.nowPlaying.timestamp);
+    // }
   }, []);
 
   useEffect(() => {
     const audio = audioRef.current;
+    if (!audio) return;
     audio.addEventListener('durationchange', audioDurationChange);
     audio.addEventListener('ended', audioEnded);
     audio.addEventListener('pause', audioPause);
@@ -67,20 +71,31 @@ function Playbar() {
 
   function audioEnded() { /* TODO */ }
 
-  function audioDurationChange() { setDuration(audioRef.current.duration); }
+  function audioDurationChange() {
+    const audio = audioRef.current;
+    if (!audio) return;
+    setDuration(audio.duration);
+  }
 
   function audioPause() { setIsPaused(true); }
 
   function audioPlay() { setIsPaused(false); }
 
-  function audioTimeUpdate() { setCurrentTime(audioRef.current.currentTime); }
-
-  function skipToTime(seconds) {
-    seconds = Math.max(0, seconds);
-    seconds = Math.min(audioRef.current.duration, seconds);
-    audioRef.current.currentTime = seconds;
+  function audioTimeUpdate() {
+    const audio = audioRef.current;
+    if (!audio) return;
+    setCurrentTime(audio.currentTime);
   }
 
+  function skipToTime(seconds: number) {
+    const audio = audioRef.current;
+    if (!audio) return;
+    seconds = Math.max(0, seconds);
+    seconds = Math.min(audio.duration, seconds);
+    audio.currentTime = seconds;
+  }
+
+  if (!state.nowPlaying) return null;
   const { episodeTitle, episodeUrl, podcastTitle } = state.nowPlaying;
   return (
     <div className="app-content playbar">
@@ -108,7 +123,8 @@ function Playbar() {
         <Slider
           labelEnd={ secondsToTimestamp(duration) }
           labelStart={ secondsToTimestamp(currentTime) }
-          onChange={ (percent) => { skipToTime(audioRef.current.duration * percent / 100) } }
+          onChange={ (percent: number) => { skipToTime(audioRef.current!.duration * percent / 100) } }
+          onInput={ null }
           value={ 100 * currentTime / duration }
         />
       </div>

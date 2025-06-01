@@ -2,9 +2,17 @@ import { useEffect, useRef, useState } from "react";
 
 import "./Slider.css";
 
-export default function Slider({ labelEnd, labelStart, onChange, onInput, value }) {
-  const barRef = useRef(null);
-  const markerRef = useRef(null);
+interface TSliderProps {
+  labelEnd: string;
+  labelStart: string;
+  onChange: ((value: number) => void) | null;
+  onInput: ((value: number) => void) | null;
+  value: number;
+}
+
+export default function Slider({ labelEnd, labelStart, onChange, onInput, value }: TSliderProps) {
+  const barRef = useRef<HTMLDivElement | null>(null);
+  const markerRef = useRef<HTMLDivElement | null>(null);
 
   // ref is used because state isn't updated inside of event listeners created by useEffect
   const mouseRef = useRef({});
@@ -14,9 +22,9 @@ export default function Slider({ labelEnd, labelStart, onChange, onInput, value 
   // state is still needed to trigger re-renders
   const [_valuePending, _setValuePending] = useState(value);
   const valuePendingRef = useRef(_valuePending);
-  function setValuePending(data) {
-    valuePendingRef.current = data;
-    _setValuePending(data);
+  function setValuePending(value: number) {
+    valuePendingRef.current = value;
+    _setValuePending(value);
   }
 
   useEffect(() => {
@@ -26,49 +34,60 @@ export default function Slider({ labelEnd, labelStart, onChange, onInput, value 
   }, [value]);
 
   useEffect(() => {
-    document.addEventListener('mousemove', onMouseMove);
-    document.addEventListener('touchmove', onMouseMove);
+    document.addEventListener('mousemove', onPointerMove);
+    document.addEventListener('touchmove', onPointerMove);
     document.addEventListener('mouseup', onMouseUp);
     document.addEventListener('touchend', onMouseUp);
     return () => {
-      document.removeEventListener('mousemove', onMouseMove);
-      document.removeEventListener('touchmove', onMouseMove);
+      document.removeEventListener('mousemove', onPointerMove);
+      document.removeEventListener('touchmove', onPointerMove);
       document.removeEventListener('mouseup', onMouseUp);
       document.removeEventListener('touchend', onMouseUp);
     };
   }, []);
 
-  function onMouseDown(event) {
+  function onPointerDown(event: React.MouseEvent | React.TouchEvent) {
     const marker = markerRef.current;
+    if (!marker) return;
     marker.style.cursor = 'grabbing';
 
-    mouseRef.current ={ event, offset: marker.offsetLeft };
+    mouseRef.current = { event, offset: marker.offsetLeft };
     isMouseDownRef.current = true;
 
-    const percent = calculatePercent(event.clientX || event.touches?.[0]?.clientX);
+    const percent = ('touches' in event)
+      ? calculatePercent(event.touches?.[0]?.clientX)
+      : calculatePercent(event.clientX);
+
     setValuePending(percent);
     onInput && onInput(percent);
   }
 
-  function onMouseMove(event) {
+  function onPointerMove(event: MouseEvent | TouchEvent) {
     if (isMouseDownRef.current) {
-      const percent = calculatePercent(event.clientX || event.touches?.[0]?.clientX);
+      const percent = ('touches' in event)
+        ? calculatePercent(event.touches?.[0]?.clientX)
+        : calculatePercent(event.clientX);
+
       setValuePending(percent);
       onInput && onInput(percent);
     }
   }
 
   function onMouseUp() {
+    const marker = markerRef.current;
+    if (!marker) return;
     if (isMouseDownRef.current) {
-      markerRef.current.style.cursor = null;
+      marker.style.cursor = '';
       isMouseDownRef.current = false;
       onChange && onChange(valuePendingRef.current);
     }
   }
 
-  function calculatePercent(mouseX) {
-    const barWidth = barRef.current.clientWidth;
-    const barX = barRef.current.getBoundingClientRect().left;
+  function calculatePercent(mouseX: number) {
+    const bar = barRef.current;
+    if (!bar) return 0;
+    const barWidth = bar.clientWidth;
+    const barX = bar.getBoundingClientRect().left;
     let percent = 100 * (mouseX - barX) / barWidth;
     percent = Math.max(0, percent);
     percent = Math.min(100, percent);
@@ -77,7 +96,7 @@ export default function Slider({ labelEnd, labelStart, onChange, onInput, value 
 
   const percent = valuePendingRef.current
   const content = (
-    <div className="slider" onMouseDown={ onMouseDown } onTouchStart={ onMouseDown }>
+    <div className="slider" onMouseDown={ onPointerDown } onTouchStart={ onPointerDown }>
       <div ref={ barRef } className="slider-bar">
         <div className="slider-bar-bg"></div>
         <div
@@ -89,7 +108,7 @@ export default function Slider({ labelEnd, labelStart, onChange, onInput, value 
         ref={ markerRef }
         className="slider-marker"
         style={{
-          backgroundColor: isMouseDownRef.current && 'var(--accent-color-dark)',
+          backgroundColor: isMouseDownRef.current ? 'var(--accent-color-dark)' : undefined,
           left: `calc(${ percent }% - var(--marker-size) / 2)`
         }}>
       </div>

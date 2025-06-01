@@ -1,12 +1,11 @@
-import { useContext } from "react";
 import { Link } from "react-router-dom";
 
-import { RootContext } from "./Root";
+import { useRootContext } from "./Root";
 
 import "./Titlebar.css";
 
 function Titlebar() {
-  const { state } = useContext(RootContext);
+  const { state } = useRootContext();
 
   let authButtons = (
     <>

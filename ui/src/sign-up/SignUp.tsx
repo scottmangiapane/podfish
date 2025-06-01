@@ -1,18 +1,18 @@
 import Cookies from "js-cookie";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { postSignUp } from "../api-service";
-import { RootContext } from '../Root';
+import { useRootContext } from '../Root';
 
 function SignIn() {
-  const { dispatch, state } = useContext(RootContext);
+  const { dispatch, state } = useRootContext();
 
   const navigate = useNavigate();
 
-  const confirmPasswordRef = useRef(null);
-  const emailRef = useRef(null);
-  const passwordRef = useRef(null);
+  const confirmPasswordRef = useRef<HTMLInputElement>(null);
+  const emailRef = useRef<HTMLInputElement>(null);
+  const passwordRef = useRef<HTMLInputElement>(null);
 
   const [confirmPassword, setConfirmPassword] = useState('');
   const [email, setEmail] = useState('');
@@ -22,10 +22,10 @@ function SignIn() {
     if (state.user) {
       navigate('/');
     }
-    emailRef.current.focus();
+    emailRef.current?.focus();
   }, []);
 
-  async function submit(event) {
+  async function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     const res = await postSignUp(email, password);
@@ -44,7 +44,7 @@ function SignIn() {
           autoComplete="on"
           onChange={(e) => setEmail(e.target.value)}
           placeholder="Email"
-          required="required"
+          required={ true }
           type="email"
           value={ email }
         />
@@ -53,7 +53,7 @@ function SignIn() {
           autoComplete="on"
           onChange={(e) => setPassword(e.target.value)}
           placeholder="Password"
-          required="required"
+          required={ true }
           type="password"
           value={ password }
         />
@@ -62,7 +62,7 @@ function SignIn() {
           autoComplete="on"
           onChange={(e) => setConfirmPassword(e.target.value)}
           placeholder="Confirm Password"
-          required="required"
+          required={ true }
           type="password"
           value={ confirmPassword }
         />
