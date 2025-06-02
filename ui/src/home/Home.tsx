@@ -3,24 +3,20 @@ import { Link, useNavigate } from "react-router-dom";
 
 import { getSubscriptions } from "@/api-service";
 import Subscription from "@/home/Subscription";
-import type { TSubscription } from "@/types";
+import type { TPodcast } from "@/types";
 
 import "@/home/Home.css";
 
 function Home() {
   const navigate = useNavigate();
-  const [subscriptions, setSubscriptions] = useState<TSubscription[]>([]);
+  const [subscriptions, setSubscriptions] = useState<TPodcast[]>([]);
 
   useEffect(() => {
     getSubscriptions(navigate).then((response) => setSubscriptions(response.data));
   }, []);
 
   const content = subscriptions.map(subscription => (
-    <Subscription
-      key={ subscription['podcast_id'] }
-      id={ subscription['podcast_id'] }
-      imageId={ subscription['image_id'] }
-      title={ subscription.title } />
+    <Subscription key={ subscription['podcast_id'] } podcast={ subscription } />
   ));
 
   return (

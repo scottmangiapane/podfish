@@ -1,18 +1,18 @@
 import { Link } from "react-router-dom";
 
+import type { TPodcast } from "@/types";
+
 import "@/home/Subscription.css";
 
 interface TSubscriptionProps {
-  id: string;
-  imageId: string;
-  title: string;
+  podcast: TPodcast
 }
 
-function Subscription({ id, imageId, title }: TSubscriptionProps) {
+function Subscription({ podcast }: TSubscriptionProps) {
   return (
-    <Link className="uncolored" to={`/podcasts/${ id }`}>
-      <img className="subscription-cover" src={ `/file/${ imageId }` }></img>
-      <div className="truncate">{ title }</div>
+    <Link className="uncolored" to={`/podcasts/${ podcast.podcast_id }`}>
+      <img className="subscription-cover" src={ `/file/${ podcast.image_id }` }></img>
+      <div className="truncate">{ podcast.title }</div>
     </Link>
   );
 }

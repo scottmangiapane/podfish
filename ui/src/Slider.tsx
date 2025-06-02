@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 
-import { useRootContext } from "@/Root";
+import { useRootContext } from "@/contexts/RootContext";
 
 import "@/Slider.css";
 
@@ -109,7 +109,7 @@ export default function Slider({ labelEnd, labelStart, onChange, onInput, value 
     return percent;
   }
 
-  const percent = valuePendingRef.current
+  const percent = valuePendingRef.current;
   const content = (
     <div
       className={ "slider " + ((state.isMobile) ? "slider-mobile" : "") }

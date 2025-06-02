@@ -3,14 +3,14 @@ import { useNavigate } from "react-router-dom";
 import sanitizeHtml from "sanitize-html";
 
 import { putNowPlaying } from "@/api-service";
-import { useAppContext } from '@/App';
-import type { TEpisode, TPosition, TSubscription } from "@/types";
+import { useAppContext } from '@/contexts/AppContext';
+import type { TEpisode, TPodcast, TPosition } from "@/types";
 
 import "@/podcast/Episode.css";
 
 interface TEpisodeProps {
   episode: TEpisode;
-  podcast: TSubscription;
+  podcast: TPodcast;
   position: TPosition;
 }
 
@@ -26,7 +26,6 @@ function Episode({ episode, podcast, position }: TEpisodeProps) {
       podcast,
       position,
     } });
-    dispatch({ type: 'AUDIO_PLAY' });
     putNowPlaying(navigate, episode['episode_id']);
   }
 

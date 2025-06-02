@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { postSignUp } from "@/api-service";
-import { useRootContext } from '@/Root';
+import { useRootContext } from '@/contexts/RootContext';
 
 function SignIn() {
   const { dispatch, state } = useRootContext();

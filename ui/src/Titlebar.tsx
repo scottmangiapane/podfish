@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-import { useRootContext } from "@/Root";
+import { useRootContext } from "@/contexts/RootContext";
 
 import "@/Titlebar.css";
 

@@ -4,7 +4,7 @@ import sanitizeHtml from "sanitize-html";
 
 import { getEpisodes, getSubscription } from "@/api-service";
 import Episode from "@/podcast/Episode";
-import type { TEpisodePosition, TSubscription } from "@/types";
+import type { TEpisodePosition, TPodcast } from "@/types";
 
 import "@/podcast/Podcast.css";
 
@@ -14,7 +14,7 @@ function Podcast() {
   const { id } = useParams();
   const [episodes, setEpisodes] = useState<TEpisodePosition[]>([]);
   const [isCollapsed, setIsCollapsed] = useState(true);
-  const [podcast, setPodcast] = useState<TSubscription | null>(null);
+  const [podcast, setPodcast] = useState<TPodcast | null>(null);
 
   useEffect(() => {
     getEpisodes(navigate, id!).then((res) => setEpisodes(res.data));

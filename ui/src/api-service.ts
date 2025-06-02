@@ -1,5 +1,5 @@
 import { type NavigateFunction } from 'react-router-dom';
-import type { TEpisodePosition, TNowPlaying, TApiResponse, TSignIn, TSignUp, TSubscription } from '@/types';
+import type { TEpisodePosition, TNowPlaying, TApiResponse, TPodcast, TSignIn, TSignUp } from '@/types';
 
 async function callApi(navigate: NavigateFunction | null, resource: string, options={}) : Promise<TApiResponse<any>> {
   const res = await fetch(resource, options);
@@ -39,13 +39,13 @@ export async function putNowPlaying(navigate: NavigateFunction, id: string) {
 export async function getSubscription(navigate: NavigateFunction, id: string) {
   return await callApi(navigate, `/api/v1/subscriptions/${ id }`, {
     method: 'GET'
-  }) as TApiResponse<TSubscription>;
+  }) as TApiResponse<TPodcast>;
 }
 
 export async function getSubscriptions(navigate: NavigateFunction) {
   return await callApi(navigate, `/api/v1/subscriptions`, {
     method: 'GET'
-  }) as TApiResponse<TSubscription[]>;
+  }) as TApiResponse<TPodcast[]>;
 }
 
 export async function postSignIn(email: string, password: string) {

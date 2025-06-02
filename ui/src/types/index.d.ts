@@ -1,3 +1,5 @@
+// TODO use camel case in type properties
+
 export interface TApiResponse<T> {
   data: T;
   ok: boolean;
@@ -19,8 +21,8 @@ export interface TEpisodePosition {
 
 export interface TNowPlaying {
   episode: TEpisode;
-  podcast: TSubscription; // TODO consistent naming between "podcast" and "subscription"
-  position: TPosition;
+  podcast: TPodcast;
+  position: TPosition | null;
 }
 
 export interface TPosition {
@@ -37,7 +39,7 @@ export interface TSignUp {
   user_id: string;
 }
 
-export interface TSubscription {
+export interface TPodcast {
   description: string;
   image_id: string;
   podcast_id: string;

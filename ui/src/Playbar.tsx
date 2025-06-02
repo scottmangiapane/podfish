@@ -1,5 +1,5 @@
-import { useAppContext } from "@/App";
-import { useRootContext } from "@/Root";
+import { useAppContext } from "@/contexts/AppContext";
+import { useRootContext } from "@/contexts/RootContext";
 import Slider from "@/Slider";
 
 import "@/Playbar.css";
@@ -27,7 +27,7 @@ function Playbar() {
           data: state.audio.duration * percent / 100
         });
       }}
-      value={ 100 * state.audio.currentTime / state.audio.duration }
+      value={ 100 * state.audio.currentTime / state.audio.duration || 0 }
     />
   );
 
