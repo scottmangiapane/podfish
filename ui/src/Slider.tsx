@@ -23,6 +23,16 @@ export default function Slider({ labelEnd, labelStart, onChange, onInput, value 
   const isMouseDownRef = useRef(false);
 
   // ref is used because state isn't updated inside of event listeners created by useEffect
+  const onChangeRef = useRef(onChange);
+  useEffect(() => {
+    onChangeRef.current = onChange;
+  }, [onChange]);
+  const onInputRef = useRef(onInput);
+  useEffect(() => {
+    onInputRef.current = onInput;
+  }, [onInput]);
+
+  // ref is used because state isn't updated inside of event listeners created by useEffect
   // state is still needed to trigger re-renders
   const [_valuePending, _setValuePending] = useState(value);
   const valuePendingRef = useRef(_valuePending);
@@ -63,7 +73,7 @@ export default function Slider({ labelEnd, labelStart, onChange, onInput, value 
       : calculatePercent(event.clientX);
 
     setValuePending(percent);
-    onInput && onInput(percent);
+    onInputRef.current?.(percent);
   }
 
   function onPointerMove(event: MouseEvent | TouchEvent) {
@@ -73,7 +83,8 @@ export default function Slider({ labelEnd, labelStart, onChange, onInput, value 
         : calculatePercent(event.clientX);
 
       setValuePending(percent);
-      onInput && onInput(percent);
+
+      onInputRef.current?.(percent);
     }
   }
 
@@ -83,7 +94,7 @@ export default function Slider({ labelEnd, labelStart, onChange, onInput, value 
     if (isMouseDownRef.current) {
       marker.style.cursor = '';
       isMouseDownRef.current = false;
-      onChange && onChange(valuePendingRef.current);
+      onChangeRef.current?.(valuePendingRef.current);
     }
   }
 

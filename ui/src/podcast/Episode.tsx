@@ -21,13 +21,12 @@ function Episode({ episode, podcast }: TEpisodeProps) {
 
   function play() {
     dispatch({ type: 'SET_NOW_PLAYING', data: {
-      episodeId: episode['episode_id'],
       episodeTitle: episode.title,
       episodeUrl: episode.url,
-      podcastId: podcast['podcast_id'],
       podcastTitle: podcast.title,
       // TODO include current timestamp
     } });
+    dispatch({ type: 'AUDIO_PLAY' });
     putNowPlaying(navigate, episode['episode_id']);
   }
 

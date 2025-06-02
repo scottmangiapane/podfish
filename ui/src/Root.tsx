@@ -1,3 +1,4 @@
+import { produce } from "immer";
 import Cookies from "js-cookie";
 import { createContext, useContext, useEffect, useReducer } from "react";
 import { Outlet } from "react-router-dom";
@@ -29,22 +30,21 @@ export function useRootContext() {
 }
 
 function Root() {
+  const rootReducer = produce((state = initialState, action: TAction) => {
+    switch (action.type) {
+      case 'SET_IS_MOBILE':
+        state.isMobile = action.data;
+        break;
+      case 'SET_USER':
+        state.user = action.data;
+        break;
+    }
+  });
   const initialState = {
     isMobile: window.innerWidth < 576,
     user: Cookies.get('user') || null,
   };
   const [state, dispatch] = useReducer(rootReducer, initialState);
-
-  function rootReducer(state = initialState, action: TAction) {
-    switch (action.type) {
-      case 'SET_IS_MOBILE':
-        return { ...state, isMobile: action.data };
-      case 'SET_USER':
-        return { ...state, user: action.data };
-      default:
-        return state;
-    }
-  }
 
   useEffect(() => {
     const handleResize = () => {

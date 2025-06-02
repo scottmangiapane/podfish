@@ -20,9 +20,7 @@ docker compose up
 
 Most changes will be automatically reapplied when developing locally, but some changes (ex: installing a node module) require a rebuild. Containers can be rebuilt like so:
 ```
-docker compose down
-docker compose build --no-cache ui
-docker compose up
+docker compose down && docker compose build --no-cache ui && docker compose up
 ```
 Backend changes work the same way but with `api` instead of `ui`.
 
