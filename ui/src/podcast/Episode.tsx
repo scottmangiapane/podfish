@@ -4,16 +4,17 @@ import sanitizeHtml from "sanitize-html";
 
 import { putNowPlaying } from "@/api-service";
 import { useAppContext } from '@/App';
-import type { TEpisode, TSubscription } from "@/types";
+import type { TEpisode, TPosition, TSubscription } from "@/types";
 
 import "@/podcast/Episode.css";
 
 interface TEpisodeProps {
   episode: TEpisode;
   podcast: TSubscription;
+  position: TPosition;
 }
 
-function Episode({ episode, podcast }: TEpisodeProps) {
+function Episode({ episode, podcast, position }: TEpisodeProps) {
   const { dispatch } = useAppContext();
 
   const navigate = useNavigate();
@@ -21,10 +22,9 @@ function Episode({ episode, podcast }: TEpisodeProps) {
 
   function play() {
     dispatch({ type: 'SET_NOW_PLAYING', data: {
-      episodeTitle: episode.title,
-      episodeUrl: episode.url,
-      podcastTitle: podcast.title,
-      // TODO include current timestamp
+      episode,
+      podcast,
+      position,
     } });
     dispatch({ type: 'AUDIO_PLAY' });
     putNowPlaying(navigate, episode['episode_id']);

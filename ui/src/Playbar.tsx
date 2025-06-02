@@ -32,7 +32,8 @@ function Playbar() {
   );
 
   if (!state.nowPlaying) return null;
-  const { episodeTitle, podcastTitle } = state.nowPlaying;
+  const episodeTitle = state.nowPlaying.episode.title;
+  const podcastTitle = state.nowPlaying.podcast.title;
 
   const simpleControls = (
     <span

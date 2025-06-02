@@ -24,7 +24,7 @@ export interface TNowPlaying {
 }
 
 export interface TPosition {
-  current_time: string;
+  current_time: number;
 }
 
 export interface TSignIn {

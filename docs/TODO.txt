@@ -29,3 +29,7 @@ UI
 - Recursive custom error page (ex: https://pod.scottmangiapane.com/podcasts/undefined)
 - Speed up loading time of symbols font (minimized file to only include symbols I use?)
 - Speed up loading time of cover art (resize images?)
+
+OTHER
+
+- Automatic linting on save (ex: consistent single / double quotes)

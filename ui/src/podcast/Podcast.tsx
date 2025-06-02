@@ -26,11 +26,10 @@ function Podcast() {
   }
 
   const episodeList: ReactElement[] = [];
-  // TODO replace { episode } with { episode, position } as needed
-  for (const { episode } of episodes) {
+  for (const { episode, position } of episodes) {
     episodeList.push(
       <div className="podcast-list-item" key={ episode["episode_id"] }>
-        <Episode episode={ episode } podcast={ podcast } />
+        <Episode episode={ episode } podcast={ podcast } position={ position } />
       </div>
     );
   }

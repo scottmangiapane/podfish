@@ -24,7 +24,7 @@ const RootContext = createContext<TRootContext | null>(null);
 export function useRootContext() {
   const context = useContext(RootContext);
   if (!context) {
-    throw new Error("RootContext must be used within a RootContext.Provider");
+    throw new Error("Unable to obtain RootContext");
   }
   return context;
 }

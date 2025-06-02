@@ -1,6 +1,7 @@
 import { produce } from "immer";
 import { createContext, useContext, useEffect, useReducer, useRef } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
+import type { TNowPlaying } from "./types";
 
 import { getNowPlaying } from "@/api-service";
 import Playbar from "@/Playbar";
@@ -19,13 +20,6 @@ type TAction =
   | { type: 'AUDIO_TOGGLE'; }
   | { type: 'SET_NOW_PLAYING'; data: TNowPlaying | null; };
 
-// TODO can this be replaced with TNowPlaying from types file?
-interface TNowPlaying {
-  episodeTitle: string;
-  episodeUrl: string;
-  podcastTitle: string;
-};
-
 interface TState {
   audio: {
     currentTime: number;
@@ -33,11 +27,7 @@ interface TState {
     isPaused: boolean;
     requestedTime: number;
   }
-  nowPlaying: {
-    episodeTitle: string;
-    episodeUrl: string;
-    podcastTitle: string;
-  } | null;
+  nowPlaying: TNowPlaying | null;
 };
 
 const AppContext = createContext<TAppContext | null>(null);
@@ -45,7 +35,7 @@ const AppContext = createContext<TAppContext | null>(null);
 export function useAppContext() {
   const context = useContext(AppContext);
   if (!context) {
-    throw new Error("AppContext must be used within an AppContext.Provider");
+    throw new Error("Unable to obtain AppContext");
   }
   return context;
 }
@@ -75,8 +65,8 @@ function App() {
         if (action.data === null) {
           state.nowPlaying = null;
         } else {
-          const { episodeTitle, episodeUrl, podcastTitle } = action.data;
-          state.nowPlaying = { episodeTitle, episodeUrl, podcastTitle };
+          state.nowPlaying = action.data;
+          state.audio.requestedTime = action.data.position["current_time"];
         }
         break;
     }
@@ -98,12 +88,7 @@ function App() {
   useEffect(() => {
     getNowPlaying(navigate).then((res) => {
       if (res.ok && res.data && Object.keys(res.data).length > 0) {
-        dispatch({ type: 'SET_NOW_PLAYING', data: {
-          episodeTitle: res.data.episode.title,
-          episodeUrl: res.data.episode.url,
-          podcastTitle: res.data.podcast.title,
-          // TODO include current timestamp
-        } });
+        dispatch({ type: 'SET_NOW_PLAYING', data: res.data });
       }
     });
   }, []);
@@ -143,7 +128,7 @@ function App() {
     }
   }, []);
 
-  function audioEnded() { /* TODO */ }
+  function audioEnded() { /* TODO call `PATCH /episodes/{id}/completed` */ }
 
   function audioDurationChange() {
     const audio = audioRef.current;
@@ -168,12 +153,14 @@ function App() {
     }
   }
 
-  const paddingBottom = state.nowPlaying ? 'calc(32px + var(--playbar-height))' : undefined;
-
   return (
     <AppContext.Provider value={{ state, dispatch }}>
-      <audio ref={ audioRef } src={ state.nowPlaying?.episodeUrl } preload="metadata"></audio>
-      <div className="app-content" style={{ paddingBottom }}>
+      <audio ref={ audioRef } src={ state.nowPlaying?.episode.url } preload="metadata"></audio>
+      <div
+        className="app-content"
+        style={{ paddingBottom: state.nowPlaying
+          ? 'calc(32px + var(--playbar-height))'
+          : undefined }}>
         <Outlet />
         { state.nowPlaying && <Playbar />}
       </div>
