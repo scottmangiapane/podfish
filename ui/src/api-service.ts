@@ -19,8 +19,15 @@ async function callApi(navigate: NavigateFunction | null, resource: string, opti
 
 export async function getEpisodes(navigate: NavigateFunction, id: string) {
   return await callApi(navigate, `/api/v1/episodes?podcast_id=${ id }`, {
-    method: 'GET'
+    method: 'GET',
   }) as TApiResponse<TEpisodePosition[]>;
+}
+
+export async function patchEpisodeCurrentTime(navigate: NavigateFunction, id: string, currentTime: number) {
+  return await callApi(navigate, `/api/v1/episodes/${ id }/current-time`, {
+    method: 'PATCH',
+    body: JSON.stringify({ 'current_time': currentTime }),
+  }) as TApiResponse<TNowPlaying | null>;
 }
 
 export async function getNowPlaying(navigate: NavigateFunction) {
@@ -32,19 +39,19 @@ export async function getNowPlaying(navigate: NavigateFunction) {
 export async function putNowPlaying(navigate: NavigateFunction, id: string) {
   return await callApi(navigate, `/api/v1/now-playing`, {
     method: 'PUT',
-    body: JSON.stringify({ 'episode_id': id })
+    body: JSON.stringify({ 'episode_id': id }),
   }) as TApiResponse<TNowPlaying >;
 }
 
 export async function getSubscription(navigate: NavigateFunction, id: string) {
   return await callApi(navigate, `/api/v1/subscriptions/${ id }`, {
-    method: 'GET'
+    method: 'GET',
   }) as TApiResponse<TPodcast>;
 }
 
 export async function getSubscriptions(navigate: NavigateFunction) {
   return await callApi(navigate, `/api/v1/subscriptions`, {
-    method: 'GET'
+    method: 'GET',
   }) as TApiResponse<TPodcast[]>;
 }
 

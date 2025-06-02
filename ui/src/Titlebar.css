@@ -6,6 +6,7 @@
     height: var(--titlebar-height);
     inset: 0 0 auto;
     justify-content: space-between;
+    padding: 0 16px;
     position: fixed;
     width: 100%;
     z-index: 1000;

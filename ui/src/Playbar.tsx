@@ -45,7 +45,7 @@ function Playbar() {
 
   const fullControls = (
     <>
-      <div className="center flex-2">
+      <div className="center flex-1_5">
         <div className="playbar-symbol-group">
           <span
             className="btn symbol"
@@ -78,11 +78,14 @@ function Playbar() {
   );
 
   return (
-    <div className="playbar app-content">
+    <div className="playbar">
       { rootState.isMobile && slider }
-      <div className="flex-1">
-        <p className="truncate">{ episodeTitle }</p>
-        <p className="text-light truncate">{ podcastTitle }</p>
+      <div className="flex-1 playbar-metadata">
+        <img className="playbar-cover" src={ `/file/${ state.nowPlaying.podcast['image_id'] }` }></img>
+        <div className="playbar-metadata-text">
+          <p className="truncate">{ episodeTitle }</p>
+          <p className="text-light truncate">{ podcastTitle }</p>
+        </div>
       </div>
       { rootState.isMobile ? simpleControls : fullControls }
     </div>

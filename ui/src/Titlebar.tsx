@@ -25,7 +25,7 @@ function Titlebar() {
   }
 
   return (
-    <div className="app-content titlebar">
+    <div className="titlebar">
       <Link className="titlebar-item" to={"/"}>
         <img className="titlebar-logo" src="/logo.svg"></img>
       </Link>

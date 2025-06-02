@@ -6,12 +6,28 @@
     gap: 16px;
     height: var(--playbar-height);
     inset: auto 0 0;
+    padding: 0 16px;
     position: fixed;
     width: 100%;
     z-index: 1000;
 }
 
 .playbar > * { min-width: 0; }
+
+.playbar-cover {
+    aspect-ratio: 1;
+    height: 70%;
+}
+
+.playbar-metadata {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+    height: 100%;
+}
+
+.playbar-metadata-text { min-width: 0; }
 
 .playbar-stretch { flex: 1; }
 

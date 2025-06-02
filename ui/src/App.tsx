@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 
-import { getNowPlaying } from "@/api-service";
+import { getNowPlaying, patchEpisodeCurrentTime } from "@/api-service";
 import { AppProvider, useAppContext } from '@/contexts/AppContext';
 import Playbar from "@/Playbar";
 
@@ -33,6 +33,22 @@ function AppWithContext() {
       return () => audio.removeEventListener("canplay", playWhenReady);
     }
   }, [state.nowPlaying?.episode.url]);
+
+  useEffect(() => {
+    if (!state.nowPlaying) return;
+    const { lastSync, previousTime } = state.syncCurrentTime;
+    if (Date.now() - lastSync > 5 * 1000) {
+      const newCurrentTime = state.audio.currentTime;
+      if (previousTime !== newCurrentTime) {
+        patchEpisodeCurrentTime(
+          navigate,
+          state.nowPlaying.episode['episode_id'],
+          Math.round(newCurrentTime)
+        );
+        dispatch({ type: 'SYNC_CURRENT_TIME', data: newCurrentTime });
+      }
+    }
+  }, [state.audio.currentTime]);
 
   useEffect(() => {
     if (audioRef.current && state.audio.requestedTime !== null) {

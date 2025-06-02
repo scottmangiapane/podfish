@@ -15,6 +15,7 @@ type TAction =
   | { type: 'AUDIO_SKIP'; data: number | null; }
   | { type: 'AUDIO_TIME_UPDATE'; data: number; }
   | { type: 'AUDIO_TOGGLE'; }
+  | { type: 'SYNC_CURRENT_TIME'; data: number }
   | { type: 'SET_NOW_PLAYING'; data: TNowPlaying | null; };
 
 interface TState {
@@ -23,7 +24,11 @@ interface TState {
     duration: number;
     isPaused: boolean;
     requestedTime: number | null;
-  }
+  },
+  syncCurrentTime: {
+    lastSync: number;
+    previousTime: number;
+  },
   nowPlaying: TNowPlaying | null;
 };
 
@@ -32,12 +37,16 @@ const AppContext = createContext<TAppContext | null>(null);
 export function AppProvider({ children }: any) {
   const initialState = {
     audio: {
-      currentTime: 0,// TODO skip -10s doesn't work at beginning
+      currentTime: 0,
       duration: 0,
       isPaused: true,
       requestedTime: null,
     },
     nowPlaying: null,
+    syncCurrentTime: {
+      lastSync: Date.now(),
+      previousTime: null,
+    },
   };
 
   const appReducer = produce((state: TState, action: TAction) => {
@@ -67,6 +76,10 @@ export function AppProvider({ children }: any) {
           state.nowPlaying = action.data;
           state.audio.requestedTime = action.data.position?.["current_time"] || null;
         }
+        break;
+      case 'SYNC_CURRENT_TIME':
+        state.syncCurrentTime.lastSync = Date.now();
+        state.syncCurrentTime.previousTime = action.data;
         break;
     }
   });
