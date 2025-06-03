@@ -28,7 +28,7 @@ function SignIn() {
 
     const res = await postSignIn(email, password);
     if (res.ok) {
-      dispatch({ type: 'SET_USER', data: Cookies.get('user') });
+      dispatch({ type: 'SET_USER', data: Cookies.get('user') || null });
       navigate('/');
     }
   }

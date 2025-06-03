@@ -103,18 +103,11 @@ func GetEpisode(c *gin.Context) {
 }
 
 // @Tags episodes
-// @Router /episodes/{id}/completed [patch]
+// @Router /episodes/{id}/progress [patch]
 // @Param id path string true "Episode ID"
-func PatchEpisodeCompleted(c *gin.Context) {
-	middleware.Abort(c, http.StatusBadRequest, "Not implemented")
-}
-
-// @Tags episodes
-// @Router /episodes/{id}/current-time [patch]
-// @Param id path string true "Episode ID"
-// @Param request body controllers.PatchEpisodeCurrentTime.request true "Request body"
-// @Success 204
-func PatchEpisodeCurrentTime(c *gin.Context) {
+// @Param request body controllers.PatchEpisodeProgress.request true "Request body"
+// @Success 200 {object} models.Position
+func PatchEpisodeProgress(c *gin.Context) {
 	id, err := uuid.Parse(c.Param("id"))
 	if err != nil {
 		middleware.Abort(c, http.StatusUnprocessableEntity, "Invalid episode ID")
@@ -122,6 +115,7 @@ func PatchEpisodeCurrentTime(c *gin.Context) {
 	}
 
 	type request struct {
+		Completed   bool `json:"completed"`
 		CurrentTime uint `json:"current_time" binding:"gte=0"`
 	}
 	var req request
@@ -133,13 +127,14 @@ func PatchEpisodeCurrentTime(c *gin.Context) {
 	position := models.Position{
 		UserID:       middleware.GetUser(c),
 		EpisodeID:    id,
+		Completed:    req.Completed,
 		CurrentTime:  req.CurrentTime,
 		LastListened: time.Now(),
 	}
 	result := global.DB.Save(&position)
 	if result.Error != nil {
 		fmt.Println(result.Error)
-		middleware.Abort(c, http.StatusInternalServerError, "Failed to set current time")
+		middleware.Abort(c, http.StatusInternalServerError, "Failed to set episode progress")
 		return
 	}
 

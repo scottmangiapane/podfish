@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 
-import { getNowPlaying, patchEpisodeCurrentTime } from "@/api-service";
+import { getNowPlaying, patchEpisodeProgress } from "@/api-service";
 import { AppProvider, useAppContext } from '@/contexts/AppContext';
 import Playbar from "@/Playbar";
 
@@ -37,13 +37,14 @@ function AppWithContext() {
   useEffect(() => {
     if (!state.nowPlaying) return;
     const { lastSync, previousTime } = state.syncCurrentTime;
-    if (Date.now() - lastSync > 5 * 1000) {
+    if (lastSync === null || Date.now() - lastSync > 5 * 1000) {
       const newCurrentTime = state.audio.currentTime;
       if (previousTime !== newCurrentTime) {
-        patchEpisodeCurrentTime(
+        patchEpisodeProgress(
           navigate,
           state.nowPlaying.episode['episode_id'],
-          Math.round(newCurrentTime)
+          false,
+          Math.round(newCurrentTime),
         );
         dispatch({ type: 'SYNC_CURRENT_TIME', data: newCurrentTime });
       }
@@ -84,7 +85,16 @@ function AppWithContext() {
     }
   }, []);
 
-  function audioEnded() { /* TODO call `PATCH /episodes/{id}/completed` */ }
+  function audioEnded() {
+    // TODO: the following doesn't work because event listeners only know the default state... use ref instead?
+    // if (!state.nowPlaying) return;
+    // patchEpisodeProgress(
+    //   navigate,
+    //   state.nowPlaying?.episode.episode_id,
+    //   true,
+    //   0,
+    // );
+  }
 
   function audioDurationChange() {
     const audio = audioRef.current;

@@ -11,7 +11,7 @@ import "@/podcast/Episode.css";
 interface TEpisodeProps {
   episode: TEpisode;
   podcast: TPodcast;
-  position: TPosition;
+  position: TPosition | null;
 }
 
 function Episode({ episode, podcast, position }: TEpisodeProps) {
@@ -43,6 +43,9 @@ function Episode({ episode, podcast, position }: TEpisodeProps) {
         <div style={{ minWidth: 0 }}> {/* `minWidth: 0` is necessary for truncation */}
           <p className="episode-title truncate">{ episode.title }</p>
           <p className="text-light truncate">{ new Date(episode.date).toDateString() }</p>
+          {/* TODO remove: */}
+          {/* <p className="text-light truncate">{ 'Completed: ' + !!position?.completed}</p> */}
+          {/* <p className="text-light truncate">{ 'Current Time: ' + (position?.["current_time"] || 0) }</p> */}
         </div>
       </div>
       <div className="episode-content">

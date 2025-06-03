@@ -24,12 +24,12 @@ interface TState {
     duration: number;
     isPaused: boolean;
     requestedTime: number | null;
-  },
-  syncCurrentTime: {
-    lastSync: number;
-    previousTime: number;
-  },
+  };
   nowPlaying: TNowPlaying | null;
+  syncCurrentTime: {
+    lastSync: number | null;
+    previousTime: number
+  };
 };
 
 const AppContext = createContext<TAppContext | null>(null);
@@ -44,8 +44,8 @@ export function AppProvider({ children }: any) {
     },
     nowPlaying: null,
     syncCurrentTime: {
-      lastSync: Date.now(),
-      previousTime: null,
+      lastSync: null,
+      previousTime: 0,
     },
   };
 

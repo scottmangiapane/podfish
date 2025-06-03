@@ -41,8 +41,7 @@ func main() {
 	// Episodes
 	authorized.GET("/episodes", controllers.GetEpisodes)
 	authorized.GET("/episodes/:id", controllers.GetEpisode)
-	authorized.PATCH("/episodes/:id/completed", controllers.PatchEpisodeCompleted)
-	authorized.PATCH("/episodes/:id/current-time", controllers.PatchEpisodeCurrentTime)
+	authorized.PATCH("/episodes/:id/progress", controllers.PatchEpisodeProgress)
 
 	// Now Playing
 	authorized.GET("/now-playing", controllers.GetNowPlaying)
