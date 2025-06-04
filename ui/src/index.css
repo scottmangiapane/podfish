@@ -70,9 +70,9 @@ button, h1, h2, h3, h4, h5, h6, input, label, p { color: var(--text-color); }
 /* prevents page from being dragged while slider is used on mobile */
 body { overflow-x: hidden; }
 
-button, input[type=email], input[type=password] { padding: 8px; }
+button, input[type=email], input[type=password], input[type=url] { padding: 8px; }
 
-input[type=email], input[type=password] {
+input[type=email], input[type=password], input[type=url] {
     border: var(--br);
     border-radius: 8px;
 }
@@ -82,13 +82,6 @@ input[type=email], input[type=password] {
     margin-right: 0;
     width: fit-content;
 }
-
-.app {
-    height: 100%;
-    width: 100%;
-}
-
-.app-body { padding: 32px 0; }
 
 .app-content {
     margin: 0 auto;

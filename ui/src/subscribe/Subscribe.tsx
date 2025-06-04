@@ -1,3 +1,4 @@
+import { useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { postSubscription } from "@/api-service";
@@ -6,6 +7,12 @@ import "@/subscribe/Subscribe.css";
 
 function Subscribe() {
   const navigate = useNavigate();
+
+    const inputRef = useRef<HTMLInputElement>(null);
+
+    useEffect(() => {
+      inputRef.current?.focus();
+    }, []);
 
   function subscribe(formData: FormData) {
     const rss = formData.get('rss');
@@ -16,7 +23,7 @@ function Subscribe() {
   }
 
   return (
-    <div className="center">
+    <div>
       <h1 className="mt-0">Subscribe</h1>
       <div className="subscribe-form">
         <div>
@@ -28,7 +35,7 @@ function Subscribe() {
           <code>https://example.com/podcast/feed.xml</code>
         </div>
         <form className="form" action={ subscribe }>
-          <input name="rss"></input>
+          <input ref={ inputRef } name="rss" type="url"></input>
           <button className="btn btn-pill" type="submit">Subscribe</button>
         </form>
       </div>

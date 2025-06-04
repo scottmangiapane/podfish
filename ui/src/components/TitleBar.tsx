@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 import { useRootContext } from "@/contexts/RootContext";
 
-import "@/TitleBar.css";
+import "@/components/TitleBar.css";
 
 function TitleBar() {
   const { state } = useRootContext();

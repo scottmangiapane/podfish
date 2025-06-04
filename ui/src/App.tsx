@@ -3,7 +3,7 @@ import { Outlet, useNavigate } from "react-router-dom";
 
 import { getNowPlaying, patchEpisodeProgress } from "@/api-service";
 import { AppProvider, useAppContext } from '@/contexts/AppContext';
-import Playbar from "@/Playbar";
+import Playbar from "@/components/Playbar";
 
 function AppWithContext() {
   const { dispatch, state } = useAppContext();
@@ -121,16 +121,12 @@ function AppWithContext() {
 
   return (
     <>
-      <audio
-        ref={ audioRef }
-        // key={ state.nowPlaying?.episode.url }
-        // src={ state.nowPlaying?.episode.url }
-        preload="metadata"></audio>
+      <audio ref={ audioRef } preload="metadata"></audio>
       <div
         className="app-content"
         style={{ paddingBottom: state.nowPlaying
           ? 'calc(32px + var(--playbar-height))'
-          : undefined }}>
+          : '32px' }}>
         <Outlet />
         { state.nowPlaying && <Playbar />}
       </div>

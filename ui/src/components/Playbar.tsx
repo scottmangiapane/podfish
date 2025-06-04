@@ -1,8 +1,8 @@
 import { useAppContext } from "@/contexts/AppContext";
 import { useRootContext } from "@/contexts/RootContext";
-import Slider from "@/Slider";
+import Slider from "@/components/Slider";
 
-import "@/Playbar.css";
+import "@/components/Playbar.css";
 
 function Playbar() {
   const { dispatch, state } = useAppContext();

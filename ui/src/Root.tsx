@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { Outlet } from "react-router-dom";
 
 import { RootProvider, useRootContext } from "@/contexts/RootContext";
-import TitleBar from "@/TitleBar";
+import TitleBar from "@/components/TitleBar";
 
 function RootWithContext() {
   const { dispatch } = useRootContext();

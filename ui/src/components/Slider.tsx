@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 
 import { useRootContext } from "@/contexts/RootContext";
 
-import "@/Slider.css";
+import "@/components/Slider.css";
 
 interface TSliderProps {
   labelEnd: string;
