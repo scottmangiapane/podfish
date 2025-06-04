@@ -4,6 +4,7 @@
     --accent-color: #2196f3;
     --accent-color-light: #64b5f6;
     --accent-color-dark: #1976d2;
+    --alert-color: #f44336;
     --bg-color: white;
     --link-color: #2e8dd0;
     --text-color: #424242;
@@ -136,6 +137,10 @@ input[type=email], input[type=password] {
     align-items: normal;
     display: flex;
 }
+
+.color-alert { color: var(--alert-color); }
+
+.color-theme { color: var(--theme-color); }
 
 .ellipsis {
     overflow: hidden;

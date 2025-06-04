@@ -7,4 +7,10 @@
     gap: 16px;
 }
 
+.episode-subtext {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+}
+
 .episode-title { font-weight: bold; }

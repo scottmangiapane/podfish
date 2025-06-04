@@ -20,6 +20,29 @@ function Episode({ episode, podcast, position }: TEpisodeProps) {
   const navigate = useNavigate();
   const [isCollapsed, setIsCollapsed] = useState(true);
 
+  function cleanHtml(text: string) {
+    return sanitizeHtml(text, {
+      allowedTags: [],
+      allowedAttributes: {},
+    })
+  }
+
+  function formatDuration(seconds: number) {
+    seconds = Math.floor(seconds);
+
+    const h = Math.floor(seconds / 3600);
+    const m = Math.floor((seconds % 3600) / 60);
+    const s = seconds % 60;
+
+    const pad = (n: number) => String(n).padStart(2, '0');
+
+    if (h > 0) {
+      return `${pad(h)}:${pad(m)}:${pad(s)}`;
+    } else {
+      return `${pad(m)}:${pad(s)}`;
+    }
+  }
+
   function play() {
     dispatch({ type: 'SET_NOW_PLAYING', data: {
       episode,
@@ -29,10 +52,15 @@ function Episode({ episode, podcast, position }: TEpisodeProps) {
     putNowPlaying(navigate, episode['episode_id']);
   }
 
-  const cleanDescription = sanitizeHtml(episode.description, {
-    allowedTags: [],
-    allowedAttributes: {},
-  });
+  let status = <p className="text-light">{ formatDuration(episode.duration) }s</p>;
+  if (position?.completed
+    || (position?.current_time && episode.duration - position.current_time < 10)) {
+    status = <p className="color-theme">Played</p>
+  }
+  else if ( position?.current_time) {
+    const seconds = episode.duration - position.current_time;
+    status = <p className="color-alert">{ formatDuration(seconds) }s left</p>
+  }
 
   return (
     <>
@@ -42,16 +70,16 @@ function Episode({ episode, podcast, position }: TEpisodeProps) {
         </span>
         <div style={{ minWidth: 0 }}> {/* `minWidth: 0` is necessary for truncation */}
           <p className="episode-title truncate">{ episode.title }</p>
-          <p className="text-light truncate">{ new Date(episode.date).toDateString() }</p>
-          {/* TODO remove: */}
-          {/* <p className="text-light truncate">{ 'Completed: ' + !!position?.completed}</p> */}
-          {/* <p className="text-light truncate">{ 'Current Time: ' + (position?.["current_time"] || 0) }</p> */}
-          {/* <p className="text-light truncate">{ 'Duration: ' + episode.duration }</p> */}
+          <div className="episode-subtext">
+            <p className="text-light truncate">{ new Date(episode.date).toDateString() }</p>
+            <p className="text-light">·</p>
+            <p className="truncate">{ status }</p>
+          </div>
         </div>
       </div>
       <div className="episode-content">
         <p className={ "break-word " + (isCollapsed && "truncate-l truncate-3l") }>
-          { cleanDescription }
+          { cleanHtml(episode.description) }
         </p>
         <span className="btn symbol" onClick={ () => setIsCollapsed(!isCollapsed) }>
           { (isCollapsed) ? "expand_more" : "expand_less" }
