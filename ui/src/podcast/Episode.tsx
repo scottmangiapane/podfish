@@ -15,7 +15,7 @@ interface TEpisodeProps {
 }
 
 function Episode({ episode, podcast, position }: TEpisodeProps) {
-  const { dispatch } = useAppContext();
+  const { dispatch, state } = useAppContext();
 
   const navigate = useNavigate();
   const [isCollapsed, setIsCollapsed] = useState(true);
@@ -43,33 +43,51 @@ function Episode({ episode, podcast, position }: TEpisodeProps) {
     }
   }
 
-  function play() {
-    dispatch({ type: 'SET_NOW_PLAYING', data: {
-      episode,
-      podcast,
-      position,
-    } });
-    putNowPlaying(navigate, episode['episode_id']);
+  let playButton = (
+    <span className="btn symbol symbol-outline" onClick={ () => {
+      dispatch({ type: 'SET_NOW_PLAYING', data: {
+        episode,
+        podcast,
+        position,
+      } });
+      putNowPlaying(navigate, episode['episode_id']);
+    } }>
+      play_circle
+    </span>
+  );
+
+  if (episode.episode_id === state.nowPlaying?.episode.episode_id) {
+    const symbol = (state.audio.isPaused) ? 'play_circle' : 'pause_circle';
+    playButton = (
+      <span
+        className="btn symbol symbol-outline"
+        onClick={ () => dispatch({ type: 'AUDIO_TOGGLE' }) }>
+        { symbol }
+      </span>
+    );
   }
 
   // TODO duration is unreliable (ex: Reuters, Safety Third)
   // Use as starting point but also track client-reported duration in position
-  let status = <p className="text-light">{ formatDuration(episode.duration) }s</p>;
+  let status = <p className="text-light">{ formatDuration(episode.duration) }</p>;
   if (position?.completed
     || (position?.current_time && episode.duration - position.current_time < 10)) {
     status = <p className="color-theme">Played</p>
   }
-  else if ( position?.current_time) {
+  else if (position?.current_time) {
     const seconds = episode.duration - position.current_time;
-    status = <p className="episode-status-bold">{ formatDuration(seconds) }s left</p>
+    status = <p className="episode-status-bold">{ formatDuration(seconds) } left</p>
+  }
+
+  if (episode.episode_id === state.nowPlaying?.episode.episode_id) {
+    const seconds = episode.duration - state.audio.currentTime;
+    status = <p className="episode-status-bold">{ formatDuration(seconds) } left</p>
   }
 
   return (
     <>
       <div className="episode-header mb-2">
-        <span className="btn symbol symbol-outline" onClick={ play }>
-          play_circle
-        </span>
+        { playButton }
         <div style={{ minWidth: 0 }}> {/* `minWidth: 0` is necessary for truncation */}
           <p className="episode-title truncate">{ episode.title }</p>
           <div className="episode-subtext">
