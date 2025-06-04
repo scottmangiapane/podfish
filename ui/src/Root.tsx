@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { Outlet } from "react-router-dom";
 
 import { RootProvider, useRootContext } from "@/contexts/RootContext";
-import Titlebar from "@/Titlebar";
+import TitleBar from "@/TitleBar";
 
 function RootWithContext() {
   const { dispatch } = useRootContext();
@@ -19,7 +19,7 @@ function RootWithContext() {
 
   return (
     <div className="root-content">
-      <Titlebar />
+      <TitleBar />
       <Outlet />
     </div>
   );

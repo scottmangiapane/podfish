@@ -1,20 +1,15 @@
 import Cookies from "js-cookie";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { postSignIn } from "@/api-service";
 import { useRootContext } from "@/contexts/RootContext";
 
 function SignIn() {
+  const navigate = useNavigate();
   const { dispatch, state } = useRootContext();
 
-  const navigate = useNavigate();
-
-  const emailRef = useRef<HTMLInputElement | null>(null);
-  const passwordRef = useRef<HTMLInputElement | null>(null);
-
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const emailRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (state.user) {
@@ -23,9 +18,9 @@ function SignIn() {
     emailRef.current?.focus();
   }, []);
 
-  async function submit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-
+  async function submit(formData: FormData) {
+    const email = formData.get('email')?.toString() || '';
+    const password = formData.get('password')?.toString() || '';
     const res = await postSignIn(email, password);
     if (res.ok) {
       dispatch({ type: 'SET_USER', data: Cookies.get('user') || null });
@@ -36,24 +31,21 @@ function SignIn() {
   return (
     <div className="center">
       <h1 className="mt-0">Sign In</h1>
-      <form className="form" onSubmit={ submit }>
+      <form className="form" action={ submit }>
         <input
           ref={ emailRef }
           autoComplete="on"
-          onChange={(e) => setEmail(e.target.value)}
+          name="email"
           placeholder="Email"
           required={ true }
           type="email"
-          value={ email }
         />
         <input
-          ref={ passwordRef }
           autoComplete="on"
-          onChange={(e) => setPassword(e.target.value)}
+          name="password"
           placeholder="Password"
           required={ true }
           type="password"
-          value={ password }
         />
         <label className="checkbox-label">
           <input type="checkbox" />

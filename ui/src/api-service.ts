@@ -43,16 +43,23 @@ export async function putNowPlaying(navigate: NavigateFunction, id: string) {
   }) as TApiResponse<TNowPlaying >;
 }
 
-export async function getSubscription(navigate: NavigateFunction, id: string) {
-  return await callApi(navigate, `/api/v1/subscriptions/${ id }`, {
-    method: 'GET',
-  }) as TApiResponse<TPodcast>;
-}
-
 export async function getSubscriptions(navigate: NavigateFunction) {
   return await callApi(navigate, `/api/v1/subscriptions`, {
     method: 'GET',
   }) as TApiResponse<TPodcast[]>;
+}
+
+export async function postSubscription(navigate: NavigateFunction, rss: string) {
+  return await callApi(navigate, `/api/v1/subscriptions`, {
+    method: 'POST',
+    body: JSON.stringify({ rss }),
+  }) as TApiResponse<TPodcast>;
+}
+
+export async function getSubscription(navigate: NavigateFunction, id: string) {
+  return await callApi(navigate, `/api/v1/subscriptions/${ id }`, {
+    method: 'GET',
+  }) as TApiResponse<TPodcast>;
 }
 
 export async function postSignIn(email: string, password: string) {

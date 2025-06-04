@@ -2,15 +2,15 @@ import { Link } from "react-router-dom";
 
 import { useRootContext } from "@/contexts/RootContext";
 
-import "@/Titlebar.css";
+import "@/TitleBar.css";
 
-function Titlebar() {
+function TitleBar() {
   const { state } = useRootContext();
 
   let authButtons = (
     <>
-      <Link className="titlebar-item mr-3" to={"/sign-up"}>Sign Up</Link>
-      <Link className="titlebar-item" to={"/sign-in"}>
+      <Link className="title-bar-item mr-3" to={"/sign-up"}>Sign Up</Link>
+      <Link className="title-bar-item" to={"/sign-in"}>
         <button className="btn btn-pill">Sign In</button>
       </Link>
     </>
@@ -18,20 +18,20 @@ function Titlebar() {
 
   if (state.user) {
     authButtons = (
-      <Link className="titlebar-item" to={"/settings"}>
+      <Link className="title-bar-item" to={"/settings"}>
         <button className="btn btn-pill">Settings</button>
       </Link>
     );
   }
 
   return (
-    <div className="titlebar">
-      <Link className="titlebar-item" to={"/"}>
-        <img className="titlebar-logo" src="/logo.svg"></img>
+    <div className="title-bar">
+      <Link className="title-bar-item" to={"/"}>
+        <img className="title-bar-logo" src="/logo.svg"></img>
       </Link>
       { authButtons }
     </div>
   )
 }
 
-export default Titlebar;
+export default TitleBar;

@@ -1,9 +1,9 @@
-.titlebar {
+.title-bar {
     align-items: center;
     background-color: white;
     border-bottom: var(--br);
     display: flex;
-    height: var(--titlebar-height);
+    height: var(--title-bar-height);
     inset: 0 0 auto;
     justify-content: space-between;
     padding: 0 16px;
@@ -12,6 +12,6 @@
     z-index: 1000;
 }
 
-.titlebar-item > * { white-space: nowrap; }
+.title-bar-item > * { white-space: nowrap; }
 
-.titlebar-logo { height: 100%; width: 50px; }
+.title-bar-logo { height: 100%; width: 50px; }

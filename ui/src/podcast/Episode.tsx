@@ -52,6 +52,8 @@ function Episode({ episode, podcast, position }: TEpisodeProps) {
     putNowPlaying(navigate, episode['episode_id']);
   }
 
+  // TODO duration is unreliable (ex: Reuters, Safety Third)
+  // Use as starting point but also track client-reported duration in position
   let status = <p className="text-light">{ formatDuration(episode.duration) }s</p>;
   if (position?.completed
     || (position?.current_time && episode.duration - position.current_time < 10)) {

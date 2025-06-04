@@ -17,7 +17,7 @@
 :root {
     --br: 1px solid rgba(0, 0, 0, 0.2);
     --playbar-height: 96px;
-    --titlebar-height: 64px;
+    --title-bar-height: 64px;
 }
 
 /* Resets */
@@ -184,7 +184,7 @@ input[type=email], input[type=password] {
 
 .mt-3 { margin-top: 16px; }
 
-.root-content { padding-top: calc(32px + var(--titlebar-height)); }
+.root-content { padding-top: calc(32px + var(--title-bar-height)); }
 
 .symbol {
     color: var(--text-color);
