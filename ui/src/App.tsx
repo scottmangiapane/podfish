@@ -45,6 +45,7 @@ function AppWithContext() {
           state.nowPlaying.episode['episode_id'],
           false,
           Math.round(newCurrentTime),
+          Math.round(state.audio.duration),
         );
         dispatch({ type: 'SYNC_CURRENT_TIME', data: newCurrentTime });
       }

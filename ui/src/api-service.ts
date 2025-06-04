@@ -23,10 +23,10 @@ export async function getEpisodes(navigate: NavigateFunction, id: string) {
   }) as TApiResponse<TEpisodePosition[]>;
 }
 
-export async function patchEpisodeProgress(navigate: NavigateFunction, id: string, completed: boolean, currentTime: number) {
+export async function patchEpisodeProgress(navigate: NavigateFunction, id: string, completed: boolean, currentTime: number, duration: number) {
   return await callApi(navigate, `/api/v1/episodes/${ id }/progress`, {
     method: 'PATCH',
-    body: JSON.stringify({ completed, 'current_time': currentTime }),
+    body: JSON.stringify({ completed, 'current_time': currentTime, 'real_duration': duration }),
   }) as TApiResponse<TNowPlaying | null>;
 }
 

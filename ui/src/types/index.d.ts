@@ -29,6 +29,7 @@ export interface TNowPlaying {
 export interface TPosition {
   completed: boolean;
   current_time: number;
+  real_duration: number;
 }
 
 export interface TSignIn {

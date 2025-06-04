@@ -115,8 +115,9 @@ func PatchEpisodeProgress(c *gin.Context) {
 	}
 
 	type request struct {
-		Completed   bool `json:"completed"`
-		CurrentTime uint `json:"current_time" binding:"gte=0"`
+		Completed    bool `json:"completed"`
+		CurrentTime  uint `json:"current_time" binding:"gte=0"`
+		RealDuration uint `json:"real_duration" binding:"gte=0"`
 	}
 	var req request
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -130,6 +131,7 @@ func PatchEpisodeProgress(c *gin.Context) {
 		Completed:    req.Completed,
 		CurrentTime:  req.CurrentTime,
 		LastListened: time.Now(),
+		RealDuration: req.RealDuration,
 	}
 	result := global.DB.Save(&position)
 	if result.Error != nil {

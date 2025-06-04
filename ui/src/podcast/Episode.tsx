@@ -67,20 +67,18 @@ function Episode({ episode, podcast, position }: TEpisodeProps) {
     );
   }
 
-  // TODO duration is unreliable (ex: Reuters, Safety Third)
-  // Use as starting point but also track client-reported duration in position
-  let status = <p className="text-light">{ formatDuration(episode.duration) }</p>;
+  const realDuration = position?.['real_duration'] || episode.duration;
+  let status = <p className="text-light">{ formatDuration(realDuration) }</p>;
   if (position?.completed
-    || (position?.current_time && episode.duration - position.current_time < 10)) {
+    || (position?.current_time && realDuration - position.current_time < 30)) {
     status = <p className="color-theme">Played</p>
   }
-  else if (position?.current_time) {
-    const seconds = episode.duration - position.current_time;
+  else if (episode.episode_id === state.nowPlaying?.episode.episode_id) {
+    const seconds = realDuration - state.audio.currentTime;
     status = <p className="episode-status-bold">{ formatDuration(seconds) } left</p>
   }
-
-  if (episode.episode_id === state.nowPlaying?.episode.episode_id) {
-    const seconds = episode.duration - state.audio.currentTime;
+  else if (position?.current_time) {
+    const seconds = realDuration - position.current_time;
     status = <p className="episode-status-bold">{ formatDuration(seconds) } left</p>
   }
 
