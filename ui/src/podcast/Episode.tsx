@@ -61,7 +61,7 @@ function Episode({ episode, podcast, position }: TEpisodeProps) {
   }
   else if ( position?.current_time) {
     const seconds = episode.duration - position.current_time;
-    status = <p className="color-alert">{ formatDuration(seconds) }s left</p>
+    status = <p className="episode-status-bold">{ formatDuration(seconds) }s left</p>
   }
 
   return (

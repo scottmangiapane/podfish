@@ -7,6 +7,13 @@
     gap: 16px;
 }
 
+.episode-status-bold {
+    background-color: var(--theme-color-alt);
+    border-radius: 4px;
+    color: white;
+    padding: 0 8px;
+}
+
 .episode-subtext {
     display: flex;
     flex-direction: row;

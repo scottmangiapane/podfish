@@ -4,13 +4,13 @@
     --accent-color: #2196f3;
     --accent-color-light: #64b5f6;
     --accent-color-dark: #1976d2;
-    --alert-color: #f44336;
     --bg-color: white;
     --link-color: #2e8dd0;
     --text-color: #424242;
     --text-color-dark: black;
     --text-color-light: #9e9e9e;
     --theme-color: #4caf50;
+    --theme-color-alt: #009688;
     --theme-color-dark: #43a047;
 }
 
