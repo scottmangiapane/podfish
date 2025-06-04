@@ -11,7 +11,7 @@ import (
 )
 
 type User struct {
-	UserID   uuid.UUID `json:"user_id" gorm:"primarykey;type:uuid;default:gen_random_uuid()"`
+	UserID   uuid.UUID `json:"user_id" gorm:"primaryKey;type:uuid;default:gen_random_uuid()"`
 	Email    string    `json:"email" gorm:"unique"`
 	Password string    `json:"-"`
 	templates.Timestamps

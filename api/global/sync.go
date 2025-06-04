@@ -5,8 +5,11 @@ import (
 	"fmt"
 	"os"
 	"podfish/models"
+	"strconv"
 	"strings"
 	"time"
+
+	"gorm.io/gorm/clause"
 )
 
 type Rss struct {
@@ -29,6 +32,7 @@ type Item struct {
 	ID          string      `xml:"guid"`
 	Title       string      `xml:"title"`
 	Description string      `xml:"description"`
+	Duration    string      `xml:"duration"`
 	Date        string      `xml:"pubDate"`
 	Enclosures  []Enclosure `xml:"enclosure"`
 }
@@ -89,6 +93,13 @@ func Sync(p *models.Podcast) error {
 			continue
 		}
 
+		duration, err := parseDuration(item.Duration)
+		if err != nil {
+			fmt.Printf("Failed to parse duration %s\n", item.Duration)
+			fmt.Println(err)
+			continue
+		}
+
 		var url string
 		for _, enclosure := range item.Enclosures {
 			if enclosure.Type == "audio/mpeg" {
@@ -98,23 +109,55 @@ func Sync(p *models.Podcast) error {
 		}
 
 		// TODO make this a bulk update instead of potentially 100s of DB calls
-		var episode models.Episode
-		result := DB.FirstOrCreate(&episode, models.Episode{
+		result := DB.Clauses(clause.OnConflict{
+			Columns:   []clause.Column{{Name: "podcast_id"}, {Name: "item_id"}},
+			DoUpdates: clause.AssignmentColumns([]string{"title", "description", "date", "duration", "url"}),
+		}).Create(&models.Episode{
 			PodcastID:   p.PodcastID,
+			ItemID:      item.ID,
 			Title:       item.Title,
 			Description: item.Description,
 			Date:        date,
+			Duration:    duration,
 			URL:         url,
-
-			// TODO episode ID
-			// TODO add constraint on episode ID and podcast ID
 		})
 		if result.Error != nil {
-			fmt.Printf("Failed to create episode %s for podcast %s\n", item.ID, p.PodcastID)
+			fmt.Printf("Failed to sync item %s for podcast %s\n", item.ID, p.PodcastID)
 			fmt.Println(result.Error)
 			continue
 		}
 	}
 
 	return nil
+}
+
+func parseDuration(input string) (uint, error) {
+	parts := strings.Split(input, ":")
+	hours := 0
+	minutes := 0
+	err := fmt.Errorf("invalid duration format: %s", input)
+
+	switch len(parts) {
+	case 3:
+		h, e := strconv.Atoi(parts[len(parts)-3])
+		if e != nil {
+			return 0, err
+		}
+		hours = h
+		fallthrough
+	case 2:
+		m, e := strconv.Atoi(parts[len(parts)-2])
+		if e != nil {
+			return 0, err
+		}
+		minutes = m
+		fallthrough
+	case 1:
+		seconds, e := strconv.Atoi(parts[len(parts)-1])
+		if e != nil {
+			return 0, err
+		}
+		return uint(hours*3600 + minutes*60 + seconds), nil
+	}
+	return 0, err
 }

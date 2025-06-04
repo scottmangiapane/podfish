@@ -7,9 +7,9 @@ import (
 )
 
 type Position struct {
-	UserID       uuid.UUID `json:"-" gorm:"primaryKey"`
+	UserID       uuid.UUID `json:"-" gorm:"primaryKey;type:uuid"`
 	User         User      `json:"-"`
-	EpisodeID    uuid.UUID `json:"episode_id" gorm:"primaryKey"`
+	EpisodeID    uuid.UUID `json:"episode_id" gorm:"primaryKey;type:uuid"`
 	Episode      Episode   `json:"-"`
 	Completed    bool      `json:"completed"`
 	CurrentTime  uint      `json:"current_time"`

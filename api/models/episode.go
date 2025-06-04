@@ -8,12 +8,14 @@ import (
 )
 
 type Episode struct {
-	EpisodeID   uuid.UUID `json:"episode_id" gorm:"primarykey;type:uuid;default:gen_random_uuid()"`
-	PodcastID   uuid.UUID `json:"podcast_id"`
+	EpisodeID   uuid.UUID `json:"episode_id" gorm:"primaryKey;type:uuid;default:gen_random_uuid()"`
+	PodcastID   uuid.UUID `json:"podcast_id" gorm:"type:uuid;index:idx_podcast_item,unique"`
 	Podcast     Podcast   `json:"-"`
+	ItemID      string    `json:"guid" gorm:"index:idx_podcast_item,unique"`
 	Title       string    `json:"title"`
 	Description string    `json:"description"`
 	Date        time.Time `json:"date"`
-	URL         string    `json:"url" gorm:"unique"`
+	Duration    uint      `json:"duration"`
+	URL         string    `json:"url"`
 	templates.Timestamps
 }

@@ -34,19 +34,19 @@ func RequireAuth(c *gin.Context) {
 		return
 	}
 
-	userIdString, err := token.Claims.GetSubject()
+	userIDString, err := token.Claims.GetSubject()
 	if err != nil {
 		Abort(c, http.StatusUnauthorized, "Failed to set active user")
 		return
 	}
 
-	userId, err := uuid.Parse(userIdString)
+	userID, err := uuid.Parse(userIDString)
 	if err != nil {
 		Abort(c, http.StatusUnauthorized, "Invalid user ID in auth token")
 		return
 	}
 
-	c.Set("user", userId)
+	c.Set("user", userID)
 }
 
 func GetUser(c *gin.Context) (u uuid.UUID) {

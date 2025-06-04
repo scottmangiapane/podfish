@@ -5,8 +5,8 @@ import (
 )
 
 type Subscription struct {
-	UserID    uuid.UUID `json:"-" gorm:"primaryKey"`
+	UserID    uuid.UUID `json:"-" gorm:"primaryKey;type:uuid"`
 	User      User      `json:"-"`
-	PodcastID uuid.UUID `json:"podcast_id" gorm:"primaryKey"`
+	PodcastID uuid.UUID `json:"podcast_id" gorm:"primaryKey;type:uuid"`
 	Podcast   Podcast   `json:"-"`
 }

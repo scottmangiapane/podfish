@@ -9,6 +9,7 @@ export interface TApiResponse<T> {
 export interface TEpisode {
   date: string;
   description: string;
+  duration: number;
   episode_id: string;
   title: string;
   url: string;

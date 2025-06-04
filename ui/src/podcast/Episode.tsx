@@ -46,6 +46,7 @@ function Episode({ episode, podcast, position }: TEpisodeProps) {
           {/* TODO remove: */}
           {/* <p className="text-light truncate">{ 'Completed: ' + !!position?.completed}</p> */}
           {/* <p className="text-light truncate">{ 'Current Time: ' + (position?.["current_time"] || 0) }</p> */}
+          {/* <p className="text-light truncate">{ 'Duration: ' + episode.duration }</p> */}
         </div>
       </div>
       <div className="episode-content">
