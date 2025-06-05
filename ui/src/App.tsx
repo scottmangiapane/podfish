@@ -36,13 +36,14 @@ function AppWithContext() {
 
   useEffect(() => {
     if (!state.nowPlaying) return;
+    if (!state.audio.currentTime || !state.audio.duration) return;
     const { lastSync, previousTime } = state.syncCurrentTime;
     if (lastSync === null || Date.now() - lastSync > 5 * 1000) {
       const newCurrentTime = state.audio.currentTime;
       if (previousTime !== newCurrentTime) {
         patchEpisodeProgress(
           navigate,
-          state.nowPlaying.episode['episode_id'],
+          state.nowPlaying.episode.episodeId,
           false,
           Math.round(newCurrentTime),
           Math.round(state.audio.duration),
@@ -91,7 +92,7 @@ function AppWithContext() {
     // if (!state.nowPlaying) return;
     // patchEpisodeProgress(
     //   navigate,
-    //   state.nowPlaying?.episode.episode_id,
+    //   state.nowPlaying?.episode.episodeId,
     //   true,
     //   0,
     // );

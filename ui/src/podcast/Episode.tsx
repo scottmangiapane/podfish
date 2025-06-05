@@ -50,13 +50,13 @@ function Episode({ episode, podcast, position }: TEpisodeProps) {
         podcast,
         position,
       } });
-      putNowPlaying(navigate, episode['episode_id']);
+      putNowPlaying(navigate, episode.episodeId);
     } }>
       play_circle
     </span>
   );
 
-  if (episode.episode_id === state.nowPlaying?.episode.episode_id) {
+  if (episode.episodeId === state.nowPlaying?.episode.episodeId) {
     const symbol = (state.audio.isPaused) ? 'play_circle' : 'pause_circle';
     playButton = (
       <span
@@ -67,13 +67,13 @@ function Episode({ episode, podcast, position }: TEpisodeProps) {
     );
   }
 
-  const realDuration = position?.['real_duration'] || episode.duration;
+  const realDuration = position?.realDuration || episode.duration;
   let status = <p className="text-light">{ formatDuration(realDuration) }</p>;
   if (position?.completed
     || (position?.current_time && realDuration - position.current_time < 30)) {
     status = <p className="color-theme">Played</p>
   }
-  else if (episode.episode_id === state.nowPlaying?.episode.episode_id) {
+  else if (episode.episodeId === state.nowPlaying?.episode.episodeId) {
     const seconds = realDuration - state.audio.currentTime;
     status = <p className="episode-status-bold">{ formatDuration(seconds) } left</p>
   }

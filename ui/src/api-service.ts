@@ -17,61 +17,89 @@ async function callApi(navigate: NavigateFunction | null, resource: string, opti
   };
 }
 
+function toCamelCase(str: string): string {
+  return str.replace(/_([a-z])/g, (_, letter) => letter.toUpperCase());
+}
+
+function convertKeysToCamelCase<T>(obj: any): T {
+  if (Array.isArray(obj)) {
+    return obj.map(item => convertKeysToCamelCase(item)) as any;
+  } else if (obj !== null && typeof obj === 'object') {
+    return Object.fromEntries(
+      Object.entries(obj).map(([key, value]) => [
+        toCamelCase(key),
+        convertKeysToCamelCase(value),
+      ])
+    ) as T;
+  }
+  return obj;
+}
+
+
 export async function getEpisodes(navigate: NavigateFunction, id: string) {
-  return await callApi(navigate, `/api/v1/episodes?podcast_id=${ id }`, {
+  const res = await callApi(navigate, `/api/v1/episodes?podcast_id=${ id }`, {
     method: 'GET',
-  }) as TApiResponse<TEpisodePosition[]>;
+  });
+  return convertKeysToCamelCase<TApiResponse<TEpisodePosition[]>>(res);
 }
 
 export async function patchEpisodeProgress(navigate: NavigateFunction, id: string, completed: boolean, currentTime: number, duration: number) {
-  return await callApi(navigate, `/api/v1/episodes/${ id }/progress`, {
+  const res = await callApi(navigate, `/api/v1/episodes/${ id }/progress`, {
     method: 'PATCH',
     body: JSON.stringify({ completed, 'current_time': currentTime, 'real_duration': duration }),
-  }) as TApiResponse<TNowPlaying | null>;
+  });
+  return convertKeysToCamelCase<TApiResponse<TNowPlaying | null>>(res);
 }
 
 export async function getNowPlaying(navigate: NavigateFunction) {
-  return await callApi(navigate, `/api/v1/now-playing`, {
+  const res = await callApi(navigate, `/api/v1/now-playing`, {
     method: 'GET'
-  }) as TApiResponse<TNowPlaying | null>;
+  });
+  return convertKeysToCamelCase<TApiResponse<TNowPlaying | null>>(res);
 }
 
 export async function putNowPlaying(navigate: NavigateFunction, id: string) {
-  return await callApi(navigate, `/api/v1/now-playing`, {
+  const res = await callApi(navigate, `/api/v1/now-playing`, {
     method: 'PUT',
     body: JSON.stringify({ 'episode_id': id }),
-  }) as TApiResponse<TNowPlaying >;
+  });
+  return convertKeysToCamelCase<TApiResponse<TNowPlaying >>(res);
 }
 
 export async function getSubscriptions(navigate: NavigateFunction) {
-  return await callApi(navigate, `/api/v1/subscriptions`, {
+  const res = await callApi(navigate, `/api/v1/subscriptions`, {
     method: 'GET',
-  }) as TApiResponse<TPodcast[]>;
+  });
+  return convertKeysToCamelCase<TApiResponse<TPodcast[]>>(res);
 }
 
 export async function postSubscription(navigate: NavigateFunction, rss: string) {
-  return await callApi(navigate, `/api/v1/subscriptions`, {
+  const res = await callApi(navigate, `/api/v1/subscriptions`, {
     method: 'POST',
     body: JSON.stringify({ rss }),
-  }) as TApiResponse<TPodcast>;
+  });
+  return convertKeysToCamelCase<TApiResponse<TPodcast>>(res);
 }
 
 export async function getSubscription(navigate: NavigateFunction, id: string) {
-  return await callApi(navigate, `/api/v1/subscriptions/${ id }`, {
+  const res = await callApi(navigate, `/api/v1/subscriptions/${ id }`, {
     method: 'GET',
-  }) as TApiResponse<TPodcast>;
+  });
+  return convertKeysToCamelCase<TApiResponse<TPodcast>>(res);
 }
 
 export async function postSignIn(email: string, password: string) {
-  return await callApi(null, '/api/v1/auth/sign-in', {
+  const res = await callApi(null, '/api/v1/auth/sign-in', {
     method: 'POST',
     body: JSON.stringify({ email, password })
-  }) as TApiResponse<TSignIn>;
+  });
+  return convertKeysToCamelCase<TApiResponse<TSignIn>>(res);
 }
 
 export async function postSignUp(email: string, password: string) {
-  return await callApi(null, '/api/v1/auth/sign-up', {
+  const res = await callApi(null, '/api/v1/auth/sign-up', {
     method: 'POST',
     body: JSON.stringify({ email, password })
-  }) as TApiResponse<TSignUp>;
+  });
+  return convertKeysToCamelCase<TApiResponse<TSignUp>>(res);
 }

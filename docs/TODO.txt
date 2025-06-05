@@ -2,7 +2,6 @@ SECURITY
 
 - SameSite cookie attribute (example: `c.SetSameSite(http.SameSiteLaxMode)`)
 - HTTP security headers
-- Sanitize images
 - Extra validation for RSS feed URLs (SSRF concerns, ex: no calls to localhost or private networks)
 - "http.Dir" says it follows symlinks... Can malicious RSS feed with symlink for image read arbitrary files?
 - Prevent RSS feeds (or images within feed) to invalid domains (localhost, docker hostnames like "api:3000", 0.0.0.0, etc)
@@ -29,7 +28,7 @@ UI
     - Explain in README
 - Recursive custom error page (ex: https://pod.scottmangiapane.com/podcasts/undefined)
 - Speed up loading time of symbols font (minimized file to only include symbols I use?)
-- Speed up loading time of cover art (resize images?)
+- Support fallback image if podcast cover fails to download / convert
 
 OTHER
 

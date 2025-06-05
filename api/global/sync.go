@@ -55,20 +55,13 @@ func Sync(p *models.Podcast) error {
 		return err
 	}
 
-	image := strings.TrimSpace(rss.Channel.Image.URL)
-	if image == "" {
-		image = strings.TrimSpace(rss.Channel.Image.AltURL)
+	imageURL := strings.TrimSpace(rss.Channel.Image.URL)
+	if imageURL == "" {
+		imageURL = strings.TrimSpace(rss.Channel.Image.AltURL)
 	}
 
-	res, err = Fetch(image)
-	if err != nil {
-		fmt.Printf("Failed to fetch image for podcast %s\n", p.PodcastID)
-		fmt.Println(err)
-		return err
-	}
-
-	path := fmt.Sprintf("%s/%s", os.Getenv("RSS_DATA_DIR"), p.ImageID)
-	err = os.WriteFile(path, res, 0644)
+	path := fmt.Sprintf("%s/%s.jpeg", os.Getenv("RSS_DATA_DIR"), p.ImageID)
+	err = SanitizeAndSaveImage(imageURL, path)
 	if err != nil {
 		fmt.Printf("Failed to write image %s\n", p.ImageID)
 		fmt.Println(err)

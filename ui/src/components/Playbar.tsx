@@ -26,7 +26,7 @@ function Playbar() {
           type: 'AUDIO_SKIP',
           data: state.audio.duration * percent / 100
         });
-      }}
+      } }
       value={ 100 * state.audio.currentTime / state.audio.duration || 0 }
     />
   );
@@ -81,7 +81,7 @@ function Playbar() {
     <div className="playbar">
       { rootState.isMobile && slider }
       <div className="flex-1 playbar-metadata">
-        <img className="playbar-cover" src={ `/file/${ state.nowPlaying.podcast['image_id'] }` }></img>
+        <img className="playbar-cover" src={ `/file/${ state.nowPlaying.podcast.imageId }.jpeg` }></img>
         <div className="playbar-metadata-text">
           <p className="truncate">{ episodeTitle }</p>
           <p className="text-light truncate">{ podcastTitle }</p>

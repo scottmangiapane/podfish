@@ -28,7 +28,7 @@ function Podcast() {
   const episodeList: ReactElement[] = [];
   for (const { episode, position } of episodes) {
     episodeList.push(
-      <div className="podcast-list-item" key={ episode["episode_id"] }>
+      <div className="podcast-list-item" key={ episode.episodeId }>
         <Episode episode={ episode } podcast={ podcast } position={ position } />
       </div>
     );
@@ -43,7 +43,7 @@ function Podcast() {
     <div className="podcast-split">
       <div className="podcast-split-left">
         <div className="podcast-header">
-          <img className="podcast-cover" src={ `/file/${ podcast['image_id'] }` }></img>
+          <img className="podcast-cover" src={ `/file/${ podcast.imageId }.jpeg` }></img>
           <div className="break-word">
             <h3 className="break-word podcast-title">{ podcast.title }</h3>
             <p className={ "break-word " + (isCollapsed && "truncate-l truncate-6l") }>

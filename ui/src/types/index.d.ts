@@ -10,7 +10,7 @@ export interface TEpisode {
   date: string;
   description: string;
   duration: number;
-  episode_id: string;
+  episodeId: string;
   title: string;
   url: string;
 }
@@ -29,7 +29,7 @@ export interface TNowPlaying {
 export interface TPosition {
   completed: boolean;
   current_time: number;
-  real_duration: number;
+  realDuration: number;
 }
 
 export interface TSignIn {
@@ -39,12 +39,12 @@ export interface TSignIn {
 
 export interface TSignUp {
   email: string;
-  user_id: string;
+  userId: string;
 }
 
 export interface TPodcast {
   description: string;
-  image_id: string;
-  podcast_id: string;
+  imageId: string;
+  podcastId: string;
   title: string;
 }

@@ -16,7 +16,7 @@ function Home() {
   }, []);
 
   const content = subscriptions.map(subscription => (
-    <Subscription key={ subscription['podcast_id'] } podcast={ subscription } />
+    <Subscription key={ subscription.podcastId } podcast={ subscription } />
   ));
 
   return (
