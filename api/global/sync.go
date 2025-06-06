@@ -60,8 +60,8 @@ func Sync(p *models.Podcast) error {
 		imageURL = strings.TrimSpace(rss.Channel.Image.AltURL)
 	}
 
-	path := fmt.Sprintf("%s/%s.jpeg", os.Getenv("RSS_DATA_DIR"), p.ImageID)
-	err = SanitizeAndSaveImage(imageURL, path)
+	outputPathBase := fmt.Sprintf("%s/%s", os.Getenv("RSS_DATA_DIR"), p.ImageID)
+	err = SanitizeAndSaveImage(imageURL, outputPathBase)
 	if err != nil {
 		fmt.Printf("Failed to write image %s\n", p.ImageID)
 		fmt.Println(err)
@@ -78,6 +78,7 @@ func Sync(p *models.Podcast) error {
 		return result.Error
 	}
 
+	var episodes []models.Episode
 	for _, item := range rss.Channel.Items {
 		date, err := time.Parse("Mon, _2 Jan 2006 15:04:05 MST", item.Date)
 		if err != nil {
@@ -101,11 +102,7 @@ func Sync(p *models.Podcast) error {
 			}
 		}
 
-		// TODO make this a bulk update instead of potentially 100s of DB calls
-		result := DB.Clauses(clause.OnConflict{
-			Columns:   []clause.Column{{Name: "podcast_id"}, {Name: "item_id"}},
-			DoUpdates: clause.AssignmentColumns([]string{"title", "description", "date", "duration", "url"}),
-		}).Create(&models.Episode{
+		episodes = append(episodes, models.Episode{
 			PodcastID:   p.PodcastID,
 			ItemID:      item.ID,
 			Title:       item.Title,
@@ -114,11 +111,15 @@ func Sync(p *models.Podcast) error {
 			Duration:    duration,
 			URL:         url,
 		})
-		if result.Error != nil {
-			fmt.Printf("Failed to sync item %s for podcast %s\n", item.ID, p.PodcastID)
-			fmt.Println(result.Error)
-			continue
-		}
+	}
+
+	result = DB.Clauses(clause.OnConflict{
+		Columns:   []clause.Column{{Name: "podcast_id"}, {Name: "item_id"}},
+		DoUpdates: clause.AssignmentColumns([]string{"title", "description", "date", "duration", "url"}),
+	}).Create(&episodes)
+	if result.Error != nil {
+		fmt.Printf("Failed to bulk upsert episodes for podcast %s\n", p.PodcastID)
+		fmt.Println(result.Error)
 	}
 
 	return nil

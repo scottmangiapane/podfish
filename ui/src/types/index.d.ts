@@ -1,7 +1,5 @@
-// TODO use camel case in type properties
-
 export interface TApiResponse<T> {
-  data: T;
+  data: T | null;
   ok: boolean;
   status: number;
 }
@@ -28,7 +26,7 @@ export interface TNowPlaying {
 
 export interface TPosition {
   completed: boolean;
-  current_time: number;
+  currentTime: number;
   realDuration: number;
 }
 

@@ -4,26 +4,25 @@ import (
 	"errors"
 	"fmt"
 	"image"
+	_ "image/gif"
+	_ "image/jpeg"
+	_ "image/png"
 	"io"
 	"net/http"
 	"time"
 
 	"github.com/disintegration/imaging"
-
-	_ "image/gif"
-	_ "image/jpeg"
-	_ "image/png"
-
 	_ "golang.org/x/image/webp"
 )
 
 const (
 	maxImageSize = 10 * 1024 * 1024 // 10 MB
-	maxWidth     = 500
-	maxHeight    = 500
+	maxSizeSm    = 140
+	maxSizeMd    = 300
+	maxSizeLg    = 560
 )
 
-func SanitizeAndSaveImage(imageURL, outputPath string) error {
+func SanitizeAndSaveImage(imageURL, outputBasePath string) error {
 	client := &http.Client{Timeout: 10 * time.Second}
 
 	resp, err := client.Get(imageURL)
@@ -49,11 +48,21 @@ func SanitizeAndSaveImage(imageURL, outputPath string) error {
 		return fmt.Errorf("unsupported image format: %s", format)
 	}
 
-	resized := imaging.Fit(imaging.Clone(img), maxWidth, maxHeight, imaging.Lanczos)
+	sizes := []struct {
+		size       int
+		outputPath string
+	}{
+		{maxSizeSm, fmt.Sprintf("%s-sm.jpeg", outputBasePath)},
+		{maxSizeMd, fmt.Sprintf("%s-md.jpeg", outputBasePath)},
+		{maxSizeLg, fmt.Sprintf("%s-lg.jpeg", outputBasePath)},
+	}
 
-	err = imaging.Save(resized, outputPath, imaging.JPEGQuality(85))
-	if err != nil {
-		return fmt.Errorf("failed to save jpeg: %w", err)
+	for _, size := range sizes {
+		resized := imaging.Fit(imaging.Clone(img), size.size, size.size, imaging.Lanczos)
+
+		if err := imaging.Save(resized, size.outputPath, imaging.JPEGQuality(85)); err != nil {
+			return fmt.Errorf("failed to save cover at %dx%d: %w", size.size, size.size, err)
+		}
 	}
 
 	return nil

@@ -70,15 +70,15 @@ function Episode({ episode, podcast, position }: TEpisodeProps) {
   const realDuration = position?.realDuration || episode.duration;
   let status = <p className="text-light">{ formatDuration(realDuration) }</p>;
   if (position?.completed
-    || (position?.current_time && realDuration - position.current_time < 30)) {
+    || (position?.currentTime && realDuration - position.currentTime < 30)) {
     status = <p className="color-theme">Played</p>
   }
   else if (episode.episodeId === state.nowPlaying?.episode.episodeId) {
     const seconds = realDuration - state.audio.currentTime;
     status = <p className="episode-status-bold">{ formatDuration(seconds) } left</p>
   }
-  else if (position?.current_time) {
-    const seconds = realDuration - position.current_time;
+  else if (position?.currentTime) {
+    const seconds = realDuration - position.currentTime;
     status = <p className="episode-status-bold">{ formatDuration(seconds) } left</p>
   }
 

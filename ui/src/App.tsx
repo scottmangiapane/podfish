@@ -62,7 +62,7 @@ function AppWithContext() {
 
   useEffect(() => {
     getNowPlaying(navigate).then((res) => {
-      if (res.ok && res.data && Object.keys(res.data).length > 0) {
+      if (res.ok && res.data) {
         dispatch({ type: 'SET_NOW_PLAYING', data: res.data });
       }
     });

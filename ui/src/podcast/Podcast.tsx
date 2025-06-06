@@ -17,8 +17,16 @@ function Podcast() {
   const [podcast, setPodcast] = useState<TPodcast | null>(null);
 
   useEffect(() => {
-    getEpisodes(navigate, id!).then((res) => setEpisodes(res.data));
-    getSubscription(navigate, id!).then((res) => setPodcast(res.data));
+    getEpisodes(navigate, id!).then((res) => {
+      if (res.ok && res.data) {
+        setEpisodes(res.data);
+      }
+    });
+    getSubscription(navigate, id!).then((res) => {
+      if (res.ok && res.data) {
+        setPodcast(res.data);
+      }
+    });
   }, []);
 
   if (!podcast) {
@@ -43,7 +51,7 @@ function Podcast() {
     <div className="podcast-split">
       <div className="podcast-split-left">
         <div className="podcast-header">
-          <img className="podcast-cover" src={ `/file/${ podcast.imageId }.jpeg` }></img>
+          <img className="podcast-cover" src={ `/file/${ podcast.imageId }-lg.jpeg` }></img>
           <div className="break-word">
             <h3 className="break-word podcast-title">{ podcast.title }</h3>
             <p className={ "break-word " + (isCollapsed && "truncate-l truncate-6l") }>

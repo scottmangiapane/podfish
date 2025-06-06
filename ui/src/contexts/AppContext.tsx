@@ -74,7 +74,7 @@ export function AppProvider({ children }: any) {
           state.nowPlaying = null;
         } else {
           state.nowPlaying = action.data;
-          state.audio.requestedTime = action.data.position?.["current_time"] || null;
+          state.audio.requestedTime = action.data.position?.currentTime || null;
         }
         break;
       case 'SYNC_CURRENT_TIME':

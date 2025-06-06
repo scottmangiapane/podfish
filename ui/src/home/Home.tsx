@@ -12,7 +12,11 @@ function Home() {
   const [subscriptions, setSubscriptions] = useState<TPodcast[]>([]);
 
   useEffect(() => {
-    getSubscriptions(navigate).then((response) => setSubscriptions(response.data));
+    getSubscriptions(navigate).then((res) => {
+      if (res.ok && res.data) {
+        setSubscriptions(res.data);
+      }
+    });
   }, []);
 
   const content = subscriptions.map(subscription => (

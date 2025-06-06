@@ -11,7 +11,10 @@ interface TSubscriptionProps {
 function Subscription({ podcast }: TSubscriptionProps) {
   return (
     <Link className="uncolored" to={`/podcasts/${ podcast.podcastId }`}>
-      <img className="subscription-cover" src={ `/file/${ podcast.imageId }.jpeg` }></img>
+      <img
+        className="subscription-cover"
+        loading="lazy"
+        src={ `/file/${ podcast.imageId }-md.jpeg` }></img>
       <div className="truncate">{ podcast.title }</div>
     </Link>
   );
