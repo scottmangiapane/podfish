@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 
-import { getNowPlaying, patchEpisodeProgress } from "@/api-service";
+import { getNowPlaying, patchEpisodePosition } from "@/api-service";
 import { AppProvider, useAppContext } from '@/contexts/AppContext';
 import Playbar from "@/components/Playbar";
 
@@ -38,7 +38,7 @@ function AppWithContext() {
     if (!state.nowPlaying?.position) return;
     if (state.positionLastSynced === null || Date.now() - state.positionLastSynced > 5 * 1000) {
       const { currentTime, realDuration } = state.nowPlaying.position;
-        patchEpisodeProgress(
+        patchEpisodePosition(
           navigate,
           state.nowPlaying.episode.episodeId,
           false,
@@ -88,8 +88,9 @@ function AppWithContext() {
 
   function audioEnded() {
     // TODO: the following doesn't work because event listeners only know the default state... use ref instead?
+    // TODO: does it even matter?
     // if (!state.nowPlaying) return;
-    // patchEpisodeProgress(
+    // patchEpisodePosition(
     //   navigate,
     //   state.nowPlaying?.episode.episodeId,
     //   true,

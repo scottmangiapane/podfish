@@ -9,8 +9,8 @@ export function getEpisodes(navigate: NavigateFunction, id: string) {
   });
 }
 
-export function patchEpisodeProgress(navigate: NavigateFunction, id: string, completed: boolean, currentTime: number, duration: number) {
-  return callApi<TNowPlaying>(navigate, `/api/v1/episodes/${ id }/progress`, {
+export function patchEpisodePosition(navigate: NavigateFunction, id: string, completed: boolean, currentTime: number, duration: number) {
+  return callApi<TNowPlaying>(navigate, `/api/v1/episodes/${ id }/position`, {
     method: 'PATCH',
     body: JSON.stringify({ completed, 'current_time': currentTime, 'real_duration': duration }),
   });

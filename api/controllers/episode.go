@@ -103,11 +103,11 @@ func GetEpisode(c *gin.Context) {
 }
 
 // @Tags episodes
-// @Router /episodes/{id}/progress [patch]
+// @Router /episodes/{id}/position [patch]
 // @Param id path string true "Episode ID"
-// @Param request body controllers.PatchEpisodeProgress.request true "Request body"
+// @Param request body controllers.PatchEpisodePosition.request true "Request body"
 // @Success 200 {object} models.Position
-func PatchEpisodeProgress(c *gin.Context) {
+func PatchEpisodePosition(c *gin.Context) {
 	id, err := uuid.Parse(c.Param("id"))
 	if err != nil {
 		middleware.Abort(c, http.StatusUnprocessableEntity, "Invalid episode ID")
@@ -136,7 +136,7 @@ func PatchEpisodeProgress(c *gin.Context) {
 	result := global.DB.Save(&position)
 	if result.Error != nil {
 		fmt.Println(result.Error)
-		middleware.Abort(c, http.StatusInternalServerError, "Failed to set episode progress")
+		middleware.Abort(c, http.StatusInternalServerError, "Failed to set episode position")
 		return
 	}
 
