@@ -19,15 +19,19 @@ function Playbar() {
 
   const slider = (
     <Slider
-      labelEnd={ secondsToTimestamp(state.audio.duration) }
-      labelStart={ secondsToTimestamp(state.audio.currentTime) }
+      labelEnd={ secondsToTimestamp(state.nowPlaying?.position?.realDuration || 0) }
+      labelStart={ secondsToTimestamp(state.nowPlaying?.position?.currentTime || 0) }
       onChange={ (percent: number) => {
         dispatch({
           type: 'AUDIO_SKIP',
-          data: state.audio.duration * percent / 100
+          data: (state.nowPlaying?.position?.realDuration || 0) * percent / 100
         });
       } }
-      value={ 100 * state.audio.currentTime / state.audio.duration || 0 }
+      value={
+        100
+        * (state.nowPlaying?.position?.currentTime || 0)
+        / (state.nowPlaying?.position?.realDuration || 0)
+      }
     />
   );
 
@@ -51,7 +55,7 @@ function Playbar() {
             className="btn symbol"
             onClick={ () => { dispatch({
               type: 'AUDIO_SKIP',
-              data: Math.max(0, state.audio.currentTime - 10)
+              data: Math.max(0, (state.nowPlaying?.position?.currentTime || 0) - 10)
             }); } }>
             replay_10
           </span>
@@ -60,7 +64,10 @@ function Playbar() {
             className="btn symbol"
             onClick={ () => { dispatch({
               type: 'AUDIO_SKIP',
-              data: Math.min(state.audio.duration, state.audio.currentTime + 30)
+              data: Math.min(
+                state.nowPlaying?.position?.realDuration || 0,
+                (state.nowPlaying?.position?.currentTime || 0) + 30
+              )
             }); } }>
             forward_30
           </span>

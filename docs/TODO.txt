@@ -7,6 +7,7 @@ SECURITY
 
 API
 
+- Rename "progress" to "position" for consistency
 - Simplified error handling (especially checking if gorm returned "not found" for 404, then 500 as fallback)
 - Refresh JWT token as needed
 - Use actual migration files instead of GORM's auto-migrate
@@ -16,6 +17,7 @@ API
 
 UI
 
+- Indicate when audio is loading
 - Pagination on episode list page
 - Error handling in UI for sign up / sign in
 - Ensure adding/removing node dependencies is reflected in docker container (is .dockerignore to blame?).

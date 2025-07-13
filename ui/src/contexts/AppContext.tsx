@@ -15,21 +15,16 @@ type TAction =
   | { type: 'AUDIO_SKIP'; data: number | null; }
   | { type: 'AUDIO_TIME_UPDATE'; data: number; }
   | { type: 'AUDIO_TOGGLE'; }
-  | { type: 'SYNC_CURRENT_TIME'; data: number }
-  | { type: 'SET_NOW_PLAYING'; data: TNowPlaying | null; };
+  | { type: 'SET_NOW_PLAYING'; data: TNowPlaying | null; }
+  | { type: 'SYNC_POSITION'; data: { currentTime: number; realDuration: number; }; };
 
 interface TState {
   audio: {
-    currentTime: number;
-    duration: number;
     isPaused: boolean;
     requestedTime: number | null;
   };
   nowPlaying: TNowPlaying | null;
-  syncCurrentTime: {
-    lastSync: number | null;
-    previousTime: number
-  };
+  positionLastSynced: number | null;
 };
 
 const AppContext = createContext<TAppContext | null>(null);
@@ -37,22 +32,24 @@ const AppContext = createContext<TAppContext | null>(null);
 export function AppProvider({ children }: any) {
   const initialState = {
     audio: {
-      currentTime: 0,
-      duration: 0,
       isPaused: true,
       requestedTime: null,
     },
     nowPlaying: null,
-    syncCurrentTime: {
-      lastSync: null,
-      previousTime: 0,
-    },
+    positionLastSynced: null,
   };
 
   const appReducer = produce((state: TState, action: TAction) => {
     switch (action.type) {
       case 'AUDIO_DURATION_CHANGE':
-        state.audio.duration = action.data;
+        if (state.nowPlaying) {
+          state.nowPlaying.position = state.nowPlaying.position || {
+            completed: false,
+            currentTime: 0,
+            realDuration: action.data,
+          }
+          state.nowPlaying.position.realDuration = action.data;
+        }
         break;
       case 'AUDIO_PAUSE':
         state.audio.isPaused = true;
@@ -64,7 +61,14 @@ export function AppProvider({ children }: any) {
         state.audio.requestedTime = action.data;
         break;
       case 'AUDIO_TIME_UPDATE':
-        state.audio.currentTime = action.data;
+        if (state.nowPlaying) {
+          state.nowPlaying.position = state.nowPlaying.position || {
+            completed: false,
+            currentTime: action.data,
+            realDuration: state.nowPlaying.episode.duration,
+          }
+          state.nowPlaying.position.currentTime = action.data;
+        }
         break;
       case 'AUDIO_TOGGLE':
         state.audio.isPaused = !state.audio.isPaused;
@@ -77,9 +81,8 @@ export function AppProvider({ children }: any) {
           state.audio.requestedTime = action.data.position?.currentTime || null;
         }
         break;
-      case 'SYNC_CURRENT_TIME':
-        state.syncCurrentTime.lastSync = Date.now();
-        state.syncCurrentTime.previousTime = action.data;
+      case 'SYNC_POSITION':
+        state.positionLastSynced = Date.now();
         break;
     }
   });

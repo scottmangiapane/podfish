@@ -35,23 +35,22 @@ function AppWithContext() {
   }, [state.nowPlaying?.episode.url]);
 
   useEffect(() => {
-    if (!state.nowPlaying) return;
-    if (!state.audio.currentTime || !state.audio.duration) return;
-    const { lastSync, previousTime } = state.syncCurrentTime;
-    if (lastSync === null || Date.now() - lastSync > 5 * 1000) {
-      const newCurrentTime = state.audio.currentTime;
-      if (previousTime !== newCurrentTime) {
+    if (!state.nowPlaying?.position) return;
+    if (state.positionLastSynced === null || Date.now() - state.positionLastSynced > 5 * 1000) {
+      const { currentTime, realDuration } = state.nowPlaying.position;
         patchEpisodeProgress(
           navigate,
           state.nowPlaying.episode.episodeId,
           false,
-          Math.round(newCurrentTime),
-          Math.round(state.audio.duration),
+          Math.round(currentTime),
+          Math.round(realDuration),
         );
-        dispatch({ type: 'SYNC_CURRENT_TIME', data: newCurrentTime });
-      }
+        dispatch({ type: 'SYNC_POSITION', data: {
+          currentTime,
+          realDuration,
+        } });
     }
-  }, [state.audio.currentTime]);
+  }, [state.nowPlaying?.position?.currentTime]);
 
   useEffect(() => {
     if (audioRef.current && state.audio.requestedTime !== null) {

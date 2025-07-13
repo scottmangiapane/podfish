@@ -1,25 +1,27 @@
 import { useEffect, useState, type ReactElement } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import sanitizeHtml from "sanitize-html";
+import { useImmer } from "use-immer";
 
 import { getEpisodes, getSubscription } from "@/api-service";
+import { useAppContext } from "@/contexts/AppContext";
 import Episode from "@/podcast/Episode";
 import type { TEpisodePosition, TPodcast } from "@/types";
 
 import "@/podcast/Podcast.css";
 
 function Podcast() {
+  const { state } = useAppContext();
   const navigate = useNavigate();
-
   const { id } = useParams();
-  const [episodes, setEpisodes] = useState<TEpisodePosition[]>([]);
+  const [episodes, updateEpisodes] = useImmer<TEpisodePosition[]>([]);
   const [isCollapsed, setIsCollapsed] = useState(true);
   const [podcast, setPodcast] = useState<TPodcast | null>(null);
 
   useEffect(() => {
     getEpisodes(navigate, id!).then((res) => {
       if (res.ok && res.data) {
-        setEpisodes(res.data);
+        updateEpisodes(() => res.data);
       }
     });
     getSubscription(navigate, id!).then((res) => {
@@ -28,6 +30,25 @@ function Podcast() {
       }
     });
   }, []);
+
+  useEffect(() => {
+    if (state.nowPlaying?.position) {
+      const { episodeId } = state.nowPlaying.episode;
+      const { currentTime, realDuration } = state.nowPlaying.position;
+      updateEpisodes(draft => {
+        const episode = draft.find(e => e.episode.episodeId === episodeId);
+        if (episode) {
+          episode.position = episode.position || {
+            completed: false,
+            currentTime: currentTime,
+            realDuration: realDuration,
+          };
+          episode.position.currentTime = currentTime;
+          episode.position.realDuration = realDuration;
+        }
+      });
+    }
+  }, [state.nowPlaying?.position]);
 
   if (!podcast) {
     return null;

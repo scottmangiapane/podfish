@@ -16,7 +16,6 @@ interface TEpisodeProps {
 
 function Episode({ episode, podcast, position }: TEpisodeProps) {
   const { dispatch, state } = useAppContext();
-
   const navigate = useNavigate();
   const [isCollapsed, setIsCollapsed] = useState(true);
 
@@ -67,19 +66,15 @@ function Episode({ episode, podcast, position }: TEpisodeProps) {
     );
   }
 
-  const realDuration = position?.realDuration || episode.duration;
-  let status = <p className="text-light">{ formatDuration(realDuration) }</p>;
+  const duration = position?.realDuration || episode.duration;
+  let status = <span className="text-light">{ formatDuration(duration) }</span>;
   if (position?.completed
-    || (position?.currentTime && realDuration - position.currentTime < 30)) {
-    status = <p className="color-theme">Played</p>
-  }
-  else if (episode.episodeId === state.nowPlaying?.episode.episodeId) {
-    const seconds = realDuration - state.audio.currentTime;
-    status = <p className="episode-status-bold">{ formatDuration(seconds) } left</p>
+    || (position?.currentTime && duration - position.currentTime < 15)) {
+    status = <span className="color-theme">Played</span>
   }
   else if (position?.currentTime) {
-    const seconds = realDuration - position.currentTime;
-    status = <p className="episode-status-bold">{ formatDuration(seconds) } left</p>
+    const seconds = duration - position.currentTime;
+    status = <span className="episode-status-bold">{ formatDuration(seconds) } left</span>
   }
 
   return (
