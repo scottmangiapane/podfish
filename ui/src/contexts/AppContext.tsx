@@ -16,6 +16,7 @@ type TAction =
   | { type: 'AUDIO_TIME_UPDATE'; data: number; }
   | { type: 'AUDIO_TOGGLE'; }
   | { type: 'SET_NOW_PLAYING'; data: TNowPlaying | null; }
+  | { type: 'SET_HAS_USER_INTERACTED'; }
   | { type: 'SYNC_POSITION'; data: { currentTime: number; realDuration: number; }; };
 
 interface TState {
@@ -23,6 +24,7 @@ interface TState {
     isPaused: boolean;
     requestedTime: number | null;
   };
+  hasUserInteracted: boolean;
   nowPlaying: TNowPlaying | null;
   positionLastSynced: number | null;
 };
@@ -35,6 +37,7 @@ export function AppProvider({ children }: any) {
       isPaused: true,
       requestedTime: null,
     },
+    hasUserInteracted: false,
     nowPlaying: null,
     positionLastSynced: null,
   };
@@ -80,6 +83,9 @@ export function AppProvider({ children }: any) {
           state.nowPlaying = action.data;
           state.audio.requestedTime = action.data.position?.currentTime || null;
         }
+        break;
+      case 'SET_HAS_USER_INTERACTED':
+        state.hasUserInteracted = true;
         break;
       case 'SYNC_POSITION':
         state.positionLastSynced = Date.now();

@@ -42,7 +42,10 @@ function Playbar() {
   const simpleControls = (
     <span
       className="btn symbol symbol-play-pause"
-      onClick={ () => dispatch({ type: "AUDIO_TOGGLE" }) }>
+      onClick={ () => {
+        dispatch({ type: 'SET_HAS_USER_INTERACTED' });
+        dispatch({ type: "AUDIO_TOGGLE" })
+      } }>
       { (state.audio.isPaused) ? "play_circle" : "pause_circle" }
     </span>
   );

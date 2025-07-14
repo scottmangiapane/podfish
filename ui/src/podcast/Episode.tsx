@@ -44,6 +44,7 @@ function Episode({ episode, podcast, position }: TEpisodeProps) {
 
   let playButton = (
     <span className="btn symbol symbol-outline" onClick={ () => {
+      dispatch({ type: 'SET_HAS_USER_INTERACTED' });
       dispatch({ type: 'SET_NOW_PLAYING', data: {
         episode,
         podcast,

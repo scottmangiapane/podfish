@@ -29,8 +29,10 @@ function AppWithContext() {
     const playWhenReady = () => audio.play();
     if (state.nowPlaying?.episode.url) {
       audio.src = state.nowPlaying?.episode.url;
-      audio.addEventListener("canplay", playWhenReady, { once: true });
-      return () => audio.removeEventListener("canplay", playWhenReady);
+      if (state.hasUserInteracted) {
+        audio.addEventListener("canplay", playWhenReady, { once: true });
+        return () => audio.removeEventListener("canplay", playWhenReady);
+      }
     }
   }, [state.nowPlaying?.episode.url]);
 
@@ -117,6 +119,7 @@ function AppWithContext() {
   function spacebarPressed(event: KeyboardEvent) {
     if (event.code === 'Space') {
       event.preventDefault();
+      dispatch({ type: 'SET_HAS_USER_INTERACTED' });
       dispatch({ type: 'AUDIO_TOGGLE' })
     }
   }
