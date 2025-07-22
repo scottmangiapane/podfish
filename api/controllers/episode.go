@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
 	"podfish/global"
@@ -11,12 +12,14 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+	"gorm.io/gorm"
 )
 
 // @Tags episodes
 // @Router /episodes [get]
 // @Param limit query number false "Limit" default(10)
-// @Param offset query number false "Offset" default(0)
+// @Param before_id query string false "Before"
+// @Param after_id query string false "After"
 // @Param podcast_id query string false "Podcast ID"
 // @Success 200 {object} []models.EpisodePosition
 func GetEpisodes(c *gin.Context) {
@@ -30,14 +33,36 @@ func GetEpisodes(c *gin.Context) {
 		limit = limitParam
 	}
 
-	offset := 0
-	if c.Query("offset") != "" {
-		offsetParam, err := strconv.Atoi(c.Query("offset"))
+	var beforeId uuid.UUID
+	var beforeEpisode models.Episode
+	if c.Query("before_id") != "" {
+		beforeParam, err := uuid.Parse(c.Query("before_id"))
 		if err != nil {
-			middleware.Abort(c, http.StatusUnprocessableEntity, "Invalid offset")
+			middleware.Abort(c, http.StatusUnprocessableEntity, "Invalid before ID")
 			return
 		}
-		offset = offsetParam
+		beforeId = beforeParam
+		result := global.DB.First(&beforeEpisode, &models.Episode{EpisodeID: beforeId})
+		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+			middleware.Abort(c, http.StatusNotFound, "Before episode not found")
+			return
+		}
+	}
+
+	var afterId uuid.UUID
+	var afterEpisode models.Episode
+	if c.Query("after_id") != "" {
+		afterParam, err := uuid.Parse(c.Query("after_id"))
+		if err != nil {
+			middleware.Abort(c, http.StatusUnprocessableEntity, "Invalid after ID")
+			return
+		}
+		afterId = afterParam
+		result := global.DB.First(&afterEpisode, &models.Episode{EpisodeID: afterId})
+		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+			middleware.Abort(c, http.StatusNotFound, "After episode not found")
+			return
+		}
 	}
 
 	var podcastId uuid.UUID
@@ -49,16 +74,27 @@ func GetEpisodes(c *gin.Context) {
 		}
 		podcastId = podcastIdParam
 	}
-	var episodes []models.EpisodePosition = []models.EpisodePosition{}
-	result := global.DB.
+	query := global.DB.
 		Table("episodes").
 		Joins("LEFT JOIN positions "+
 			"ON episodes.episode_id = positions.episode_id "+
-			"AND positions.user_id = ?", middleware.GetUser(c)).
-		Where(&models.Episode{PodcastID: podcastId}).
+			"AND positions.user_id = ?", middleware.GetUser(c))
+	if podcastId != uuid.Nil {
+		query = query.Where("podcast_id = ?", podcastId)
+	}
+
+	if beforeId != uuid.Nil {
+		query = query.Where("date < ?", beforeEpisode.Date)
+	}
+
+	if afterId != uuid.Nil {
+		query = query.Where("date > ?", afterEpisode.Date)
+	}
+
+	var episodes []models.EpisodePosition = []models.EpisodePosition{}
+	result := query.
 		Order("date DESC, episodes.episode_id").
 		Limit(limit).
-		Offset(offset).
 		Scan(&episodes)
 	if result.Error != nil {
 		fmt.Println(result.Error)

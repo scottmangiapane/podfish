@@ -26,6 +26,7 @@ UI
 - Recursive custom error page (ex: https://pod.scottmangiapane.com/podcasts/undefined)
 - Speed up loading time of symbols font (minimized file to only include symbols I use?)
 - Support fallback image if podcast cover fails to download / convert
+- Zero state for if a podcast has no episodes (possibly due to parsing error)
 
 OTHER
 
