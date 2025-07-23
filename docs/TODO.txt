@@ -18,7 +18,6 @@ API
 UI
 
 - Indicate when audio is loading
-- Pagination on episode list page
 - Error handling in UI for sign up / sign in
 - Ensure adding/removing node dependencies is reflected in docker container (is .dockerignore to blame?).
     - Not possible? without giving up live reloading. data volume is immutable after initial build

@@ -5,7 +5,7 @@ import type { TApiResponse, TEpisodePosition, TNowPlaying, TPodcast, TSignIn, TS
 
 export function getEpisodes(navigate: NavigateFunction, podcastId: string, beforeId?: string) {
   const beforeQuery = (beforeId) ? `&before_id=${ beforeId }` : '';
-  return callApi<TEpisodePosition[]>(navigate, `/api/v1/episodes?limit=20&podcast_id=${ podcastId }${ beforeQuery }`, {
+  return callApi<TEpisodePosition[]>(navigate, `/api/v1/episodes?limit=50&podcast_id=${ podcastId }${ beforeQuery }`, {
     method: 'GET',
   });
 }
