@@ -3,16 +3,17 @@ import type { TApiResponse, TEpisodePosition, TNowPlaying, TPodcast, TSignIn, TS
 
 /* API calls */
 
-export function getEpisodes(navigate: NavigateFunction, id: string) {
-  return callApi<TEpisodePosition[]>(navigate, `/api/v1/episodes?podcast_id=${ id }`, {
+export function getEpisodes(navigate: NavigateFunction, podcastId: string, beforeId?: string) {
+  const beforeQuery = (beforeId) ? `&before_id=${ beforeId }` : '';
+  return callApi<TEpisodePosition[]>(navigate, `/api/v1/episodes?limit=20&podcast_id=${ podcastId }${ beforeQuery }`, {
     method: 'GET',
   });
 }
 
-export function patchEpisodePosition(navigate: NavigateFunction, id: string, completed: boolean, currentTime: number, duration: number) {
-  return callApi<TNowPlaying>(navigate, `/api/v1/episodes/${ id }/position`, {
+export function patchEpisodePosition(navigate: NavigateFunction, episodeId: string, completed: boolean, currentTime: number, realDuration: number) {
+  return callApi<TNowPlaying>(navigate, `/api/v1/episodes/${ episodeId }/position`, {
     method: 'PATCH',
-    body: JSON.stringify({ completed, 'current_time': currentTime, 'real_duration': duration }),
+    body: JSON.stringify({ completed, 'current_time': currentTime, 'real_duration': realDuration }),
   });
 }
 
@@ -22,10 +23,10 @@ export function getNowPlaying(navigate: NavigateFunction) {
   });
 }
 
-export function putNowPlaying(navigate: NavigateFunction, id: string) {
+export function putNowPlaying(navigate: NavigateFunction, episodeId: string) {
   return callApi<TNowPlaying>(navigate, `/api/v1/now-playing`, {
     method: 'PUT',
-    body: JSON.stringify({ 'episode_id': id }),
+    body: JSON.stringify({ 'episode_id': episodeId }),
   });
 }
 
@@ -42,8 +43,8 @@ export function postSubscription(navigate: NavigateFunction, rss: string) {
   });
 }
 
-export function getSubscription(navigate: NavigateFunction, id: string) {
-  return callApi<TPodcast>(navigate, `/api/v1/subscriptions/${ id }`, {
+export function getSubscription(navigate: NavigateFunction, podcastId: string) {
+  return callApi<TPodcast>(navigate, `/api/v1/subscriptions/${ podcastId }`, {
     method: 'GET',
   });
 }

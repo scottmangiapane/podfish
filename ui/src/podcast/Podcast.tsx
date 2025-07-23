@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactElement } from "react";
+import { useEffect, useRef, useState, type ReactElement } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import sanitizeHtml from "sanitize-html";
 import { useImmer } from "use-immer";
@@ -13,18 +13,38 @@ import "@/podcast/Podcast.css";
 function Podcast() {
   const { state } = useAppContext();
   const navigate = useNavigate();
-  const { id } = useParams();
-  const [episodes, updateEpisodes] = useImmer<TEpisodePosition[]>([]);
+  const { podcastId } = useParams();
+  const containerRef = useRef(null);
+  const [episodes, updateEpisodes] = useImmer(new Map<string, TEpisodePosition>);
+  const [beforeId, setBeforeId] = useState<string | undefined>();
+  const [hasMoreEpisodes, setHasMoreEpisodes] = useState(true);
   const [isCollapsed, setIsCollapsed] = useState(true);
+  const [isLoadingEpisodes, setIsLoadingEpisodes] = useState(false);
   const [podcast, setPodcast] = useState<TPodcast | null>(null);
 
-  useEffect(() => {
-    getEpisodes(navigate, id!).then((res) => {
+  function loadEpisodes() {
+    if (isLoadingEpisodes || !hasMoreEpisodes) {
+      return;
+    }
+    setIsLoadingEpisodes(true);
+    getEpisodes(navigate, podcastId!, beforeId).then((res) => {
       if (res.ok && res.data) {
-        updateEpisodes(() => res.data);
+        if (res.data.length) {
+          updateEpisodes((draft) => {
+            res.data!.forEach((episode) => draft.set(episode.episode.episodeId, episode));
+          });
+          setBeforeId(res.data.at(-1)?.episode?.episodeId);
+        } else {
+          setHasMoreEpisodes(false);
+        }
       }
+      setIsLoadingEpisodes(false);
     });
-    getSubscription(navigate, id!).then((res) => {
+  }
+
+  useEffect(() => {
+    loadEpisodes();
+    getSubscription(navigate, podcastId!).then((res) => {
       if (res.ok && res.data) {
         setPodcast(res.data);
       }
@@ -32,11 +52,26 @@ function Podcast() {
   }, []);
 
   useEffect(() => {
+    const observer = new IntersectionObserver(([entry]) => {
+        if (entry.isIntersecting) {
+            loadEpisodes();
+        }
+    }, { threshold: 1 });
+
+    const el = containerRef.current;
+    if (el) observer.observe(el);
+
+    return () => {
+      if (el)  observer.unobserve(el);
+    };
+  }, [loadEpisodes]);
+
+  useEffect(() => {
     if (state.nowPlaying?.position) {
       const { episodeId } = state.nowPlaying.episode;
       const { currentTime, realDuration } = state.nowPlaying.position;
-      updateEpisodes(draft => {
-        const episode = draft.find(e => e.episode.episodeId === episodeId);
+      updateEpisodes((draft) => {
+        const episode = draft.get(episodeId);
         if (episode) {
           episode.position = episode.position || {
             completed: false,
@@ -55,7 +90,7 @@ function Podcast() {
   }
 
   const episodeList: ReactElement[] = [];
-  for (const { episode, position } of episodes) {
+  for (const { episode, position } of episodes.values()) {
     episodeList.push(
       <div className="podcast-list-item" key={ episode.episodeId }>
         <Episode episode={ episode } podcast={ podcast } position={ position } />
@@ -88,6 +123,10 @@ function Podcast() {
       <div className="podcast-split-right">
         <div className="podcast-list">
           { episodeList }
+          {/* TODO make these more aesthetic */}
+          { isLoadingEpisodes && <p>Loading more episodes...</p> }
+          { !hasMoreEpisodes && <p>No more episodes</p> }
+          <div ref={ containerRef } style={{ height: 0 }} />
         </div>
       </div>
     </div>

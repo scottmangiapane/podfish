@@ -1,3 +1,4 @@
+import { enableMapSet } from "immer";
 import React from "react";
 import { createRoot } from "react-dom/client";
 import {
@@ -16,6 +17,8 @@ import SignUp from "@/sign-up/SignUp";
 import Subscribe from "@/subscribe/Subscribe";
 
 import "@/index.css";
+
+enableMapSet();
 
 const router = createBrowserRouter([
   {
@@ -40,7 +43,7 @@ const router = createBrowserRouter([
             element: <Subscribe />
           },
           {
-            path: "podcasts/:id",
+            path: "podcasts/:podcastId",
             element: <Podcast />
           }
         ]
