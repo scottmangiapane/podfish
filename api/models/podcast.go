@@ -12,5 +12,6 @@ type Podcast struct {
 	ImageID     uuid.UUID `json:"image_id" gorm:"type:uuid;default:gen_random_uuid()"`
 	Title       string    `json:"title"`
 	Description string    `json:"description"`
+	Color       string    `json:"color"`
 	templates.Timestamps
 }

@@ -107,7 +107,10 @@ function Podcast() {
     <div className="podcast-split">
       <div className="podcast-split-left">
         <div className="podcast-header">
-          <img className="podcast-cover" src={ `/file/${ podcast.imageId }-lg.jpeg` }></img>
+          <img
+            className="podcast-cover"
+            src={ `/file/${ podcast.imageId }-lg.jpeg` }
+            style={{ backgroundColor: podcast.color }}></img>
           <div className="break-word">
             <h3 className="break-word podcast-title">{ podcast.title }</h3>
             <p className={ "break-word " + (isCollapsed && "truncate-l truncate-6l") }>

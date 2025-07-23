@@ -61,12 +61,13 @@ func Sync(p *models.Podcast) error {
 	}
 
 	outputPathBase := fmt.Sprintf("%s/%s", os.Getenv("RSS_DATA_DIR"), p.ImageID)
-	err = SanitizeAndSaveImage(imageURL, outputPathBase)
+	color, err := SanitizeAndSaveImage(imageURL, outputPathBase)
 	if err != nil {
 		fmt.Printf("Failed to write image %s\n", p.ImageID)
 		fmt.Println(err)
 		return err
 	}
+	p.Color = ColorToHexString(color)
 
 	p.Title = strings.TrimSpace(rss.Channel.Title)
 	p.Description = strings.TrimSpace(rss.Channel.Description)

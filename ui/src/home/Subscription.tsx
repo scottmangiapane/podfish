@@ -14,7 +14,8 @@ function Subscription({ podcast }: TSubscriptionProps) {
       <img
         className="subscription-cover"
         loading="lazy"
-        src={ `/file/${ podcast.imageId }-md.jpeg` }></img>
+        src={ `/file/${ podcast.imageId }-md.jpeg` }
+        style={{ backgroundColor: podcast.color }}></img>
       <div className="truncate">{ podcast.title }</div>
     </Link>
   );

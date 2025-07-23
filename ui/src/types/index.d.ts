@@ -41,6 +41,7 @@ export interface TSignUp {
 }
 
 export interface TPodcast {
+  color: string;
   description: string;
   imageId: string;
   podcastId: string;
