@@ -1,7 +1,4 @@
-.podcast-cover {
-    aspect-ratio: 1;
-    width: 100%;
-}
+.podcast-cover { width: 100%; }
 
 .podcast-list {
     display: flex;

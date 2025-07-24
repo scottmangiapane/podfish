@@ -14,10 +14,7 @@
 
 .playbar > * { min-width: 0; }
 
-.playbar-cover {
-    aspect-ratio: 1;
-    height: 70%;
-}
+.playbar-cover { height: 70%; }
 
 .playbar-metadata {
     align-items: center;

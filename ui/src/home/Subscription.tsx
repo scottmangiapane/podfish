@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 
+import Cover from "@/components/Cover";
 import type { TPodcast } from "@/types";
 
 import "@/home/Subscription.css";
@@ -11,11 +12,10 @@ interface TSubscriptionProps {
 function Subscription({ podcast }: TSubscriptionProps) {
   return (
     <Link className="uncolored" to={`/podcasts/${ podcast.podcastId }`}>
-      <img
+      <Cover
         className="subscription-cover"
-        loading="lazy"
-        src={ `/file/${ podcast.imageId }-md.jpeg` }
-        style={{ backgroundColor: podcast.color }}></img>
+        color={ podcast.color }
+        src={ `/file/${ podcast.imageId }-md.jpeg` } />
       <div className="truncate">{ podcast.title }</div>
     </Link>
   );

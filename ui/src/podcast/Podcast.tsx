@@ -5,6 +5,7 @@ import { useImmer } from "use-immer";
 
 import { getEpisodes, getSubscription } from "@/api-service";
 import { useAppContext } from "@/contexts/AppContext";
+import Cover from "@/components/Cover";
 import Episode from "@/podcast/Episode";
 import type { TEpisodePosition, TPodcast } from "@/types";
 
@@ -107,10 +108,10 @@ function Podcast() {
     <div className="podcast-split">
       <div className="podcast-split-left">
         <div className="podcast-header">
-          <img
+          <Cover
             className="podcast-cover"
-            src={ `/file/${ podcast.imageId }-lg.jpeg` }
-            style={{ backgroundColor: podcast.color }}></img>
+            color={ podcast.color }
+            src={ `/file/${ podcast.imageId }-lg.jpeg` } />
           <div className="break-word">
             <h3 className="break-word podcast-title">{ podcast.title }</h3>
             <p className={ "break-word " + (isCollapsed && "truncate-l truncate-6l") }>
