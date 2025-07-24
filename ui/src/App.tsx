@@ -11,6 +11,14 @@ function AppWithContext() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
+    document.body.classList.add("font-loading");
+
+    document.fonts.ready.then(() => {
+      document.body.classList.remove("font-loading");
+    });
+  }, []);
+
+  useEffect(() => {
     if (state.audio.isPaused) {
       audioRef.current?.pause();
     } else {

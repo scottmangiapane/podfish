@@ -23,7 +23,7 @@ UI
     - Not possible? without giving up live reloading. data volume is immutable after initial build
     - Explain in README
 - Recursive custom error page (ex: https://pod.scottmangiapane.com/podcasts/undefined)
-- Speed up loading time of symbols font (minimized file to only include symbols I use?)
+- Better UI indicator for when episode list has no more episodes ot is loading new episodes
 - Zero state for if a podcast has no episodes (possibly due to parsing error)
 
 OTHER

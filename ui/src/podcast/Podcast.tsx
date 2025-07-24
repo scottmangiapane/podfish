@@ -117,9 +117,12 @@ function Podcast() {
             <p className={ "break-word " + (isCollapsed && "truncate-l truncate-6l") }>
               { cleanDescription }
             </p>
-            <span className="btn symbol" onClick={ () => setIsCollapsed(!isCollapsed) }>
-              { (isCollapsed) ? "expand_more" : "expand_less" }
-            </span>
+            <img
+              className="btn symbol"
+              onClick={ () => setIsCollapsed(!isCollapsed) }
+              src={ (isCollapsed)
+                ? "/symbols/unfold_more_24dp.svg"
+                : "/symbols/unfold_less_24dp.svg" } />
             {/* TODO unsubscribe button? */}
           </div>
         </div>

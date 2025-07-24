@@ -35,14 +35,8 @@
 }
 
 .symbol-play-pause {
-    color: var(--theme-color) !important;
-    font-size: 48px !important;
-    font-variation-settings:
-    'FILL' 1,
-    'wght' 400,
-    'GRAD' 0,
-    'opsz' 48
-    !important;
+    fill: var(--theme-color) !important;
+    height: 48px !important;
 }
 
-.symbol-play-pause:active { color: var(--theme-color-dark) !important; }
+.symbol-play-pause:active { fill: var(--theme-color-dark) !important; }

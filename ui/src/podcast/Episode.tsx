@@ -43,7 +43,7 @@ function Episode({ episode, podcast, position }: TEpisodeProps) {
   }
 
   let playButton = (
-    <span className="btn symbol symbol-outline" onClick={ () => {
+    <img className="btn symbol symbol-outline" onClick={ () => {
       dispatch({ type: 'SET_HAS_USER_INTERACTED' });
       dispatch({ type: 'SET_NOW_PLAYING', data: {
         episode,
@@ -51,19 +51,18 @@ function Episode({ episode, podcast, position }: TEpisodeProps) {
         position,
       } });
       putNowPlaying(navigate, episode.episodeId);
-    } }>
-      play_circle
-    </span>
+    } }
+    src='/symbols/play_circle_24dp.svg' />
   );
 
   if (episode.episodeId === state.nowPlaying?.episode.episodeId) {
-    const symbol = (state.audio.isPaused) ? 'play_circle' : 'pause_circle';
     playButton = (
-      <span
+      <img
         className="btn symbol symbol-outline"
-        onClick={ () => dispatch({ type: 'AUDIO_TOGGLE' }) }>
-        { symbol }
-      </span>
+        onClick={ () => dispatch({ type: 'AUDIO_TOGGLE' }) }
+        src={ (state.audio.isPaused)
+          ? '/symbols/play_circle_24dp.svg'
+          : '/symbols/pause_circle_24dp.svg' } />
     );
   }
 
@@ -95,9 +94,12 @@ function Episode({ episode, podcast, position }: TEpisodeProps) {
         <p className={ "break-word " + (isCollapsed && "truncate-l truncate-3l") }>
           { cleanHtml(episode.description) }
         </p>
-        <span className="btn symbol" onClick={ () => setIsCollapsed(!isCollapsed) }>
-          { (isCollapsed) ? "expand_more" : "expand_less" }
-        </span>
+        <img
+          className="btn symbol"
+          onClick={ () => setIsCollapsed(!isCollapsed) }
+          src={ (isCollapsed)
+            ? "/symbols/unfold_more_24dp.svg"
+            : "/symbols/unfold_less_24dp.svg" } />
       </div>
     </>
   );

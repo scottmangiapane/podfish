@@ -27,7 +27,7 @@ function TitleBar() {
   return (
     <div className="title-bar">
       <Link className="title-bar-item" to={"/"}>
-        <img className="title-bar-logo" src="/logo.svg"></img>
+        <img className="title-bar-logo" src="/logo.svg" />
       </Link>
       { authButtons }
     </div>

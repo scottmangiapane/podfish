@@ -41,30 +41,30 @@ function Playbar() {
   const podcastTitle = state.nowPlaying.podcast.title;
 
   const simpleControls = (
-    <span
+    <img
       className="btn symbol symbol-play-pause"
       onClick={ () => {
         dispatch({ type: 'SET_HAS_USER_INTERACTED' });
         dispatch({ type: "AUDIO_TOGGLE" })
-      } }>
-      { (state.audio.isPaused) ? "play_circle" : "pause_circle" }
-    </span>
+      } }
+      src={ (state.audio.isPaused)
+        ? "/symbols/play_circle_48dp_fill.svg"
+        : "/symbols/pause_circle_48dp_fill.svg" } />
   );
 
   const fullControls = (
     <>
       <div className="center flex-1_5">
         <div className="playbar-symbol-group">
-          <span
+          <img
             className="btn symbol"
             onClick={ () => { dispatch({
               type: 'AUDIO_SKIP',
               data: Math.max(0, (state.nowPlaying?.position?.currentTime || 0) - 10)
-            }); } }>
-            replay_10
-          </span>
+            }); } }
+            src="/symbols/replay_10_24dp.svg" />
           { simpleControls }
-          <span
+          <img
             className="btn symbol"
             onClick={ () => { dispatch({
               type: 'AUDIO_SKIP',
@@ -72,17 +72,16 @@ function Playbar() {
                 state.nowPlaying?.position?.realDuration || 0,
                 (state.nowPlaying?.position?.currentTime || 0) + 30
               )
-            }); } }>
-            forward_30
-          </span>
+            }); } }
+            src="/symbols/forward_30_24dp.svg" />
         </div>
         { slider }
       </div>
       <div className="flex-1">
         <div className="align-right">
-          <span className="btn symbol">volume_up</span>
-          {/* <span className="btn symbol">volume_down</span> */}
-          {/* <span className="btn symbol">volume_mute</span> */}
+          <img className="btn symbol" src="/symbols/volume_up_24dp.svg" />
+          {/* <img className="btn symbol" src="/symbols/volume_down_24dp.svg" /> */}
+          {/* <img className="btn symbol" src="/symbols/volume_mute_24dp.svg" /> */}
         </div>
       </div>
     </>
