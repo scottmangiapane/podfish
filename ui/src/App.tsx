@@ -11,14 +11,6 @@ function AppWithContext() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
-    document.body.classList.add("font-loading");
-
-    document.fonts.ready.then(() => {
-      document.body.classList.remove("font-loading");
-    });
-  }, []);
-
-  useEffect(() => {
     if (state.audio.isPaused) {
       audioRef.current?.pause();
     } else {
@@ -85,6 +77,7 @@ function AppWithContext() {
     audio.addEventListener('pause', audioPause);
     audio.addEventListener('play', audioPlay);
     audio.addEventListener('timeupdate', audioTimeUpdate);
+    // TODO: attaching to document breaks text inputs
     document.addEventListener('keydown', spacebarPressed);
     return () => {
       audio.removeEventListener('durationchange', audioDurationChange);

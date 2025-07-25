@@ -45,13 +45,13 @@ type Enclosure struct {
 func Sync(p *models.Podcast) error {
 	res, err := Fetch(p.RSS)
 	if err != nil {
-		fmt.Printf("Failed to fetch RSS for podcast %s\n", p.PodcastID)
+		fmt.Printf("failed to fetch RSS for podcast %s\n", p.PodcastID)
 		return err
 	}
 
 	var rss Rss
 	if err := xml.Unmarshal(res, &rss); err != nil {
-		fmt.Printf("Failed to parse RSS for podcast %s\n", p.PodcastID)
+		fmt.Printf("failed to parse RSS for podcast %s\n", p.PodcastID)
 		return err
 	}
 
@@ -63,7 +63,7 @@ func Sync(p *models.Podcast) error {
 	outputPathBase := fmt.Sprintf("%s/%s", os.Getenv("RSS_DATA_DIR"), p.ImageID)
 	color, err := SanitizeAndSaveImage(imageURL, outputPathBase)
 	if err != nil {
-		fmt.Printf("Failed to write image %s\n", p.ImageID)
+		fmt.Printf("failed to write image %s\n", p.ImageID)
 		fmt.Println(err)
 		return err
 	}
@@ -74,25 +74,23 @@ func Sync(p *models.Podcast) error {
 
 	result := DB.Save(p)
 	if result.Error != nil {
-		fmt.Printf("Failed to save podcast for RSS feed %s\n", p.RSS)
+		fmt.Printf("failed to save podcast for RSS feed %s\n", p.RSS)
 		fmt.Println(result.Error)
 		return result.Error
 	}
 
 	var episodes []models.Episode
 	for _, item := range rss.Channel.Items {
-		date, err := time.Parse("Mon, _2 Jan 2006 15:04:05 MST", item.Date)
+		date, err := parseDate(item.Date)
 		if err != nil {
-			fmt.Printf("Failed to parse timestamp %s\n", item.Date)
+			fmt.Printf("failed to parse date '%s' for podcast %s\n", item.Date, p.PodcastID)
 			fmt.Println(err)
-			continue
 		}
 
 		duration, err := parseDuration(item.Duration)
 		if err != nil {
-			fmt.Printf("Failed to parse duration %s\n", item.Duration)
+			fmt.Printf("failed to parse duration '%s' for podcast %s\n", item.Duration, p.PodcastID)
 			fmt.Println(err)
-			continue
 		}
 
 		var url string
@@ -119,18 +117,34 @@ func Sync(p *models.Podcast) error {
 		DoUpdates: clause.AssignmentColumns([]string{"title", "description", "date", "duration", "url"}),
 	}).Create(&episodes)
 	if result.Error != nil {
-		fmt.Printf("Failed to bulk upsert episodes for podcast %s\n", p.PodcastID)
+		fmt.Printf("failed to bulk upsert episodes for podcast %s\n", p.PodcastID)
 		fmt.Println(result.Error)
 	}
 
 	return nil
 }
 
+func parseDate(input string) (time.Time, error) {
+	layouts := []string{
+		"Mon, _2 Jan 2006 15:04:05 MST",
+		"Mon, _2 Jan 2006 15:04:05 -0700",
+	}
+	err := fmt.Errorf("invalid date format '%s'", input)
+
+	for _, layout := range layouts {
+		t, err := time.Parse(layout, input)
+		if err == nil {
+			return t, nil
+		}
+	}
+	return time.Time{}, err
+}
+
 func parseDuration(input string) (uint, error) {
 	parts := strings.Split(input, ":")
 	hours := 0
 	minutes := 0
-	err := fmt.Errorf("invalid duration format: %s", input)
+	err := fmt.Errorf("invalid duration format '%s'", input)
 
 	switch len(parts) {
 	case 3:
