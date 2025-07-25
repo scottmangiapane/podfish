@@ -2,6 +2,11 @@ import { useAppContext } from "@/contexts/AppContext";
 import { useRootContext } from "@/contexts/RootContext";
 import Cover from "@/components/Cover";
 import Slider from "@/components/Slider";
+import Forward30 from "@/symbols/Forward30";
+import PauseCircle from "@/symbols/PauseCircle";
+import PlayCircle from "@/symbols/PlayCircle";
+import Replay10 from "@/symbols/Replay10";
+import VolumeUp from "@/symbols/VolumeUp";
 
 import "@/components/Playbar.css";
 
@@ -40,48 +45,53 @@ function Playbar() {
   const episodeTitle = state.nowPlaying.episode.title;
   const podcastTitle = state.nowPlaying.podcast.title;
 
-  const simpleControls = (
-    <img
-      className="btn symbol symbol-play-pause"
+  let simpleControls = (
+    <PauseCircle
       onClick={ () => {
         dispatch({ type: 'SET_HAS_USER_INTERACTED' });
         dispatch({ type: "AUDIO_TOGGLE" })
       } }
-      src={ (state.audio.isPaused)
-        ? "/symbols/play_circle_48dp_fill.svg"
-        : "/symbols/pause_circle_48dp_fill.svg" } />
+      fill="var(--theme-color)"
+      size="lg" />
   );
+  if (state.audio.isPaused) {
+    simpleControls = (
+      <PlayCircle
+        onClick={ () => {
+          dispatch({ type: 'SET_HAS_USER_INTERACTED' });
+          dispatch({ type: "AUDIO_TOGGLE" })
+        } }
+        fill="var(--theme-color)"
+        size="lg" />
+    );
+  }
 
   const fullControls = (
     <>
       <div className="center flex-1_5">
         <div className="playbar-symbol-group">
-          <img
-            className="btn symbol"
+          <Replay10
             onClick={ () => { dispatch({
               type: 'AUDIO_SKIP',
               data: Math.max(0, (state.nowPlaying?.position?.currentTime || 0) - 10)
-            }); } }
-            src="/symbols/replay_10_24dp.svg" />
+            }); } } />
           { simpleControls }
-          <img
-            className="btn symbol"
+          <Forward30
             onClick={ () => { dispatch({
               type: 'AUDIO_SKIP',
               data: Math.min(
                 state.nowPlaying?.position?.realDuration || 0,
                 (state.nowPlaying?.position?.currentTime || 0) + 30
               )
-            }); } }
-            src="/symbols/forward_30_24dp.svg" />
+            }); } } />
         </div>
         { slider }
       </div>
       <div className="flex-1">
         <div className="align-right">
-          <img className="btn symbol" src="/symbols/volume_up_24dp.svg" />
-          {/* <img className="btn symbol" src="/symbols/volume_down_24dp.svg" /> */}
-          {/* <img className="btn symbol" src="/symbols/volume_mute_24dp.svg" /> */}
+          <VolumeUp />
+          {/* <VolumeDown /> */}
+          {/* <VolumeMute /> */}
         </div>
       </div>
     </>

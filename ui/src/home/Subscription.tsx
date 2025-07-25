@@ -6,7 +6,7 @@ import type { TPodcast } from "@/types";
 import "@/home/Subscription.css";
 
 interface TSubscriptionProps {
-  podcast: TPodcast
+  podcast: TPodcast;
 }
 
 function Subscription({ podcast }: TSubscriptionProps) {

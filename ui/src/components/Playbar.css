@@ -33,10 +33,3 @@
     display: flex;
     gap: 16px;
 }
-
-.symbol-play-pause {
-    fill: var(--theme-color) !important;
-    height: 48px !important;
-}
-
-.symbol-play-pause:active { fill: var(--theme-color-dark) !important; }

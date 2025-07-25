@@ -179,11 +179,7 @@ input[type=email], input[type=password], input[type=url] {
 
 .root-content { padding-top: calc(32px + var(--title-bar-height)); }
 
-.symbol {
-    fill: var(--text-color);
-    height: 24px;
-    user-select: none;
-}
+.symbol { user-select: none; }
 
 .text-light { color: var(--text-color-light); }
 

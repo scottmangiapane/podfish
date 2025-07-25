@@ -4,6 +4,10 @@ import sanitizeHtml from "sanitize-html";
 
 import { putNowPlaying } from "@/api-service";
 import { useAppContext } from '@/contexts/AppContext';
+import ArrowDown from "@/symbols/ArrowDown";
+import ArrowUp from "@/symbols/ArrowUp";
+import PlayCircle from "@/symbols/PlayCircle";
+import PauseCircle from "@/symbols/PauseCircle";
 import type { TEpisode, TPodcast, TPosition } from "@/types";
 
 import "@/podcast/Episode.css";
@@ -43,7 +47,7 @@ function Episode({ episode, podcast, position }: TEpisodeProps) {
   }
 
   let playButton = (
-    <img className="btn symbol symbol-outline" onClick={ () => {
+    <PlayCircle onClick={ () => {
       dispatch({ type: 'SET_HAS_USER_INTERACTED' });
       dispatch({ type: 'SET_NOW_PLAYING', data: {
         episode,
@@ -51,19 +55,13 @@ function Episode({ episode, podcast, position }: TEpisodeProps) {
         position,
       } });
       putNowPlaying(navigate, episode.episodeId);
-    } }
-    src='/symbols/play_circle_24dp.svg' />
+    } } />
   );
 
   if (episode.episodeId === state.nowPlaying?.episode.episodeId) {
-    playButton = (
-      <img
-        className="btn symbol symbol-outline"
-        onClick={ () => dispatch({ type: 'AUDIO_TOGGLE' }) }
-        src={ (state.audio.isPaused)
-          ? '/symbols/play_circle_24dp.svg'
-          : '/symbols/pause_circle_24dp.svg' } />
-    );
+    playButton = (state.audio.isPaused)
+      ? <PlayCircle onClick={ () => dispatch({ type: 'AUDIO_TOGGLE' }) } />
+      : <PauseCircle onClick={ () => dispatch({ type: 'AUDIO_TOGGLE' }) } />
   }
 
   const duration = position?.realDuration || episode.duration;
@@ -94,12 +92,9 @@ function Episode({ episode, podcast, position }: TEpisodeProps) {
         <p className={ "break-word " + (isCollapsed && "truncate-l truncate-3l") }>
           { cleanHtml(episode.description) }
         </p>
-        <img
-          className="btn symbol"
-          onClick={ () => setIsCollapsed(!isCollapsed) }
-          src={ (isCollapsed)
-            ? "/symbols/unfold_more_24dp.svg"
-            : "/symbols/unfold_less_24dp.svg" } />
+        { isCollapsed
+          ? <ArrowDown onClick={ () => setIsCollapsed(false) } />
+          : <ArrowUp onClick={ () => setIsCollapsed(true) } /> }
       </div>
     </>
   );

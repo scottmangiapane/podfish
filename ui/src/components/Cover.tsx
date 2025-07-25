@@ -3,12 +3,12 @@ import { useState } from "react";
 import "@/components/Cover.css";
 
 interface TCoverProps {
-  className?: string,
-  color: string,
-  src: string,
+  className?: string;
+  color: string;
+  src: string;
 }
 
-export default function Cover({ className, color, src }: TCoverProps) {
+function Cover({ className, color, src }: TCoverProps) {
   const [isLoaded, setIsLoaded] = useState(false);
 
   function onLoad() {
@@ -37,3 +37,5 @@ export default function Cover({ className, color, src }: TCoverProps) {
     </div>
   )
 }
+
+export default Cover;

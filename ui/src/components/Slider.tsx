@@ -12,7 +12,7 @@ interface TSliderProps {
   value: number;
 }
 
-export default function Slider({ labelEnd, labelStart, onChange, onInput, value }: TSliderProps) {
+function Slider({ labelEnd, labelStart, onChange, onInput, value }: TSliderProps) {
   const { state } = useRootContext();
 
   const barRef = useRef<HTMLDivElement | null>(null);
@@ -145,3 +145,5 @@ export default function Slider({ labelEnd, labelStart, onChange, onInput, value 
     </div>
   );
 }
+
+export default Slider;

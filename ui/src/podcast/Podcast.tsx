@@ -7,6 +7,8 @@ import { getEpisodes, getSubscription } from "@/api-service";
 import { useAppContext } from "@/contexts/AppContext";
 import Cover from "@/components/Cover";
 import Episode from "@/podcast/Episode";
+import ArrowDown from "@/symbols/ArrowDown";
+import ArrowUp from "@/symbols/ArrowUp";
 import type { TEpisodePosition, TPodcast } from "@/types";
 
 import "@/podcast/Podcast.css";
@@ -117,12 +119,9 @@ function Podcast() {
             <p className={ "break-word " + (isCollapsed && "truncate-l truncate-6l") }>
               { cleanDescription }
             </p>
-            <img
-              className="btn symbol"
-              onClick={ () => setIsCollapsed(!isCollapsed) }
-              src={ (isCollapsed)
-                ? "/symbols/unfold_more_24dp.svg"
-                : "/symbols/unfold_less_24dp.svg" } />
+            { isCollapsed
+              ? <ArrowDown onClick={ () => setIsCollapsed(false) } />
+              : <ArrowUp onClick={ () => setIsCollapsed(true) } /> }
             {/* TODO unsubscribe button? */}
           </div>
         </div>
