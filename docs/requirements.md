@@ -1,70 +1,82 @@
 # Basic Functionality
 
-(bare minimum required for launch)
+_Bare minimum required for launch_
 
 - API and web app client
-    - designed to become cross-platform later
-    - platforms ranked by priority:
-        1. web app
-        2. PWA (as an easy compromise before actual native mobile apps)
-        3. mobile apps (not required for launch)
-    - NO desktop apps or browser extensions
-- account management
-    - account creation
-    - change email
-    - change password
-    - reset password (account recovery when locked out)
-- add RSS feed by link
-- podcast list
-    - display list of podcasts
-    - display podcast icon
-    - display podcast metadata (title, description, etc)
-- episode list
-    - display list of episodes
-    - display episode metadata (title, description, runtime, etc)
-    - indicate previously played episodes
-    - mark episode as played / not played
-- media playback
-    - show podcast icon
-    - show episode metadata
-    - pause, play, back, forward, and timeline
-    - remember playback position
-- all data synchronized across devices
+  - Designed to support future cross-platform development
+  - Platforms ranked by priority:
+    1. Web app
+    2. PWA (as a lightweight mobile solution pre-native apps)
+    3. Mobile apps (not required for launch)
+  - No desktop apps or browser extensions
+
+- Account management
+  - Account creation
+  - Change email
+  - Change password
+  - Reset password (account recovery if locked out)
+
+- Add RSS feed by link
+
+- Podcast list
+  - Display list of subscribed podcasts
+  - Show podcast icon
+  - Show podcast metadata (title, description, etc.)
+
+- Episode list
+  - Display list of episodes
+  - Show episode metadata (title, description, runtime, etc.)
+  - Indicate previously played episodes
+  - Mark episode as played or unplayed
+
+- Media playback
+  - Show podcast icon
+  - Show episode metadata
+  - Playback controls: play, pause, skip back/forward, and playback timeline
+  - Remember playback position
+
+- Sync all data across devices
+
+---
 
 # Advanced Functionality
 
-(likely to be implemented, but not for launch)
+_Likely to be implemented, but not required for launch_
 
 - OPML import
-- search for podcasts in subscriptions
-- import podcasts from another app
-- queueing system / "Up Next"
-- delete account
-- mfa
-- download episodes and offline playback
-- notifications when new episodes are released
-- social integration (share button)
+- Search within subscriptions
+- Import podcasts from another app
+- Queueing system / “Up Next”
+- Delete account
+- Multi-factor authentication (MFA)
+- Download episodes for offline playback
+- Notifications for new episode releases
+- Social integration (e.g., share button)
+
+---
 
 # Out of Scope Functionality
 
-(relevant, but not likely to be implemented)
+_Relevant, but unlikely to be implemented_
 
-- podcast playlists
-    - default "favorites" playlist with shortcut on episode playback
-    - custom playlists
-- podcast catalog
-    - discover podcasts from catalog (scraped from Apple? 3rd party API like listennotes.com?)
-        - list of top podcasts
-        - list of top podcasts by category
-        - recommended podcasts based on current subscriptions
-    - add podcasts from catalog
-    - search for podcasts in catalog
-- analytics for podcast hosts
-- public user profiles
-    - (optionally) show what individual users subscripe to
-    - (optionally) show what episodes individual users have heard
-    - user avatars
-    - user bios
-    - follow other users
-- podcast hosting
-    - download and rehost podcasts across CDN
+- Podcast playlists
+  - Default “Favorites” playlist with shortcut from episode playback
+  - Custom user-defined playlists
+
+- Podcast catalog
+  - Discover podcasts via third-party API (e.g., podchaser.com, listennotes.com)
+    - Top podcasts overall
+    - Top podcasts by category
+    - Personalized recommendations based on subscriptions
+  - Add podcasts from catalog
+  - Search for podcasts in catalog
+
+- Public user profiles
+  - (Optional) Show what podcasts a user subscribes to
+  - (Optional) Show what episodes a user has listened to
+  - User avatars
+  - User bios
+  - Follow other users
+
+- Podcast hosting
+  - Download and re-host podcast files across a CDN
