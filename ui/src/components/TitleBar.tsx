@@ -1,5 +1,5 @@
 import Cookies from "js-cookie";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import { postSignOut } from "@/api-service";
@@ -10,8 +10,27 @@ import "@/components/TitleBar.css";
 
 function TitleBar() {
   const navigate = useNavigate();
+  const dropdownRef = useRef<HTMLDivElement>(null);
   const [showDropdown, setShowDropdown] = useState(false);
   const { dispatch, state } = useRootContext();
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (!dropdownRef.current?.contains(event.target as Node)) {
+        setShowDropdown(false);
+      }
+    }
+
+    if (showDropdown) {
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showDropdown]);
 
   async function search() {
     // TODO
@@ -27,7 +46,7 @@ function TitleBar() {
 
   let actionButtons = (
     <div className="title-bar-item-row">
-      <Link className="title-bar-item mr-3" to={"/sign-up"}>Sign Up</Link>
+      <Link className="title-bar-item" to={"/sign-up"}>Sign Up</Link>
       <Link className="title-bar-item" to={"/sign-in"}>
         <button className="btn btn-pill">Sign In</button>
       </Link>
@@ -47,7 +66,7 @@ function TitleBar() {
             type="text"
           />
         </form>
-        <div className="title-bar-dropdown">
+        <div className="title-bar-dropdown" ref={ dropdownRef }>
           <button
             className="btn title-bar-account-btn"
             onClick={ () => setShowDropdown(!showDropdown) }>

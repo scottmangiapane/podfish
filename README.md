@@ -18,7 +18,7 @@ Getting started is easy. Just run:
 docker compose up
 ```
 
-Most changes will be automatically reapplied when developing locally, but some changes (ex: installing a node module) require a rebuild. Containers can be rebuilt like so:
+Most changes will be automatically reapplied when developing locally, but some changes (ex: installing a node module or changing the UI port) require a rebuild. Containers can be rebuilt like so:
 ```sh
 # Rebuilds both containers
 docker compose down && docker compose build --no-cache && docker compose up

@@ -57,7 +57,7 @@ export function postSignIn(email: string, password: string) {
 }
 
 export function postSignOut() {
-  return callApi<TSignIn>(null, '/api/v1/auth/sign-out', {
+  return callApi(null, '/api/v1/auth/sign-out', {
     method: 'POST'
   });
 }

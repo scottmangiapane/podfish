@@ -17,13 +17,13 @@
     background-color: transparent;
     border: var(--br);
     border-radius: 8px;
-    justify-content: center;
     display: flex;
+    justify-content: center;
 }
 
-.title-bar-dropdown {
-    position: relative;
-}
+.title-bar-account-btn:hover { background-color: rgba(0, 0, 0, 0.06); }
+
+.title-bar-dropdown { position: relative; }
 
 .title-bar-dropdown-content {
     background-color: white;
@@ -31,8 +31,7 @@
     border-radius: 8px;
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    padding: 16px;
+    padding: 8px 0;
     position: absolute;
     top: 48px;
     right: 0;
@@ -43,11 +42,12 @@
     background-color: transparent;
     color: var(--text-color);
     cursor: pointer;
+    padding: 8px 16px;
     text-decoration: none;
     white-space: nowrap;
 }
-
 .title-bar-dropdown-item:hover {
+    background-color: rgba(0, 0, 0, 0.06);
     color: var(--text-color);
     text-decoration: none;
 }
