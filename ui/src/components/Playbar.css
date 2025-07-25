@@ -19,7 +19,6 @@
 .playbar-metadata {
     align-items: center;
     display: flex;
-    flex-direction: row;
     gap: 16px;
     height: 100%;
 }

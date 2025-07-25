@@ -37,7 +37,6 @@
     .podcast-header {
         align-items: flex-start;
         display: flex;
-        flex-direction: row;
         gap: 16px;
         padding-bottom: 8px;
     }

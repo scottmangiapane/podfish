@@ -12,6 +12,52 @@
     z-index: 1000;
 }
 
+.title-bar-account-btn {
+    align-items: center;
+    background-color: transparent;
+    border: var(--br);
+    border-radius: 8px;
+    justify-content: center;
+    display: flex;
+}
+
+.title-bar-dropdown {
+    position: relative;
+}
+
+.title-bar-dropdown-content {
+    background-color: white;
+    border: var(--br);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 16px;
+    position: absolute;
+    top: 48px;
+    right: 0;
+    z-index: 100;
+}
+
+.title-bar-dropdown-item {
+    background-color: transparent;
+    color: var(--text-color);
+    cursor: pointer;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.title-bar-dropdown-item:hover {
+    color: var(--text-color);
+    text-decoration: none;
+}
+
 .title-bar-item > * { white-space: nowrap; }
 
-.title-bar-logo { height: 100%; width: 50px; }
+.title-bar-item-row {
+    align-items: center;
+    display: flex;
+    gap: 16px;
+}
+
+.title-bar-logo { height: 100%; width: 48px; }

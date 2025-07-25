@@ -3,7 +3,6 @@
 .episode-header {
     align-items: center;
     display: flex;
-    flex-direction: row;
     gap: 16px;
 }
 
@@ -16,7 +15,6 @@
 
 .episode-subtext {
     display: flex;
-    flex-direction: row;
     gap: 8px;
 }
 

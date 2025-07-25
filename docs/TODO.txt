@@ -23,8 +23,9 @@ UI
     - Not possible? without giving up live reloading. data volume is immutable after initial build
     - Explain in README
 - Recursive custom error page (ex: https://pod.scottmangiapane.com/podcasts/undefined)
-- Better UI indicator for when episode list has no more episodes ot is loading new episodes
+- Better UI indicator for when episode list has no more episodes or is loading new episodes
 - Zero state for if a podcast has no episodes (possibly due to parsing error)
+- Implement search
 
 OTHER
 

@@ -14,15 +14,21 @@ Podfish is a self-hostable podcast client. It lets you browse your favorite podc
 # How to Run
 
 Getting started is easy. Just run:
-```
+```sh
 docker compose up
 ```
 
 Most changes will be automatically reapplied when developing locally, but some changes (ex: installing a node module) require a rebuild. Containers can be rebuilt like so:
-```
+```sh
+# Rebuilds both containers
+docker compose down && docker compose build --no-cache && docker compose up
+
+# Rebuilds the API
+docker compose down && docker compose build --no-cache api && docker compose up
+
+# Rebuilds the UI
 docker compose down && docker compose build --no-cache ui && docker compose up
 ```
-Backend changes work the same way but with `api` instead of `ui`.
 
 Common settings such as the environment (dev/prod), ports, keys, and more can be set in the `.env` file.
 

@@ -70,9 +70,12 @@ button, h1, h2, h3, h4, h5, h6, input, label, p { color: var(--text-color); }
 /* prevents page from being dragged while slider is used on mobile */
 body { overflow-x: hidden; }
 
-button, input[type=email], input[type=password], input[type=url] { padding: 8px; }
+button, input[type=email], input[type=password], input[type=text], input[type=url] {
+    height: 40px;
+    padding: 8px;
+}
 
-input[type=email], input[type=password], input[type=url] {
+input[type=email], input[type=password], input[type=text], input[type=url] {
     border: var(--br);
     border-radius: 8px;
 }

@@ -71,19 +71,19 @@ function Playbar() {
       <div className="center flex-1_5">
         <div className="playbar-symbol-group">
           <Replay10
-            onClick={ () => { dispatch({
+            onClick={ () => dispatch({
               type: 'AUDIO_SKIP',
               data: Math.max(0, (state.nowPlaying?.position?.currentTime || 0) - 10)
-            }); } } />
+            }) } />
           { simpleControls }
           <Forward30
-            onClick={ () => { dispatch({
+            onClick={ () => dispatch({
               type: 'AUDIO_SKIP',
               data: Math.min(
                 state.nowPlaying?.position?.realDuration || 0,
                 (state.nowPlaying?.position?.currentTime || 0) + 30
               )
-            }); } } />
+            }) } />
         </div>
         { slider }
       </div>
