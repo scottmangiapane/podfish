@@ -3,12 +3,12 @@ import { useState } from "react";
 import "@/components/Cover.css";
 
 interface TCoverProps {
-  className?: string;
   color: string;
   src: string;
+  style?: React.CSSProperties;
 }
 
-function Cover({ className, color, src }: TCoverProps) {
+function Cover({ color, src, style }: TCoverProps) {
   const [isLoaded, setIsLoaded] = useState(false);
 
   function onLoad() {
@@ -17,12 +17,12 @@ function Cover({ className, color, src }: TCoverProps) {
 
   return (
     <div
-      className={ className }
       style={{
         aspectRatio: 1,
         backgroundColor: color,
         display: "inline-block",
         position: "relative",
+        ...style
       }}>
       {!isLoaded && (
         <div className="cover-placeholder" />

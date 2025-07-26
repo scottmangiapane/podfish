@@ -33,7 +33,7 @@
 }
 
 .slider-bar-bg {
-    background-color: rgba(0, 0, 0, 0.1);
+    background-color: var(--bg-color-tint);
     border-radius: 9999px;
     height: var(--bar-size);
     top: var(--bar-padding);

@@ -21,7 +21,7 @@
     justify-content: center;
 }
 
-.title-bar-account-btn:hover { background-color: rgba(0, 0, 0, 0.06); }
+.title-bar-account-btn:hover { background-color: rgba(0, 0, 0, 0.04); }
 
 .title-bar-dropdown { position: relative; }
 
@@ -47,7 +47,7 @@
     white-space: nowrap;
 }
 .title-bar-dropdown-item:hover {
-    background-color: rgba(0, 0, 0, 0.06);
+    background-color: rgba(0, 0, 0, 0.04);
     color: var(--text-color);
     text-decoration: none;
 }

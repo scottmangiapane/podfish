@@ -5,10 +5,9 @@ import { useImmer } from "use-immer";
 
 import { getEpisodes, getSubscription } from "@/api-service";
 import { useAppContext } from "@/contexts/AppContext";
+import Collapsable from "@/components/Collapsable";
 import Cover from "@/components/Cover";
 import Episode from "@/podcast/Episode";
-import ArrowDown from "@/symbols/ArrowDown";
-import ArrowUp from "@/symbols/ArrowUp";
 import type { TEpisodePosition, TPodcast } from "@/types";
 
 import "@/podcast/Podcast.css";
@@ -21,7 +20,6 @@ function Podcast() {
   const [episodes, updateEpisodes] = useImmer(new Map<string, TEpisodePosition>);
   const [beforeId, setBeforeId] = useState<string | undefined>();
   const [hasMoreEpisodes, setHasMoreEpisodes] = useState(true);
-  const [isCollapsed, setIsCollapsed] = useState(true);
   const [isLoadingEpisodes, setIsLoadingEpisodes] = useState(false);
   const [podcast, setPodcast] = useState<TPodcast | null>(null);
 
@@ -101,7 +99,7 @@ function Podcast() {
     );
   }
 
-  const cleanDescription = sanitizeHtml(podcast.description, {
+  const descriptionClean = sanitizeHtml(podcast.description, {
     allowedTags: [],
     allowedAttributes: {},
   });
@@ -111,17 +109,18 @@ function Podcast() {
       <div className="podcast-split-left">
         <div className="podcast-header">
           <Cover
-            className="podcast-cover"
             color={ podcast.color }
-            src={ `/file/${ podcast.imageId }-lg.jpeg` } />
+            src={ `/file/${ podcast.imageId }-lg.jpeg` }
+            style={{
+              borderRadius: "8px",
+              boxShadow: "rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, "
+                + "rgba(60, 64, 67, 0.15) 0px 1px 3px 1px",
+              overflow: "hidden",
+              width: "100%"
+            }} />
           <div className="break-word">
             <h3 className="break-word podcast-title">{ podcast.title }</h3>
-            <p className={ "break-word " + (isCollapsed && "truncate-l truncate-6l") }>
-              { cleanDescription }
-            </p>
-            { isCollapsed
-              ? <ArrowDown onClick={ () => setIsCollapsed(false) } />
-              : <ArrowUp onClick={ () => setIsCollapsed(true) } /> }
+            <Collapsable lines={ 6 } text={ descriptionClean } />
             {/* TODO unsubscribe button? */}
           </div>
         </div>

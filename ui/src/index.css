@@ -5,6 +5,7 @@
     --accent-color-light: #64b5f6;
     --accent-color-dark: #1976d2;
     --bg-color: white;
+    --bg-color-tint: #e0e0e0;
     --link-color: #2e8dd0;
     --text-color: #424242;
     --text-color-dark: black;
@@ -15,7 +16,7 @@
 }
 
 :root {
-    --br: 1px solid rgba(0, 0, 0, 0.2);
+    --br: 1px solid var(--bg-color-tint);
     --playbar-height: 96px;
     --title-bar-height: 64px;
 }
@@ -192,19 +193,24 @@ input[type=email], input[type=password], input[type=text], input[type=url] {
     white-space: nowrap;
 }
 
-/* Cross platform line truncation, no ellipses */
-.truncate-l { overflow-y: hidden; }
-.truncate-3l { max-height: 3lh; }
-.truncate-3l { -webkit-line-clamp: 3; }
-
-/* Ellipses for the browsers that support it */
 .truncate-l {
     display: -webkit-box;
+    overflow-y: hidden;
     text-overflow: ellipsis;
     -webkit-box-orient: vertical;
 }
-.truncate-6l { max-height: 6lh; }
-.truncate-6l { -webkit-line-clamp: 6; }
+
+.truncate-3l {
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    max-height: 3lh;
+}
+
+.truncate-6l {
+    -webkit-line-clamp: 6;
+    line-clamp: 6;
+    max-height: 6lh;
+}
 
 .uncolored, .uncolored:hover { color: var(--text-color); }
 

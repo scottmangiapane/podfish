@@ -1,11 +1,9 @@
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import sanitizeHtml from "sanitize-html";
 
 import { putNowPlaying } from "@/api-service";
 import { useAppContext } from '@/contexts/AppContext';
-import ArrowDown from "@/symbols/ArrowDown";
-import ArrowUp from "@/symbols/ArrowUp";
+import Collapsable from "@/components/Collapsable";
 import PlayCircle from "@/symbols/PlayCircle";
 import PauseCircle from "@/symbols/PauseCircle";
 import type { TEpisode, TPodcast, TPosition } from "@/types";
@@ -21,14 +19,6 @@ interface TEpisodeProps {
 function Episode({ episode, podcast, position }: TEpisodeProps) {
   const { dispatch, state } = useAppContext();
   const navigate = useNavigate();
-  const [isCollapsed, setIsCollapsed] = useState(true);
-
-  function cleanHtml(text: string) {
-    return sanitizeHtml(text, {
-      allowedTags: [],
-      allowedAttributes: {},
-    })
-  }
 
   function formatDuration(seconds: number) {
     seconds = Math.floor(seconds);
@@ -75,6 +65,11 @@ function Episode({ episode, podcast, position }: TEpisodeProps) {
     status = <span className="episode-status-bold">{ formatDuration(seconds) } left</span>
   }
 
+  const descriptionClean = sanitizeHtml(episode.description, {
+    allowedTags: [],
+    allowedAttributes: {},
+  });
+
   return (
     <>
       <div className="episode-header mb-2">
@@ -89,12 +84,7 @@ function Episode({ episode, podcast, position }: TEpisodeProps) {
         </div>
       </div>
       <div className="episode-content">
-        <p className={ "break-word " + (isCollapsed && "truncate-l truncate-3l") }>
-          { cleanHtml(episode.description) }
-        </p>
-        { isCollapsed
-          ? <ArrowDown onClick={ () => setIsCollapsed(false) } />
-          : <ArrowUp onClick={ () => setIsCollapsed(true) } /> }
+        <Collapsable lines={ 3 } text={ descriptionClean } />
       </div>
     </>
   );

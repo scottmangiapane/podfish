@@ -14,8 +14,6 @@
 
 .playbar > * { min-width: 0; }
 
-.playbar-cover { height: 70%; }
-
 .playbar-metadata {
     align-items: center;
     display: flex;

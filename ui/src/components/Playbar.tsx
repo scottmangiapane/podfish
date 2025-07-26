@@ -102,9 +102,9 @@ function Playbar() {
       { rootState.isMobile && slider }
       <div className="flex-1 playbar-metadata">
         <Cover
-          className="playbar-cover"
           color={ state.nowPlaying.podcast.color }
-          src={ `/file/${ state.nowPlaying.podcast.imageId }-sm.jpeg`} />
+          src={ `/file/${ state.nowPlaying.podcast.imageId }-sm.jpeg`}
+          style={{ height: "70%" }} />
         <div className="playbar-metadata-text">
           <p className="truncate">{ episodeTitle }</p>
           <p className="text-light truncate">{ podcastTitle }</p>
