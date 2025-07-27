@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type ReactElement } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import sanitizeHtml from "sanitize-html";
 import { useImmer } from "use-immer";
 
@@ -21,35 +21,18 @@ function Podcast() {
   const [beforeId, setBeforeId] = useState<string | undefined>();
   const [hasMoreEpisodes, setHasMoreEpisodes] = useState(true);
   const [isLoadingEpisodes, setIsLoadingEpisodes] = useState(false);
+  const [error, setError] = useState<number>(0);
   const [podcast, setPodcast] = useState<TPodcast | null>(null);
 
-  function loadEpisodes() {
-    if (isLoadingEpisodes || !hasMoreEpisodes) {
-      return;
-    }
-    setIsLoadingEpisodes(true);
-    getEpisodes(navigate, podcastId!, beforeId).then((res) => {
-      if (res.ok && res.data) {
-        if (res.data.length) {
-          updateEpisodes((draft) => {
-            res.data!.forEach((episode) => draft.set(episode.episode.episodeId, episode));
-          });
-          setBeforeId(res.data.at(-1)?.episode?.episodeId);
-        } else {
-          setHasMoreEpisodes(false);
-        }
-      }
-      setIsLoadingEpisodes(false);
-    });
-  }
-
   useEffect(() => {
-    loadEpisodes();
     getSubscription(navigate, podcastId!).then((res) => {
-      if (res.ok && res.data) {
-        setPodcast(res.data);
+      if (!res.ok || !res.data) {
+        setError(res.status);
+        return;
       }
+      setPodcast(res.data);
     });
+    loadEpisodes();
   }, []);
 
   useEffect(() => {
@@ -85,6 +68,38 @@ function Podcast() {
       });
     }
   }, [state.nowPlaying?.position]);
+
+  function loadEpisodes() {
+    if (isLoadingEpisodes || !hasMoreEpisodes) {
+      return;
+    }
+    setIsLoadingEpisodes(true);
+    getEpisodes(navigate, podcastId!, beforeId).then((res) => {
+      if (res.ok && res.data) {
+        if (res.data.length) {
+          updateEpisodes((draft) => {
+            res.data!.forEach((episode) => draft.set(episode.episode.episodeId, episode));
+          });
+          setBeforeId(res.data.at(-1)?.episode?.episodeId);
+        } else {
+          setHasMoreEpisodes(false);
+        }
+      }
+      setIsLoadingEpisodes(false);
+    });
+  }
+
+  if (error) {
+    return (
+      <>
+        <h1>{ error } Error</h1>
+        <p>Podcast does not exist or may have been removed.</p>
+        <Link to={"/"}>
+          <button className="btn btn-pill mt-3">Home</button>
+        </Link>
+      </>
+    );
+  }
 
   if (!podcast) {
     return null;

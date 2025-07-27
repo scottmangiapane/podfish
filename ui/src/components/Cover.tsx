@@ -20,7 +20,7 @@ function Cover({ color, src, style }: TCoverProps) {
       style={{
         aspectRatio: 1,
         backgroundColor: color,
-        display: "inline-block",
+        display: "block",
         position: "relative",
         ...style
       }}>
