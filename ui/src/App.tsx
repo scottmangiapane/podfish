@@ -26,14 +26,31 @@ function AppWithContext() {
     audio.removeAttribute("src");
     audio.load(); // TODO should I also load before play/pause?
 
+    const handleLoadStart = () => dispatch({ type: 'SET_IS_LOADING', data: true });
+    const handleCanPlay = () => dispatch({ type: 'SET_IS_LOADING', data: false });
+    const handlePlaying = () => dispatch({ type: 'SET_IS_LOADING', data: false });
+    const handleWaiting = () => dispatch({ type: 'SET_IS_LOADING', data: true });
+
+    audio.addEventListener("loadstart", handleLoadStart);
+    audio.addEventListener("canplay", handleCanPlay);
+    audio.addEventListener("playing", handlePlaying);
+    audio.addEventListener("waiting", handleWaiting);
+
     const playWhenReady = () => audio.play();
     if (state.nowPlaying?.episode.url) {
       audio.src = state.nowPlaying?.episode.url;
       if (state.hasUserInteracted) {
         audio.addEventListener("canplay", playWhenReady, { once: true });
-        return () => audio.removeEventListener("canplay", playWhenReady);
       }
     }
+
+    return () => {
+      audio.removeEventListener("loadstart", handleLoadStart);
+      audio.removeEventListener("canplay", handleCanPlay);
+      audio.removeEventListener("playing", handlePlaying);
+      audio.removeEventListener("waiting", handleWaiting);
+      audio.removeEventListener("canplay", playWhenReady);
+    };
   }, [state.nowPlaying?.episode.url]);
 
   useEffect(() => {

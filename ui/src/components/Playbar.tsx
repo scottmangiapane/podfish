@@ -2,6 +2,7 @@ import { useAppContext } from "@/contexts/AppContext";
 import { useRootContext } from "@/contexts/RootContext";
 import Cover from "@/components/Cover";
 import Slider from "@/components/Slider";
+import Spinner from "@/components/Spinner";
 import Forward30 from "@/symbols/Forward30";
 import PauseCircle from "@/symbols/PauseCircle";
 import PlayCircle from "@/symbols/PlayCircle";
@@ -64,6 +65,9 @@ function Playbar() {
         fill="var(--theme-color)"
         size="lg" />
     );
+  }
+  if (state.isLoading) {
+    simpleControls = <Spinner />;
   }
 
   const fullControls = (

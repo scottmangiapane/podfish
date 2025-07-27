@@ -15,6 +15,7 @@ type TAction =
   | { type: 'AUDIO_SKIP'; data: number | null; }
   | { type: 'AUDIO_TIME_UPDATE'; data: number; }
   | { type: 'AUDIO_TOGGLE'; }
+  | { type: 'SET_IS_LOADING'; data: boolean; }
   | { type: 'SET_NOW_PLAYING'; data: TNowPlaying | null; }
   | { type: 'SET_HAS_USER_INTERACTED'; }
   | { type: 'SYNC_POSITION'; data: { currentTime: number; realDuration: number; }; };
@@ -24,6 +25,7 @@ interface TState {
     isPaused: boolean;
     requestedTime: number | null;
   };
+  isLoading: boolean;
   hasUserInteracted: boolean;
   nowPlaying: TNowPlaying | null;
   positionLastSynced: number | null;
@@ -37,6 +39,7 @@ export function AppProvider({ children }: any) {
       isPaused: true,
       requestedTime: null,
     },
+    isLoading: false,
     hasUserInteracted: false,
     nowPlaying: null,
     positionLastSynced: null,
@@ -75,6 +78,9 @@ export function AppProvider({ children }: any) {
         break;
       case 'AUDIO_TOGGLE':
         state.audio.isPaused = !state.audio.isPaused;
+        break;
+      case 'SET_IS_LOADING':
+        state.isLoading = action.data;
         break;
       case 'SET_NOW_PLAYING':
         if (action.data === null) {

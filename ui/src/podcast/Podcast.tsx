@@ -143,10 +143,10 @@ function Podcast() {
       <div className="podcast-split-right">
         <div className="podcast-list">
           { episodeList }
-          {/* TODO make these more aesthetic */}
-          { isLoadingEpisodes && <p>Loading more episodes...</p> }
-          { !hasMoreEpisodes && <p>No more episodes</p> }
-          <div ref={ containerRef } style={{ height: 0 }} />
+          <div ref={ containerRef }>
+            { isLoadingEpisodes && <p>Loading more episodes...</p> }
+            { !hasMoreEpisodes && <p>No more episodes.</p> }
+          </div>
         </div>
       </div>
     </div>

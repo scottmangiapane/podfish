@@ -20,12 +20,8 @@ API
 UI
 
 - Implement account management
-- Indicate when audio is loading
 - Improve error handling for sign up / sign in
 - Fix inconsistent play icons and cover image sizes on mobile
-- Improve indicator for when episode list is empty or loading more episodes
-- Add zero state for podcasts with no episodes (ex: due to parsing error)
-- Show error page when podcast is not found (ex: `/podcasts/undefined`)
 - Implement search functionality
 - Ensure Docker reflects added/removed Node dependencies (may require rethinking `.dockerignore` or volumes; live reload limitations?)
 

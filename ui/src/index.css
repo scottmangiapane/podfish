@@ -183,7 +183,10 @@ input[type=email], input[type=password], input[type=text], input[type=url] {
 
 .root-content { padding-top: calc(32px + var(--title-bar-height)); }
 
-.symbol { user-select: none; }
+.symbol {
+    flex-shrink: 0;
+    user-select: none;
+}
 
 .text-light { color: var(--text-color-light); }
 
