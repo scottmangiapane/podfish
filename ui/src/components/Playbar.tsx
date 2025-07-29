@@ -67,7 +67,7 @@ function Playbar() {
     );
   }
   if (state.isLoading) {
-    simpleControls = <Spinner />;
+    simpleControls = <Spinner margin="4px" size="40px" />;
   }
 
   const fullControls = (

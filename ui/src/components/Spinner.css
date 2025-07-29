@@ -1,8 +1,15 @@
 .spinner {
     animation: spin 1s linear infinite;
-    border: 6px solid #eeeeee;
+    border-color: #eeeeee;
+    border-style: solid;
     border-radius: 50%;
-    border-top: 6px solid #2196f3;
+    border-top-color: #2196f3;
+    border-top-width: 6px;
+    border-width: 6px;
+    margin: 0;
+    padding: 0;
+    /* height: 48px; */
+    /* width: 48px; */
 }
 
 .wrapper {
