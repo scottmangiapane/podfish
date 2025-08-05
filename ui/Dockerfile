@@ -6,8 +6,7 @@
 
 FROM node as build
 
-WORKDIR /podfish-src
-
+WORKDIR /app
 COPY package*.json ./
 RUN npm i
 
@@ -21,7 +20,7 @@ RUN npm run build
 
 FROM build as dev
 
-WORKDIR /podfish-src
+WORKDIR /app
 
 EXPOSE ${UI_PORT}
 
@@ -34,6 +33,6 @@ ENTRYPOINT [ "npm", "run", "dev" ]
 FROM nginx as prod
 
 COPY nginx.conf /etc/nginx/templates/podfish.conf.template
-COPY --from=build /podfish-src/dist /usr/share/nginx/html
+COPY --from=build /app/dist /usr/share/nginx/html
 
 EXPOSE ${UI_PORT}

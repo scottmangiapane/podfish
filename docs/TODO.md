@@ -7,6 +7,8 @@ SECURITY
 
 API
 
+- Replace `fmt.Println` with `log.Println`
+- Use `etag` / `last_modified` headers for conditional GETs to save bandwidth
 - Implement account management
 - Use actual migration files instead of GORM's auto-migrate
 - Refresh JWT token as needed
@@ -19,6 +21,7 @@ API
 
 UI
 
+- Add a loading animation while podcast is being added
 - Implement account management
 - Improve error handling for sign up / sign in
 - Fix inconsistent play icons and cover image sizes on mobile

@@ -4,13 +4,13 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"podfish/global"
-	"podfish/middleware"
-	"podfish/models"
 	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+	"github.com/scottmangiapane/podfish/api/middleware"
+	"github.com/scottmangiapane/podfish/shared"
+	"github.com/scottmangiapane/podfish/shared/models"
 	"gorm.io/gorm"
 )
 
@@ -19,7 +19,7 @@ import (
 // @Success 200 {object} models.EpisodePodcastPosition
 func GetNowPlaying(c *gin.Context) {
 	var nowPlaying models.NowPlaying
-	result := global.DB.
+	result := shared.DB.
 		Preload("Position.Episode.Podcast").
 		First(&nowPlaying, &models.NowPlaying{PositionUserID: middleware.GetUser(c)})
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
@@ -54,7 +54,7 @@ func PutNowPlaying(c *gin.Context) {
 		return
 	}
 
-	result := global.DB.Save(&models.Position{
+	result := shared.DB.Save(&models.Position{
 		UserID:       middleware.GetUser(c),
 		EpisodeID:    req.EpisodeID,
 		LastListened: time.Now(),
@@ -65,7 +65,7 @@ func PutNowPlaying(c *gin.Context) {
 		return
 	}
 
-	result = global.DB.Save(&models.NowPlaying{
+	result = shared.DB.Save(&models.NowPlaying{
 		PositionUserID:    middleware.GetUser(c),
 		PositionEpisodeID: req.EpisodeID,
 	})
@@ -75,7 +75,7 @@ func PutNowPlaying(c *gin.Context) {
 		return
 	}
 	var nowPlaying models.NowPlaying
-	result = global.DB.
+	result = shared.DB.
 		Preload("Position.Episode.Podcast").
 		First(&nowPlaying, &models.NowPlaying{PositionUserID: middleware.GetUser(c)})
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
@@ -100,6 +100,6 @@ func PutNowPlaying(c *gin.Context) {
 // @Router /now-playing [delete]
 // @Success 204
 func DeleteNowPlaying(c *gin.Context) {
-	global.DB.Delete(models.NowPlaying{PositionUserID: middleware.GetUser(c)})
+	shared.DB.Delete(models.NowPlaying{PositionUserID: middleware.GetUser(c)})
 	c.JSON(http.StatusNoContent, nil)
 }

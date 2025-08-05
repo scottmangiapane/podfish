@@ -3,11 +3,12 @@ package controllers
 import (
 	"fmt"
 	"net/http"
-	"podfish/global"
-	"podfish/middleware"
-	"podfish/models"
 
 	"github.com/gin-gonic/gin"
+	"github.com/scottmangiapane/podfish/api/global"
+	"github.com/scottmangiapane/podfish/api/middleware"
+	"github.com/scottmangiapane/podfish/shared"
+	"github.com/scottmangiapane/podfish/shared/models"
 )
 
 // TODO for testing purposes only, remove this or lock behind admin creds
@@ -17,7 +18,7 @@ import (
 // @Success 204
 func PostSync(c *gin.Context) {
 	var subscriptions []models.Subscription
-	result := global.DB.Preload("Podcast").Find(&subscriptions, models.Subscription{
+	result := shared.DB.Preload("Podcast").Find(&subscriptions, models.Subscription{
 		UserID: middleware.GetUser(c),
 	})
 	if result.Error != nil {
@@ -26,8 +27,8 @@ func PostSync(c *gin.Context) {
 		return
 	}
 
-	for _, s := range subscriptions {
-		global.Sync(&s.Podcast)
+	for _, subscription := range subscriptions {
+		global.Sync(&subscription.Podcast)
 	}
 
 	c.JSON(http.StatusNoContent, nil)
@@ -39,7 +40,7 @@ func PostSync(c *gin.Context) {
 // @Success 204
 func PostSyncWithId(c *gin.Context) {
 	var subscriptions []models.Subscription
-	result := global.DB.Preload("Podcast").Find(&subscriptions, models.Subscription{
+	result := shared.DB.Preload("Podcast").Find(&subscriptions, models.Subscription{
 		UserID: middleware.GetUser(c),
 	})
 	if result.Error != nil {
@@ -48,9 +49,9 @@ func PostSyncWithId(c *gin.Context) {
 		return
 	}
 
-	for _, s := range subscriptions {
-		if s.PodcastID.String() == c.Param("id") {
-			global.Sync(&s.Podcast)
+	for _, subscription := range subscriptions {
+		if subscription.PodcastID.String() == c.Param("id") {
+			global.Sync(&subscription.Podcast)
 		}
 	}
 

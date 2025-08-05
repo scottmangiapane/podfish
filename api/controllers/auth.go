@@ -5,14 +5,14 @@ import (
 	"fmt"
 	"net/http"
 	"os"
-	"podfish/global"
-	"podfish/middleware"
-	"podfish/models"
 	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/scottmangiapane/podfish/api/middleware"
+	"github.com/scottmangiapane/podfish/shared"
+	"github.com/scottmangiapane/podfish/shared/models"
 	"gorm.io/gorm"
 )
 
@@ -46,7 +46,7 @@ func PostSignIn(c *gin.Context) {
 	}
 
 	var user models.User
-	result := global.DB.First(&user, &models.User{Email: req.Email})
+	result := shared.DB.First(&user, &models.User{Email: req.Email})
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
 		middleware.Abort(c, http.StatusNotFound, "No user found with that email")
 		return
@@ -101,14 +101,14 @@ func PostSignUp(c *gin.Context) {
 		return
 	}
 
-	result := global.DB.Where(&models.User{Email: req.Email}).First(&models.User{})
+	result := shared.DB.Where(&models.User{Email: req.Email}).First(&models.User{})
 	if !errors.Is(result.Error, gorm.ErrRecordNotFound) {
 		middleware.Abort(c, http.StatusConflict, "Email is already in use")
 		return
 	}
 
 	user := models.User{Email: req.Email, Password: req.Password}
-	if result := global.DB.Create(&user); result.Error != nil {
+	if result := shared.DB.Create(&user); result.Error != nil {
 		fmt.Println(result.Error)
 		middleware.Abort(c, http.StatusInternalServerError, "Failed to create user")
 		return

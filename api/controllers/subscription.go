@@ -5,13 +5,14 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"podfish/global"
-	"podfish/middleware"
-	"podfish/models"
 	"sort"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+	"github.com/scottmangiapane/podfish/api/global"
+	"github.com/scottmangiapane/podfish/api/middleware"
+	"github.com/scottmangiapane/podfish/shared"
+	"github.com/scottmangiapane/podfish/shared/models"
 	"gorm.io/gorm"
 )
 
@@ -20,7 +21,7 @@ import (
 // @Success 200 {object} []models.Podcast
 func GetSubscriptions(c *gin.Context) {
 	var subscriptions []models.Subscription
-	result := global.DB.
+	result := shared.DB.
 		Preload("Podcast").
 		Find(&subscriptions, models.Subscription{
 			UserID: middleware.GetUser(c),
@@ -32,8 +33,8 @@ func GetSubscriptions(c *gin.Context) {
 	}
 
 	podcasts := []models.Podcast{}
-	for _, s := range subscriptions {
-		podcasts = append(podcasts, s.Podcast)
+	for _, subscription := range subscriptions {
+		podcasts = append(podcasts, subscription.Podcast)
 	}
 	sort.Slice(podcasts, func(i, j int) bool {
 		if podcasts[i].Title != podcasts[j].Title {
@@ -60,7 +61,7 @@ func PostSubscriptions(c *gin.Context) {
 	}
 
 	var podcast models.Podcast
-	result := global.DB.FirstOrCreate(&podcast, models.Podcast{RSS: req.RSS})
+	result := shared.DB.FirstOrCreate(&podcast, models.Podcast{RSS: req.RSS})
 	if result.Error != nil {
 		fmt.Println(result.Error)
 		middleware.Abort(c, http.StatusInternalServerError, "Failed to create podcast")
@@ -68,7 +69,7 @@ func PostSubscriptions(c *gin.Context) {
 	}
 
 	var subscription models.Subscription
-	result = global.DB.FirstOrCreate(&subscription, models.Subscription{
+	result = shared.DB.FirstOrCreate(&subscription, models.Subscription{
 		UserID:    middleware.GetUser(c),
 		PodcastID: podcast.PodcastID,
 	})
@@ -100,7 +101,7 @@ func GetSubscription(c *gin.Context) {
 	}
 
 	var subscription models.Subscription
-	result := global.DB.Preload("Podcast").First(&subscription, models.Subscription{
+	result := shared.DB.Preload("Podcast").First(&subscription, models.Subscription{
 		UserID:    middleware.GetUser(c),
 		PodcastID: id,
 	})
@@ -128,7 +129,7 @@ func DeleteSubscription(c *gin.Context) {
 		return
 	}
 
-	result := global.DB.Delete(models.Subscription{
+	result := shared.DB.Delete(models.Subscription{
 		UserID:    middleware.GetUser(c),
 		PodcastID: id,
 	})

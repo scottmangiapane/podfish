@@ -4,11 +4,12 @@ import (
 	"encoding/xml"
 	"fmt"
 	"os"
-	"podfish/models"
 	"strconv"
 	"strings"
 	"time"
 
+	"github.com/scottmangiapane/podfish/shared"
+	"github.com/scottmangiapane/podfish/shared/models"
 	"gorm.io/gorm/clause"
 )
 
@@ -72,7 +73,7 @@ func Sync(p *models.Podcast) error {
 	p.Title = strings.TrimSpace(rss.Channel.Title)
 	p.Description = strings.TrimSpace(rss.Channel.Description)
 
-	result := DB.Save(p)
+	result := shared.DB.Save(p)
 	if result.Error != nil {
 		fmt.Printf("failed to save podcast for RSS feed %s\n", p.RSS)
 		fmt.Println(result.Error)
@@ -112,7 +113,7 @@ func Sync(p *models.Podcast) error {
 		})
 	}
 
-	result = DB.Clauses(clause.OnConflict{
+	result = shared.DB.Clauses(clause.OnConflict{
 		Columns:   []clause.Column{{Name: "podcast_id"}, {Name: "item_id"}},
 		DoUpdates: clause.AssignmentColumns([]string{"title", "description", "date", "duration", "url"}),
 	}).Create(&episodes)

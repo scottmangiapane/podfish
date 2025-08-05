@@ -1,10 +1,10 @@
 package models
 
 import (
-	"podfish/models/templates"
 	"time"
 
 	"github.com/google/uuid"
+	"github.com/scottmangiapane/podfish/shared/models/templates"
 )
 
 type Episode struct {

@@ -9,8 +9,7 @@ FROM golang as build
 ENV CGO_ENABLED=0 \
     GOOS=linux
 
-RUN go install github.com/githubnemo/CompileDaemon@latest && \
-    go install github.com/swaggo/swag/cmd/swag@latest
+RUN go install github.com/githubnemo/CompileDaemon@latest
 
 # Installing dependencies early reduces future build times due to layer caching.
 WORKDIR /app
@@ -20,8 +19,8 @@ RUN go mod download && \
 
 COPY . .
 
-WORKDIR /app/api
-RUN swag init --parseDependency --parseInternal && go build -o /podfish-api
+WORKDIR /app/worker
+RUN go build -o /podfish-worker
 
 ################################
 # Dev stage                    #
@@ -29,16 +28,13 @@ RUN swag init --parseDependency --parseInternal && go build -o /podfish-api
 
 FROM build as dev
 
-WORKDIR /app/api
-
-EXPOSE ${API_PORT}
+WORKDIR /app/worker
 
 # If docker-compose with volume mounting is used on macOS before the `docs` folder exists,
 # CompileDaemon enters an infinite loop. `-polling=true` fixes it.
 ENTRYPOINT CompileDaemon \
-    -build="swag init --parseDependency --parseInternal && go build -o /podfish-api" \
-    -command="/podfish-api" \
-    -exclude-dir="./docs" \
+    -build="go build -o /podfish-worker" \
+    -command="/podfish-worker" \
     -polling=true
 
 ################################
@@ -47,8 +43,6 @@ ENTRYPOINT CompileDaemon \
 
 FROM alpine as prod
 
-COPY --from=build /podfish-api /podfish-api
+COPY --from=build /podfish-worker /podfish-worker
 
-EXPOSE ${API_PORT}
-
-ENTRYPOINT [ "/podfish-api" ]
+ENTRYPOINT [ "/podfish-worker" ]

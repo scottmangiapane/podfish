@@ -1,14 +1,15 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 	"os"
-	"podfish/controllers"
-	"podfish/docs"
-	"podfish/global"
-	"podfish/middleware"
 
 	"github.com/gin-gonic/gin"
+	"github.com/scottmangiapane/podfish/api/controllers"
+	"github.com/scottmangiapane/podfish/api/docs"
+	"github.com/scottmangiapane/podfish/api/middleware"
+	"github.com/scottmangiapane/podfish/shared"
 	swaggerfiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
@@ -19,7 +20,8 @@ import (
 // @license.name    GPL 3.0
 // @license.url     https://github.com/scottmangiapane/podfish/blob/master/LICENSE
 func main() {
-	global.InitDatabase()
+	fmt.Println("Starting API...")
+	shared.InitDatabase()
 
 	gin.ForceConsoleColor()
 	gin.SetMode(gin.ReleaseMode)

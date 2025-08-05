@@ -4,14 +4,14 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"podfish/global"
-	"podfish/middleware"
-	"podfish/models"
 	"strconv"
 	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+	"github.com/scottmangiapane/podfish/api/middleware"
+	"github.com/scottmangiapane/podfish/shared"
+	"github.com/scottmangiapane/podfish/shared/models"
 	"gorm.io/gorm"
 )
 
@@ -42,7 +42,7 @@ func GetEpisodes(c *gin.Context) {
 			return
 		}
 		beforeId = beforeParam
-		result := global.DB.First(&beforeEpisode, &models.Episode{EpisodeID: beforeId})
+		result := shared.DB.First(&beforeEpisode, &models.Episode{EpisodeID: beforeId})
 		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
 			middleware.Abort(c, http.StatusNotFound, "Before episode not found")
 			return
@@ -58,7 +58,7 @@ func GetEpisodes(c *gin.Context) {
 			return
 		}
 		afterId = afterParam
-		result := global.DB.First(&afterEpisode, &models.Episode{EpisodeID: afterId})
+		result := shared.DB.First(&afterEpisode, &models.Episode{EpisodeID: afterId})
 		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
 			middleware.Abort(c, http.StatusNotFound, "After episode not found")
 			return
@@ -74,7 +74,7 @@ func GetEpisodes(c *gin.Context) {
 		}
 		podcastId = podcastIdParam
 	}
-	query := global.DB.
+	query := shared.DB.
 		Table("episodes").
 		Joins("LEFT JOIN positions "+
 			"ON episodes.episode_id = positions.episode_id "+
@@ -117,7 +117,7 @@ func GetEpisode(c *gin.Context) {
 	}
 
 	var episode models.EpisodePosition
-	result := global.DB.
+	result := shared.DB.
 		Table("episodes").
 		Joins("LEFT JOIN positions "+
 			"ON episodes.episode_id = positions.episode_id "+
@@ -169,7 +169,7 @@ func PatchEpisodePosition(c *gin.Context) {
 		LastListened: time.Now(),
 		RealDuration: req.RealDuration,
 	}
-	result := global.DB.Save(&position)
+	result := shared.DB.Save(&position)
 	if result.Error != nil {
 		fmt.Println(result.Error)
 		middleware.Abort(c, http.StatusInternalServerError, "Failed to set episode position")

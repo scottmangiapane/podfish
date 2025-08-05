@@ -2,10 +2,10 @@ package models
 
 import (
 	"os"
-	"podfish/models/templates"
 	"strconv"
 
 	"github.com/google/uuid"
+	"github.com/scottmangiapane/podfish/shared/models/templates"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )

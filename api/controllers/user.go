@@ -2,9 +2,9 @@ package controllers
 
 import (
 	"net/http"
-	"podfish/middleware"
 
 	"github.com/gin-gonic/gin"
+	"github.com/scottmangiapane/podfish/api/middleware"
 )
 
 // @Tags users
