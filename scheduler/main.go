@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"log"
 	"os"
@@ -56,12 +55,11 @@ func run(client *asynq.Client, pollInterval time.Duration) {
 	log.Printf("Found %v podcasts in need of syncing", len(podcasts))
 
 	for _, podcast := range podcasts {
-		payload, err := json.Marshal(task.SyncPodcastTaskPayload{PodcastID: podcast.PodcastID})
+		task, err := task.NewSyncPodcastTask(podcast.PodcastID)
 		if err != nil {
 			log.Printf("Error creating sync task: %v", err)
 			continue
 		}
-		task := asynq.NewTask(task.TypeSyncPodcast, payload)
 
 		info, err := client.Enqueue(task)
 		if err != nil {
