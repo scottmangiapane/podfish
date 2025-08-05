@@ -9,7 +9,6 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
-	"github.com/scottmangiapane/podfish/api/global"
 	"github.com/scottmangiapane/podfish/api/middleware"
 	"github.com/scottmangiapane/podfish/shared"
 	"github.com/scottmangiapane/podfish/shared/models"
@@ -79,13 +78,14 @@ func PostSubscriptions(c *gin.Context) {
 		return
 	}
 
-	// TODO make this async, maybe with a "syncing..." indicator in UI
-	err := global.Sync(&podcast)
-	if err != nil {
-		log.Printf("Error syncing podcast: %v", err)
-		middleware.Abort(c, http.StatusInternalServerError, "Failed to sync podcast")
-		return
-	}
+	// TODO request immediate sync of podcast
+	// TODO show "syncing..." indicator in UI
+	// err := global.Sync(&podcast)
+	// if err != nil {
+	// 	log.Printf("Error syncing podcast: %v", err)
+	// 	middleware.Abort(c, http.StatusInternalServerError, "Failed to sync podcast")
+	// 	return
+	// }
 
 	c.JSON(http.StatusCreated, podcast)
 }

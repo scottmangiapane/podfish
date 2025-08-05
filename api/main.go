@@ -56,11 +56,6 @@ func main() {
 	authorized.GET("/subscriptions/:id", controllers.GetSubscription)
 	authorized.DELETE("/subscriptions/:id", controllers.DeleteSubscription)
 
-	// Sync
-	// TODO for testing purposes only, replace with background service
-	authorized.POST("/sync", controllers.PostSync)
-	authorized.POST("/sync/:id", controllers.PostSyncWithId)
-
 	// Users
 	authorized.PATCH("/users/:id/email", controllers.PatchUserEmail)
 	authorized.PATCH("/users/:id/password", controllers.PatchUserPassword)

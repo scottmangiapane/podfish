@@ -1,4 +1,4 @@
-package global
+package main
 
 import (
 	"encoding/xml"
@@ -9,6 +9,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/google/uuid"
 	"github.com/scottmangiapane/podfish/shared"
 	"github.com/scottmangiapane/podfish/shared/models"
 	"gorm.io/gorm/clause"
@@ -44,8 +45,17 @@ type Enclosure struct {
 	Type string `xml:"type,attr"`
 }
 
-func Sync(p *models.Podcast) error {
-	res, err := Fetch(p.RSS)
+func Sync(podcastId uuid.UUID) error {
+	var podcast models.Podcast
+	result := shared.DB.First(&podcast, models.Podcast{
+		PodcastID: podcastId,
+	})
+	if result.Error != nil {
+		log.Printf("Error getting podcast from DB: %v", result.Error)
+		return result.Error
+	}
+
+	res, err := Fetch(podcast.RSS)
 	if err != nil {
 		log.Printf("Error fetching RSS: %v", err)
 		return err
@@ -57,23 +67,24 @@ func Sync(p *models.Podcast) error {
 		return err
 	}
 
+	podcast.Title = strings.TrimSpace(rss.Channel.Title)
+	podcast.Description = strings.TrimSpace(rss.Channel.Description)
+
 	imageURL := strings.TrimSpace(rss.Channel.Image.URL)
 	if imageURL == "" {
 		imageURL = strings.TrimSpace(rss.Channel.Image.AltURL)
 	}
 
-	outputPathBase := fmt.Sprintf("%s/%s", os.Getenv("RSS_DATA_DIR"), p.ImageID)
+	outputPathBase := fmt.Sprintf("%s/%s", os.Getenv("RSS_DATA_DIR"), podcast.ImageID)
 	color, err := SanitizeAndSaveImage(imageURL, outputPathBase)
 	if err != nil {
-		log.Printf("Error writing image %v: %v", p.ImageID, err)
+		log.Printf("Error writing image %v: %v", podcast.ImageID, err)
 		return err
 	}
-	p.Color = ColorToHexString(color)
+	podcast.Color = ColorToHexString(color)
 
-	p.Title = strings.TrimSpace(rss.Channel.Title)
-	p.Description = strings.TrimSpace(rss.Channel.Description)
-
-	result := shared.DB.Save(p)
+	podcast.LastPolledAt = time.Now()
+	result = shared.DB.Save(podcast)
 	if result.Error != nil {
 		log.Printf("Error saving podcast in DB: %v", result.Error)
 		return result.Error
@@ -100,7 +111,7 @@ func Sync(p *models.Podcast) error {
 		}
 
 		episodes = append(episodes, models.Episode{
-			PodcastID:   p.PodcastID,
+			PodcastID:   podcast.PodcastID,
 			ItemID:      item.ID,
 			Title:       item.Title,
 			Description: item.Description,

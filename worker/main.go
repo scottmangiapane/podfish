@@ -38,7 +38,8 @@ func handler(ctx context.Context, t *asynq.Task) error {
 		if err := json.Unmarshal(t.Payload(), &p); err != nil {
 			return err
 		}
-		log.Printf("Sync podcast %v", p.PodcastID)
+		log.Printf("Syncing podcast %v", p.PodcastID)
+		Sync(p.PodcastID)
 
 	default:
 		return fmt.Errorf("unexpected task type: %s", t.Type())

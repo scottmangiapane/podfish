@@ -53,6 +53,8 @@ func run(client *asynq.Client, pollInterval time.Duration) {
 		return
 	}
 
+	log.Printf("Found %v podcasts in need of syncing", len(podcasts))
+
 	for _, podcast := range podcasts {
 		payload, err := json.Marshal(tasks.SyncTaskPayload{PodcastID: podcast.PodcastID})
 		if err != nil {
