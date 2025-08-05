@@ -47,20 +47,22 @@ func run(pollInterval time.Duration) {
 		Where("podcasts.last_polled_at < ?", cutoff).
 		Find(&podcasts)
 	if result.Error != nil {
-		log.Printf("Error querying database: %v", result.Error)
+		log.Printf("Error getting podcasts from DB: %v", result.Error)
 		return
 	}
 
 	for _, podcast := range podcasts {
 		payload, err := json.Marshal(SyncTaskPayload{PodcastID: podcast.PodcastID})
 		if err != nil {
-			log.Fatal(err)
+			log.Printf("Error creating sync task: %v", err)
+			continue
 		}
 		task := asynq.NewTask("podcast:sync", payload)
 
 		info, err := shared.Queue.Enqueue(task)
 		if err != nil {
-			log.Fatal(err)
+			log.Printf("Error enqueueing sync task: %v", err)
+			continue
 		}
 		log.Printf("Successfully enqueued sync task %v for podcast %v", info.ID, podcast.PodcastID)
 	}

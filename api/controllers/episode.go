@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"errors"
-	"fmt"
+	"log"
 	"net/http"
 	"strconv"
 	"time"
@@ -97,7 +97,7 @@ func GetEpisodes(c *gin.Context) {
 		Limit(limit).
 		Scan(&episodes)
 	if result.Error != nil {
-		fmt.Println(result.Error)
+		log.Printf("Error getting episodes from DB: %v", result.Error)
 		middleware.Abort(c, http.StatusInternalServerError, "Failed to get episodes")
 		return
 	}
@@ -126,7 +126,7 @@ func GetEpisode(c *gin.Context) {
 		Scan(&episode)
 
 	if result.Error != nil {
-		fmt.Println(result.Error)
+		log.Printf("Error getting episode from DB: %v", result.Error)
 		middleware.Abort(c, http.StatusInternalServerError, "Failed to get episode")
 		return
 	}
@@ -171,7 +171,7 @@ func PatchEpisodePosition(c *gin.Context) {
 	}
 	result := shared.DB.Save(&position)
 	if result.Error != nil {
-		fmt.Println(result.Error)
+		log.Printf("Error saving episode position in DB: %v", result.Error)
 		middleware.Abort(c, http.StatusInternalServerError, "Failed to set episode position")
 		return
 	}

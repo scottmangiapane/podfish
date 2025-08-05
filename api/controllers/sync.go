@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -22,7 +22,7 @@ func PostSync(c *gin.Context) {
 		UserID: middleware.GetUser(c),
 	})
 	if result.Error != nil {
-		fmt.Println(result.Error)
+		log.Printf("Error getting subscriptions from DB: %v", result.Error)
 		middleware.Abort(c, http.StatusInternalServerError, "Failed to sync")
 		return
 	}
@@ -39,12 +39,13 @@ func PostSync(c *gin.Context) {
 // @Param id path string true "Podcast ID"
 // @Success 204
 func PostSyncWithId(c *gin.Context) {
+	// TODO include id in DB call instead of filtering later
 	var subscriptions []models.Subscription
 	result := shared.DB.Preload("Podcast").Find(&subscriptions, models.Subscription{
 		UserID: middleware.GetUser(c),
 	})
 	if result.Error != nil {
-		fmt.Println(result.Error)
+		log.Printf("Error getting subscriptions from DB: %v", result.Error)
 		middleware.Abort(c, http.StatusInternalServerError, "Failed to sync")
 		return
 	}

@@ -3,7 +3,7 @@ package controllers
 import (
 	"bytes"
 	"errors"
-	"fmt"
+	"log"
 	"net/http"
 	"sort"
 
@@ -27,7 +27,7 @@ func GetSubscriptions(c *gin.Context) {
 			UserID: middleware.GetUser(c),
 		})
 	if result.Error != nil {
-		fmt.Println(result.Error)
+		log.Printf("Error getting subscriptions from DB: %v", result.Error)
 		middleware.Abort(c, http.StatusInternalServerError, "Failed to get subscriptions")
 		return
 	}
@@ -63,7 +63,7 @@ func PostSubscriptions(c *gin.Context) {
 	var podcast models.Podcast
 	result := shared.DB.FirstOrCreate(&podcast, models.Podcast{RSS: req.RSS})
 	if result.Error != nil {
-		fmt.Println(result.Error)
+		log.Printf("Error creating podcast in DB: %v", result.Error)
 		middleware.Abort(c, http.StatusInternalServerError, "Failed to create podcast")
 		return
 	}
@@ -74,7 +74,7 @@ func PostSubscriptions(c *gin.Context) {
 		PodcastID: podcast.PodcastID,
 	})
 	if result.Error != nil {
-		fmt.Println(result.Error)
+		log.Printf("Error creating subscription in DB: %v", result.Error)
 		middleware.Abort(c, http.StatusInternalServerError, "Failed to create subscription")
 		return
 	}
@@ -82,6 +82,7 @@ func PostSubscriptions(c *gin.Context) {
 	// TODO make this async, maybe with a "syncing..." indicator in UI
 	err := global.Sync(&podcast)
 	if err != nil {
+		log.Printf("Error syncing podcast: %v", err)
 		middleware.Abort(c, http.StatusInternalServerError, "Failed to sync podcast")
 		return
 	}
@@ -110,7 +111,7 @@ func GetSubscription(c *gin.Context) {
 		return
 	}
 	if result.Error != nil {
-		fmt.Println(result.Error)
+		log.Printf("Error getting subscription from DB: %v", result.Error)
 		middleware.Abort(c, http.StatusInternalServerError, "Failed to get subscription")
 		return
 	}
@@ -138,7 +139,7 @@ func DeleteSubscription(c *gin.Context) {
 		return
 	}
 	if result.Error != nil {
-		fmt.Println(result.Error)
+		log.Printf("Error deleting subscription from DB: %v", result.Error)
 		middleware.Abort(c, http.StatusInternalServerError, "Failed to delete subscription")
 		return
 	}

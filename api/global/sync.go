@@ -3,6 +3,7 @@ package global
 import (
 	"encoding/xml"
 	"fmt"
+	"log"
 	"os"
 	"strconv"
 	"strings"
@@ -46,13 +47,13 @@ type Enclosure struct {
 func Sync(p *models.Podcast) error {
 	res, err := Fetch(p.RSS)
 	if err != nil {
-		fmt.Printf("failed to fetch RSS for podcast %s\n", p.PodcastID)
+		log.Printf("Error fetching RSS: %v", err)
 		return err
 	}
 
 	var rss Rss
 	if err := xml.Unmarshal(res, &rss); err != nil {
-		fmt.Printf("failed to parse RSS for podcast %s\n", p.PodcastID)
+		log.Printf("Error parsing RSS: %v", err)
 		return err
 	}
 
@@ -64,8 +65,7 @@ func Sync(p *models.Podcast) error {
 	outputPathBase := fmt.Sprintf("%s/%s", os.Getenv("RSS_DATA_DIR"), p.ImageID)
 	color, err := SanitizeAndSaveImage(imageURL, outputPathBase)
 	if err != nil {
-		fmt.Printf("failed to write image %s\n", p.ImageID)
-		fmt.Println(err)
+		log.Printf("Error writing image %s: %v", p.ImageID, err)
 		return err
 	}
 	p.Color = ColorToHexString(color)
@@ -75,8 +75,7 @@ func Sync(p *models.Podcast) error {
 
 	result := shared.DB.Save(p)
 	if result.Error != nil {
-		fmt.Printf("failed to save podcast for RSS feed %s\n", p.RSS)
-		fmt.Println(result.Error)
+		log.Printf("Error saving podcast in DB: %v", result.Error)
 		return result.Error
 	}
 
@@ -84,14 +83,12 @@ func Sync(p *models.Podcast) error {
 	for _, item := range rss.Channel.Items {
 		date, err := parseDate(item.Date)
 		if err != nil {
-			fmt.Printf("failed to parse date '%s' for podcast %s\n", item.Date, p.PodcastID)
-			fmt.Println(err)
+			log.Printf("Error parsing date '%s': %v", item.Date, err)
 		}
 
 		duration, err := parseDuration(item.Duration)
 		if err != nil {
-			fmt.Printf("failed to parse duration '%s' for podcast %s\n", item.Duration, p.PodcastID)
-			fmt.Println(err)
+			log.Printf("Error parsing duration '%s': %v", item.Duration, err)
 		}
 
 		var url string
@@ -118,8 +115,7 @@ func Sync(p *models.Podcast) error {
 		DoUpdates: clause.AssignmentColumns([]string{"title", "description", "date", "duration", "url"}),
 	}).Create(&episodes)
 	if result.Error != nil {
-		fmt.Printf("failed to bulk upsert episodes for podcast %s\n", p.PodcastID)
-		fmt.Println(result.Error)
+		log.Printf("Error bulk upserting episodes in DB: %v", result.Error)
 	}
 
 	return nil

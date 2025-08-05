@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"errors"
-	"fmt"
+	"log"
 	"net/http"
 	"time"
 
@@ -27,7 +27,7 @@ func GetNowPlaying(c *gin.Context) {
 		return
 	}
 	if result.Error != nil {
-		fmt.Println(result.Error)
+		log.Printf("Error getting current episode from DB: %v", result.Error)
 		middleware.Abort(c, http.StatusInternalServerError, "Failed to get current episode")
 		return
 	}
@@ -60,7 +60,7 @@ func PutNowPlaying(c *gin.Context) {
 		LastListened: time.Now(),
 	})
 	if result.Error != nil {
-		fmt.Println(result.Error)
+		log.Printf("Error setting last listened in DB: %v", result.Error)
 		middleware.Abort(c, http.StatusInternalServerError, "Failed to set last listened")
 		return
 	}
@@ -70,7 +70,7 @@ func PutNowPlaying(c *gin.Context) {
 		PositionEpisodeID: req.EpisodeID,
 	})
 	if result.Error != nil {
-		fmt.Println(result.Error)
+		log.Printf("Error setting current episode in DB: %v", result.Error)
 		middleware.Abort(c, http.StatusInternalServerError, "Failed to set current episode")
 		return
 	}
@@ -83,7 +83,7 @@ func PutNowPlaying(c *gin.Context) {
 		return
 	}
 	if result.Error != nil {
-		fmt.Println(result.Error)
+		log.Printf("Error getting current episode from DB: %v", result.Error)
 		middleware.Abort(c, http.StatusInternalServerError, "Failed to get current episode")
 		return
 	}

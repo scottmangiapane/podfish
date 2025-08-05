@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	"log"
 	"net/http"
 	"os"
 
@@ -20,7 +20,7 @@ import (
 // @license.name    GPL 3.0
 // @license.url     https://github.com/scottmangiapane/podfish/blob/master/LICENSE
 func main() {
-	fmt.Println("Starting API...")
+	log.Println("Starting API...")
 	shared.SetupDatabase()
 
 	gin.ForceConsoleColor()

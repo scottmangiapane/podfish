@@ -7,7 +7,6 @@ SECURITY
 
 API
 
-- Replace `fmt.Println` with `log.Println`
 - Use `etag` / `last_modified` headers for conditional GETs to save bandwidth
 - Implement account management
 - Use actual migration files instead of GORM's auto-migrate

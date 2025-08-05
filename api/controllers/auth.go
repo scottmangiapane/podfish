@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"errors"
-	"fmt"
+	"log"
 	"net/http"
 	"os"
 	"strings"
@@ -52,7 +52,7 @@ func PostSignIn(c *gin.Context) {
 		return
 	}
 	if result.Error != nil {
-		fmt.Println(result.Error)
+		log.Printf("Error getting user from DB: %v", result.Error)
 		middleware.Abort(c, http.StatusInternalServerError, "Failed to get user")
 		return
 	}
@@ -69,7 +69,7 @@ func PostSignIn(c *gin.Context) {
 	})
 	s, err := t.SignedString(key)
 	if err != nil {
-		fmt.Println(err)
+		log.Printf("Error signing JWT: %v", err)
 		middleware.Abort(c, http.StatusInternalServerError, "Failed to create JWT")
 		return
 	}
@@ -109,7 +109,7 @@ func PostSignUp(c *gin.Context) {
 
 	user := models.User{Email: req.Email, Password: req.Password}
 	if result := shared.DB.Create(&user); result.Error != nil {
-		fmt.Println(result.Error)
+		log.Printf("Error creating user in DB: %v", result.Error)
 		middleware.Abort(c, http.StatusInternalServerError, "Failed to create user")
 		return
 	}
