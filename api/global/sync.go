@@ -65,7 +65,7 @@ func Sync(p *models.Podcast) error {
 	outputPathBase := fmt.Sprintf("%s/%s", os.Getenv("RSS_DATA_DIR"), p.ImageID)
 	color, err := SanitizeAndSaveImage(imageURL, outputPathBase)
 	if err != nil {
-		log.Printf("Error writing image %s: %v", p.ImageID, err)
+		log.Printf("Error writing image %v: %v", p.ImageID, err)
 		return err
 	}
 	p.Color = ColorToHexString(color)
@@ -83,12 +83,12 @@ func Sync(p *models.Podcast) error {
 	for _, item := range rss.Channel.Items {
 		date, err := parseDate(item.Date)
 		if err != nil {
-			log.Printf("Error parsing date '%s': %v", item.Date, err)
+			log.Printf("Error parsing date '%v': %v", item.Date, err)
 		}
 
 		duration, err := parseDuration(item.Duration)
 		if err != nil {
-			log.Printf("Error parsing duration '%s': %v", item.Duration, err)
+			log.Printf("Error parsing duration '%v': %v", item.Duration, err)
 		}
 
 		var url string

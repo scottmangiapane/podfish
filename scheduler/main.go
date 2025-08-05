@@ -2,26 +2,28 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"os"
 	"strconv"
 	"time"
 
-	"github.com/google/uuid"
 	"github.com/hibiken/asynq"
 	"github.com/scottmangiapane/podfish/shared"
 	"github.com/scottmangiapane/podfish/shared/models"
+	"github.com/scottmangiapane/podfish/shared/tasks"
 )
-
-type SyncTaskPayload struct {
-	PodcastID uuid.UUID
-}
 
 func main() {
 	log.Println("Starting scheduler...")
 	shared.SetupDatabase()
-	shared.SetupQueue()
-	defer shared.TeardownQueue()
+
+	client := asynq.NewClient(asynq.RedisClientOpt{
+		Addr:     fmt.Sprintf("%s:6379", os.Getenv("REDIS_HOST")),
+		Password: os.Getenv("REDIS_PASSWORD"),
+		DB:       0,
+	})
+	defer client.Close()
 
 	intervalMinutes, err := strconv.Atoi(os.Getenv("FEED_POLL_INTERVAL"))
 	if err != nil {
@@ -33,13 +35,13 @@ func main() {
 	ticker := time.NewTicker(1 * time.Minute)
 	defer ticker.Stop()
 
-	run(pollInterval)
+	run(client, pollInterval)
 	for range ticker.C {
-		run(pollInterval)
+		run(client, pollInterval)
 	}
 }
 
-func run(pollInterval time.Duration) {
+func run(client *asynq.Client, pollInterval time.Duration) {
 	cutoff := time.Now().Add(-pollInterval)
 
 	var podcasts []models.Podcast
@@ -52,14 +54,14 @@ func run(pollInterval time.Duration) {
 	}
 
 	for _, podcast := range podcasts {
-		payload, err := json.Marshal(SyncTaskPayload{PodcastID: podcast.PodcastID})
+		payload, err := json.Marshal(tasks.SyncTaskPayload{PodcastID: podcast.PodcastID})
 		if err != nil {
 			log.Printf("Error creating sync task: %v", err)
 			continue
 		}
 		task := asynq.NewTask("podcast:sync", payload)
 
-		info, err := shared.Queue.Enqueue(task)
+		info, err := client.Enqueue(task)
 		if err != nil {
 			log.Printf("Error enqueueing sync task: %v", err)
 			continue
