@@ -1,12 +1,12 @@
 package main
 
 import (
-	"fmt"
+	"log"
 
 	"github.com/scottmangiapane/podfish/shared"
 )
 
 func main() {
-	fmt.Println("Starting worker...")
-	shared.InitDatabase()
+	log.Println("Starting worker...")
+	shared.SetupDatabase()
 }

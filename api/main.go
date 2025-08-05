@@ -21,7 +21,7 @@ import (
 // @license.url     https://github.com/scottmangiapane/podfish/blob/master/LICENSE
 func main() {
 	fmt.Println("Starting API...")
-	shared.InitDatabase()
+	shared.SetupDatabase()
 
 	gin.ForceConsoleColor()
 	gin.SetMode(gin.ReleaseMode)
