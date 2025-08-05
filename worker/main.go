@@ -1,15 +1,13 @@
 package main
 
 import (
-	"context"
-	"encoding/json"
 	"fmt"
 	"log"
 	"os"
 
 	"github.com/hibiken/asynq"
 	"github.com/scottmangiapane/podfish/shared"
-	"github.com/scottmangiapane/podfish/shared/tasks"
+	"github.com/scottmangiapane/podfish/worker/task"
 )
 
 func main() {
@@ -26,23 +24,10 @@ func main() {
 			Concurrency: 0,
 		})
 
-	if err := server.Run(asynq.HandlerFunc(handler)); err != nil {
+	mux := asynq.NewServeMux()
+	mux.HandleFunc(task.TypeSyncPodcast, task.HandleSyncPodcastTask)
+
+	if err := server.Run(mux); err != nil {
 		log.Fatal(err)
 	}
-}
-
-func handler(ctx context.Context, t *asynq.Task) error {
-	switch t.Type() {
-	case "podcast:sync":
-		var p tasks.SyncTaskPayload
-		if err := json.Unmarshal(t.Payload(), &p); err != nil {
-			return err
-		}
-		log.Printf("Syncing podcast %v", p.PodcastID)
-		Sync(p.PodcastID)
-
-	default:
-		return fmt.Errorf("unexpected task type: %s", t.Type())
-	}
-	return nil
 }

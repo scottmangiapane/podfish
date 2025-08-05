@@ -11,7 +11,7 @@ import (
 	"github.com/hibiken/asynq"
 	"github.com/scottmangiapane/podfish/shared"
 	"github.com/scottmangiapane/podfish/shared/models"
-	"github.com/scottmangiapane/podfish/shared/tasks"
+	"github.com/scottmangiapane/podfish/worker/task"
 )
 
 func main() {
@@ -56,12 +56,12 @@ func run(client *asynq.Client, pollInterval time.Duration) {
 	log.Printf("Found %v podcasts in need of syncing", len(podcasts))
 
 	for _, podcast := range podcasts {
-		payload, err := json.Marshal(tasks.SyncTaskPayload{PodcastID: podcast.PodcastID})
+		payload, err := json.Marshal(task.SyncPodcastTaskPayload{PodcastID: podcast.PodcastID})
 		if err != nil {
 			log.Printf("Error creating sync task: %v", err)
 			continue
 		}
-		task := asynq.NewTask("podcast:sync", payload)
+		task := asynq.NewTask(task.TypeSyncPodcast, payload)
 
 		info, err := client.Enqueue(task)
 		if err != nil {
