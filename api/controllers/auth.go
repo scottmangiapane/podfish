@@ -10,6 +10,7 @@ import (
 	"github.com/scottmangiapane/podfish/api/middleware"
 	"github.com/scottmangiapane/podfish/shared/clients"
 	"github.com/scottmangiapane/podfish/shared/models"
+	"github.com/scottmangiapane/podfish/shared/utils"
 	"gorm.io/gorm"
 )
 
@@ -36,7 +37,11 @@ func PatchResetPasswordWithToken(c *gin.Context) {
 // @Param request body controllers.creds true "Request body"
 // @Success 200 {object} models.User
 func PostSignIn(c *gin.Context) {
-	var req creds
+	type request struct {
+		creds
+		RememberMe bool `json:"remember_me"`
+	}
+	var req request
 	if err := c.ShouldBindJSON(&req); err != nil {
 		middleware.Abort(c, http.StatusUnprocessableEntity, "Request is invalid")
 		return
@@ -61,6 +66,16 @@ func PostSignIn(c *gin.Context) {
 
 	session := sessions.Default(c)
 	session.Set("user_id", user.UserID)
+
+	if req.RememberMe {
+		session.Options(sessions.Options{
+			HttpOnly: true,
+			MaxAge:   60 * 60 * 24 * 90, // 90 days
+			Path:     "/",
+			SameSite: http.SameSiteStrictMode,
+			Secure:   utils.GetEnvBool("SECURE_COOKIES"),
+		})
+	}
 
 	if err := session.Save(); err != nil {
 		log.Printf("Failed to save session: %v", err)

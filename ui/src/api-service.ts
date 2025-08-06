@@ -1,6 +1,5 @@
 import { type NavigateFunction } from 'react-router-dom';
 import type { TApiResponse, TEpisodePosition, TNowPlaying, TPodcast, TSignIn, TSignUp } from '@/types';
-import { options } from 'sanitize-html';
 
 /* API calls */
 
@@ -50,10 +49,10 @@ export function getSubscription(navigate: NavigateFunction, podcastId: string) {
   });
 }
 
-export function postSignIn(email: string, password: string) {
+export function postSignIn(email: string, password: string, rememberMe: boolean) {
   return callApi<TSignIn>(null, '/api/v1/auth/sign-in', {
     method: 'POST',
-    body: JSON.stringify({ email, password })
+    body: JSON.stringify({ email, password, 'remember_me': rememberMe })
   });
 }
 

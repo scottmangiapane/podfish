@@ -1,4 +1,3 @@
-import Cookies from "js-cookie";
 import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -21,7 +20,8 @@ function SignIn() {
   async function submit(formData: FormData) {
     const email = formData.get('email')?.toString() || '';
     const password = formData.get('password')?.toString() || '';
-    const res = await postSignIn(email, password);
+    const rememberMe = formData.get('remember-me')?.toString() === 'on';
+    const res = await postSignIn(email, password, rememberMe);
     if (res.ok && res.data?.userId) {
       localStorage.setItem('user_id', res.data.userId);
       dispatch({ type: 'SET_USER', data: localStorage.getItem('user_id') });
@@ -49,7 +49,7 @@ function SignIn() {
           type="password"
         />
         <label className="checkbox-label">
-          <input type="checkbox" />
+          <input name="remember-me" type="checkbox" />
           Remember me
         </label>
         <button className="btn btn-pill" type="submit">Sign In</button>

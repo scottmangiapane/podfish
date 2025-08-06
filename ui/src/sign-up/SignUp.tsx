@@ -1,4 +1,3 @@
-import Cookies from "js-cookie";
 import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 

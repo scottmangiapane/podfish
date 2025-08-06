@@ -97,11 +97,11 @@ func setupSessionMiddleware(r *gin.Engine) {
 	}
 
 	store.Options(sessions.Options{
-		Path:     "/",
-		MaxAge:   86400 * 30, // 30 days
 		HttpOnly: true,
-		Secure:   utils.GetEnvBool("SECURE_COOKIES"),
+		MaxAge:   60 * 60 * 12, // 12 hours
+		Path:     "/",
 		SameSite: http.SameSiteStrictMode,
+		Secure:   utils.GetEnvBool("SECURE_COOKIES"),
 	})
 
 	r.Use(sessions.Sessions("session", store))

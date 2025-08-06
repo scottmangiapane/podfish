@@ -1,5 +1,4 @@
 import { produce } from 'immer';
-import Cookies from 'js-cookie';
 import { createContext, useContext, useReducer } from 'react';
 
 interface TRootContext {
