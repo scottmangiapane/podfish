@@ -22,6 +22,7 @@ import (
 func main() {
 	log.Println("Starting API...")
 	shared.SetupDatabase()
+	shared.SetupHealth()
 
 	gin.ForceConsoleColor()
 	gin.SetMode(gin.ReleaseMode)

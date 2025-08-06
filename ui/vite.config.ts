@@ -26,7 +26,7 @@ export default defineConfig(({ mode }: { mode: string }) => {
       proxy: {
         '^/(api|file|swagger)/.*': {
           changeOrigin: true,
-          target: env.API_URL,
+          target: `${env.API_URL}:${env.API_PORT}`,
         }
       },
     }

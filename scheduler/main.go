@@ -16,6 +16,7 @@ import (
 func main() {
 	log.Println("Starting scheduler...")
 	shared.SetupDatabase()
+	shared.SetupHealth()
 
 	client := asynq.NewClient(asynq.RedisClientOpt{
 		Addr:     fmt.Sprintf("%s:6379", os.Getenv("REDIS_HOST")),

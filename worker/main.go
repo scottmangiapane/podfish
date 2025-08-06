@@ -13,6 +13,7 @@ import (
 func main() {
 	log.Println("Starting worker...")
 	shared.SetupDatabase()
+	shared.SetupHealth()
 
 	server := asynq.NewServer(
 		asynq.RedisClientOpt{
