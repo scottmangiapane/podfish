@@ -45,7 +45,8 @@ func run(client *asynq.Client, pollInterval time.Duration) {
 
 	var podcasts []models.Podcast
 	result := shared.DB.
-		Where("podcasts.last_polled_at < ?", cutoff).
+		Joins("JOIN subscriptions ON subscriptions.podcast_id = podcasts.podcast_id").
+		Where("podcasts.last_sync_attempt_at < ?", cutoff).
 		Find(&podcasts)
 	if result.Error != nil {
 		log.Printf("Error getting podcasts from DB: %v", result.Error)

@@ -55,6 +55,13 @@ func Sync(podcastId uuid.UUID) error {
 		return result.Error
 	}
 
+	podcast.LastSyncAttemptAt = time.Now()
+	result = shared.DB.Save(podcast)
+	if result.Error != nil {
+		log.Printf("Error saving podcast sync attempt in DB: %v", result.Error)
+		return result.Error
+	}
+
 	res, err := Fetch(podcast.RSS)
 	if err != nil {
 		log.Printf("Error fetching RSS: %v", err)
@@ -83,7 +90,7 @@ func Sync(podcastId uuid.UUID) error {
 	}
 	podcast.Color = ColorToHexString(color)
 
-	podcast.LastPolledAt = time.Now()
+	podcast.LastSyncAt = podcast.LastSyncAttemptAt
 	result = shared.DB.Save(podcast)
 	if result.Error != nil {
 		log.Printf("Error saving podcast in DB: %v", result.Error)
@@ -121,6 +128,7 @@ func Sync(podcastId uuid.UUID) error {
 		})
 	}
 
+	// TODO this causes a lot of log spam, and will break if the query is >1GB
 	result = shared.DB.Clauses(clause.OnConflict{
 		Columns:   []clause.Column{{Name: "podcast_id"}, {Name: "item_id"}},
 		DoUpdates: clause.AssignmentColumns([]string{"title", "description", "date", "duration", "url"}),

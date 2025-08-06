@@ -7,6 +7,7 @@ SECURITY
 
 API
 
+- Fix excessive worker logs
 - Immediately request syncs of new podcasts
 - Use `etag` / `last_modified` headers for conditional GETs to save bandwidth
 - Implement account management
@@ -30,6 +31,5 @@ UI
 OTHER
 
 - Enable automatic linting on save (ex: consistent quotes)
-- Wrap website in Android app
-- Wrap website in iOS app
-- Wrap website in Electron (desktop) app
+- Wrap website in Capacitor app (mobile, ex: Burger King / Popeyes) or use PWA
+- Wrap website in Electron app (desktop)

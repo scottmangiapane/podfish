@@ -23,7 +23,7 @@ func NewSyncPodcastTask(podcastId uuid.UUID) (*asynq.Task, error) {
 	if err != nil {
 		return nil, err
 	}
-	return asynq.NewTask(TypeSyncPodcast, payload), nil
+	return asynq.NewTask(TypeSyncPodcast, payload, asynq.MaxRetry(0)), nil
 }
 
 func HandleSyncPodcastTask(ctx context.Context, t *asynq.Task) error {
@@ -32,6 +32,5 @@ func HandleSyncPodcastTask(ctx context.Context, t *asynq.Task) error {
 		return err
 	}
 	log.Printf("Syncing podcast %v", p.PodcastID)
-	sync.Sync(p.PodcastID)
-	return nil
+	return sync.Sync(p.PodcastID)
 }
