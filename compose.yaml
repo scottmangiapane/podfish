@@ -49,7 +49,7 @@ services:
         condition: service_healthy
     healthcheck:
       <<: *healthcheck-base
-      test: ["CMD", "curl", "-f", "http://api:8080/healthz"]
+      test: ["CMD", "wget", "-qO-", "http://podfish-api:8080/healthz"]
     volumes:
       - .:/app
       - ./rss_data:/podfish-data
@@ -68,7 +68,7 @@ services:
         condition: service_healthy
     healthcheck:
       <<: *healthcheck-base
-      test: ["CMD", "curl", "-f", "http://scheduler:8080/healthz"]
+      test: ["CMD", "wget", "-qO-", "http://podfish-scheduler:8080/healthz"]
     volumes:
       - .:/app
 
@@ -86,7 +86,7 @@ services:
         condition: service_healthy
     healthcheck:
       <<: *healthcheck-base
-      test: ["CMD", "curl", "-f", "http://worker:8080/healthz"]
+      test: ["CMD", "wget", "-qO-", "http://podfish-worker:8080/healthz"]
     volumes:
       - .:/app
       - ./rss_data:/podfish-data
@@ -102,9 +102,6 @@ services:
     depends_on:
       api:
         condition: service_healthy
-    healthcheck:
-      <<: *healthcheck-base
-      test: ["CMD", "curl", "-f", "${UI_URL}:${UI_PORT}"]
     ports:
       - 127.0.0.1:${UI_PORT}:${UI_PORT}
     volumes:
