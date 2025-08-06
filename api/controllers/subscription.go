@@ -10,7 +10,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"github.com/scottmangiapane/podfish/api/middleware"
-	"github.com/scottmangiapane/podfish/shared"
+	"github.com/scottmangiapane/podfish/shared/clients"
 	"github.com/scottmangiapane/podfish/shared/models"
 	"gorm.io/gorm"
 )
@@ -20,7 +20,7 @@ import (
 // @Success 200 {object} []models.Podcast
 func GetSubscriptions(c *gin.Context) {
 	var subscriptions []models.Subscription
-	result := shared.DB.
+	result := clients.DB.
 		Preload("Podcast").
 		Find(&subscriptions, models.Subscription{
 			UserID: middleware.GetUser(c),
@@ -60,7 +60,7 @@ func PostSubscriptions(c *gin.Context) {
 	}
 
 	var podcast models.Podcast
-	result := shared.DB.FirstOrCreate(&podcast, models.Podcast{RSS: req.RSS})
+	result := clients.DB.FirstOrCreate(&podcast, models.Podcast{RSS: req.RSS})
 	if result.Error != nil {
 		log.Printf("Error creating podcast in DB: %v", result.Error)
 		middleware.Abort(c, http.StatusInternalServerError, "Failed to create podcast")
@@ -68,7 +68,7 @@ func PostSubscriptions(c *gin.Context) {
 	}
 
 	var subscription models.Subscription
-	result = shared.DB.FirstOrCreate(&subscription, models.Subscription{
+	result = clients.DB.FirstOrCreate(&subscription, models.Subscription{
 		UserID:    middleware.GetUser(c),
 		PodcastID: podcast.PodcastID,
 	})
@@ -102,7 +102,7 @@ func GetSubscription(c *gin.Context) {
 	}
 
 	var subscription models.Subscription
-	result := shared.DB.Preload("Podcast").First(&subscription, models.Subscription{
+	result := clients.DB.Preload("Podcast").First(&subscription, models.Subscription{
 		UserID:    middleware.GetUser(c),
 		PodcastID: id,
 	})
@@ -130,7 +130,7 @@ func DeleteSubscription(c *gin.Context) {
 		return
 	}
 
-	result := shared.DB.Delete(models.Subscription{
+	result := clients.DB.Delete(models.Subscription{
 		UserID:    middleware.GetUser(c),
 		PodcastID: id,
 	})

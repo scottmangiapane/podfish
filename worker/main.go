@@ -3,22 +3,22 @@ package main
 import (
 	"fmt"
 	"log"
-	"os"
 
 	"github.com/hibiken/asynq"
-	"github.com/scottmangiapane/podfish/shared"
+	"github.com/scottmangiapane/podfish/shared/clients"
+	"github.com/scottmangiapane/podfish/shared/utils"
 	"github.com/scottmangiapane/podfish/worker/task"
 )
 
 func main() {
 	log.Println("Starting worker...")
-	shared.SetupDatabase()
-	shared.SetupHealth()
+	clients.SetupDatabase()
+	utils.SetupHealth()
 
 	server := asynq.NewServer(
 		asynq.RedisClientOpt{
-			Addr:     fmt.Sprintf("%s:6379", os.Getenv("REDIS_HOST")),
-			Password: os.Getenv("REDIS_PASSWORD"),
+			Addr:     fmt.Sprintf("%s:6379", utils.GetEnvString("REDIS_HOST")),
+			Password: utils.GetEnvString("REDIS_PASSWORD"),
 			DB:       0,
 		},
 		asynq.Config{

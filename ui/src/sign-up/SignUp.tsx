@@ -24,8 +24,9 @@ function SignUp() {
     const password = formData.get('password')?.toString() || '';
 
     const res = await postSignUp(email, password);
-    if (res.ok) {
-      dispatch({ type: 'SET_USER', data: Cookies.get('user') || null });
+    if (res.ok && res.data?.userId) {
+      localStorage.setItem('user_id', res.data.userId);
+      dispatch({ type: 'SET_USER', data: localStorage.getItem('user_id') });
       navigate('/');
     }
   }

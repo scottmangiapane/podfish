@@ -39,7 +39,8 @@ function TitleBar() {
   async function signOut() {
     const res = await postSignOut();
     if (res.ok) {
-      dispatch({ type: 'SET_USER', data: Cookies.get('user') || null });
+      localStorage.removeItem('user_id');
+      dispatch({ type: 'SET_USER', data: localStorage.getItem('user_id') });
       navigate('/sign-in');
     }
   }

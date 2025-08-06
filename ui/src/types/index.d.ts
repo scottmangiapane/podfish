@@ -32,7 +32,7 @@ export interface TPosition {
 
 export interface TSignIn {
   email: string;
-  password: string;
+  userId: string;
 }
 
 export interface TSignUp {

@@ -1,19 +1,18 @@
-package shared
+package utils
 
 import (
-	"fmt"
+	"log"
 	"net/http"
 )
 
 func SetupHealth() {
 	http.HandleFunc("/healthz", func(w http.ResponseWriter, r *http.Request) {
-		w.WriteHeader(http.StatusOK)
 		w.Write([]byte("OK"))
 	})
 
 	go func() {
 		port := ":8080"
-		fmt.Printf("Health check registered on %s\n", port)
+		log.Printf("Health check registered on port %v", port)
 		if err := http.ListenAndServe(port, nil); err != nil {
 			panic(err)
 		}

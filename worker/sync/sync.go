@@ -4,14 +4,14 @@ import (
 	"encoding/xml"
 	"fmt"
 	"log"
-	"os"
 	"strconv"
 	"strings"
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/scottmangiapane/podfish/shared"
+	"github.com/scottmangiapane/podfish/shared/clients"
 	"github.com/scottmangiapane/podfish/shared/models"
+	"github.com/scottmangiapane/podfish/shared/utils"
 	"gorm.io/gorm/clause"
 )
 
@@ -47,7 +47,7 @@ type Enclosure struct {
 
 func Sync(podcastId uuid.UUID) error {
 	var podcast models.Podcast
-	result := shared.DB.First(&podcast, models.Podcast{
+	result := clients.DB.First(&podcast, models.Podcast{
 		PodcastID: podcastId,
 	})
 	if result.Error != nil {
@@ -56,7 +56,7 @@ func Sync(podcastId uuid.UUID) error {
 	}
 
 	podcast.LastSyncAttemptAt = time.Now()
-	result = shared.DB.Save(podcast)
+	result = clients.DB.Save(podcast)
 	if result.Error != nil {
 		log.Printf("Error saving podcast sync attempt in DB: %v", result.Error)
 		return result.Error
@@ -82,7 +82,7 @@ func Sync(podcastId uuid.UUID) error {
 		imageURL = strings.TrimSpace(rss.Channel.Image.AltURL)
 	}
 
-	outputPathBase := fmt.Sprintf("%s/%s", os.Getenv("RSS_DATA_DIR"), podcast.ImageID)
+	outputPathBase := fmt.Sprintf("%s/%s", utils.GetEnvString("RSS_DATA_DIR"), podcast.ImageID)
 	color, err := SanitizeAndSaveImage(imageURL, outputPathBase)
 	if err != nil {
 		log.Printf("Error writing image %v: %v", podcast.ImageID, err)
@@ -91,7 +91,7 @@ func Sync(podcastId uuid.UUID) error {
 	podcast.Color = ColorToHexString(color)
 
 	podcast.LastSyncAt = podcast.LastSyncAttemptAt
-	result = shared.DB.Save(podcast)
+	result = clients.DB.Save(podcast)
 	if result.Error != nil {
 		log.Printf("Error saving podcast in DB: %v", result.Error)
 		return result.Error
@@ -129,7 +129,7 @@ func Sync(podcastId uuid.UUID) error {
 	}
 
 	// TODO this causes a lot of log spam, and will break if the query is >1GB
-	result = shared.DB.Clauses(clause.OnConflict{
+	result = clients.DB.Clauses(clause.OnConflict{
 		Columns:   []clause.Column{{Name: "podcast_id"}, {Name: "item_id"}},
 		DoUpdates: clause.AssignmentColumns([]string{"title", "description", "date", "duration", "url"}),
 	}).Create(&episodes)

@@ -21,7 +21,7 @@ const RootContext = createContext<TRootContext | null>(null);
 export function RootProvider({ children }: any) {
   const initialState = {
     isMobile: window.innerWidth < 576,
-    user: Cookies.get('user') || null,
+    user: localStorage.getItem('user_id'),
   };
 
   const rootReducer = produce((state = initialState, action: TAction) => {

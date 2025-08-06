@@ -1,11 +1,9 @@
 package models
 
 import (
-	"os"
-	"strconv"
-
 	"github.com/google/uuid"
 	"github.com/scottmangiapane/podfish/shared/models/templates"
+	"github.com/scottmangiapane/podfish/shared/utils"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
@@ -18,10 +16,7 @@ type User struct {
 }
 
 func (user *User) BeforeSave(tx *gorm.DB) (err error) {
-	cost, err := strconv.Atoi(os.Getenv("BCRYPT_COST"))
-	if err != nil {
-		return err
-	}
+	cost := utils.GetEnvInt("BCRYPT_COST")
 
 	bytes, err := bcrypt.GenerateFromPassword([]byte(user.Password), cost)
 	if err != nil {

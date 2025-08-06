@@ -1,5 +1,6 @@
 import { type NavigateFunction } from 'react-router-dom';
 import type { TApiResponse, TEpisodePosition, TNowPlaying, TPodcast, TSignIn, TSignUp } from '@/types';
+import { options } from 'sanitize-html';
 
 /* API calls */
 

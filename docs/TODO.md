@@ -7,12 +7,12 @@ SECURITY
 
 API
 
+- Ensure sync queue handles duplicates
 - Fix excessive worker logs
 - Immediately request syncs of new podcasts
 - Use `etag` / `last_modified` headers for conditional GETs to save bandwidth
 - Implement account management
 - Use actual migration files instead of GORM's auto-migrate
-- Refresh JWT token as needed
 - Validate that new RSS feeds are actually valid RSS
 - Handle when a podcast feed is removed (retain metadata but show error in UI)
 - Handle when an individual episode is removed (retain metadata but hide from UI)

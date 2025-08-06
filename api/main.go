@@ -1,15 +1,20 @@
 package main
 
 import (
+	"encoding/gob"
+	"fmt"
 	"log"
 	"net/http"
-	"os"
 
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-contrib/sessions/redis"
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 	"github.com/scottmangiapane/podfish/api/controllers"
 	"github.com/scottmangiapane/podfish/api/docs"
 	"github.com/scottmangiapane/podfish/api/middleware"
-	"github.com/scottmangiapane/podfish/shared"
+	"github.com/scottmangiapane/podfish/shared/clients"
+	"github.com/scottmangiapane/podfish/shared/utils"
 	swaggerfiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
@@ -21,14 +26,15 @@ import (
 // @license.url     https://github.com/scottmangiapane/podfish/blob/master/LICENSE
 func main() {
 	log.Println("Starting API...")
-	shared.SetupDatabase()
-	shared.SetupHealth()
+	clients.SetupDatabase()
+	utils.SetupHealth()
 
 	gin.ForceConsoleColor()
 	gin.SetMode(gin.ReleaseMode)
 
 	r := gin.Default()
 	r.SetTrustedProxies(nil)
+	setupSessionMiddleware(r)
 
 	// Auth
 	v1 := r.Group("/api/v1")
@@ -65,11 +71,38 @@ func main() {
 	r.StaticFS("/docs", gin.Dir("docs", false))
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 
-	r.StaticFS("/file", gin.Dir(os.Getenv("RSS_DATA_DIR"), false))
+	r.StaticFS("/file", gin.Dir(utils.GetEnvString("RSS_DATA_DIR"), false))
 
 	r.NoRoute(func(c *gin.Context) {
 		middleware.Abort(c, http.StatusNotFound, "Not found")
 	})
 
-	r.Run("0.0.0.0:" + os.Getenv("API_PORT"))
+	r.Run("0.0.0.0:" + utils.GetEnvString("API_PORT"))
+}
+
+func setupSessionMiddleware(r *gin.Engine) {
+	gob.Register(uuid.UUID{})
+
+	authKey := []byte(utils.GetEnvString("AUTH_KEY"))
+	redisHost := fmt.Sprintf("%s:6379", utils.GetEnvString("REDIS_HOST"))
+	redisPassword := utils.GetEnvString("REDIS_PASSWORD")
+
+	if len(authKey) < 32 {
+		log.Fatal("AUTH_KEY must be at least 32 bytes")
+	}
+
+	store, err := redis.NewStore(10, "tcp", redisHost, "", redisPassword, authKey)
+	if err != nil {
+		log.Fatalf("Failed to create redis session store: %v", err)
+	}
+
+	store.Options(sessions.Options{
+		Path:     "/",
+		MaxAge:   86400 * 30, // 30 days
+		HttpOnly: true,
+		Secure:   utils.GetEnvBool("SECURE_COOKIES"),
+		SameSite: http.SameSiteStrictMode,
+	})
+
+	r.Use(sessions.Sessions("session", store))
 }

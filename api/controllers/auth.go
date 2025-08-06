@@ -4,14 +4,11 @@ import (
 	"errors"
 	"log"
 	"net/http"
-	"os"
-	"strings"
-	"time"
 
+	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
-	"github.com/golang-jwt/jwt/v5"
 	"github.com/scottmangiapane/podfish/api/middleware"
-	"github.com/scottmangiapane/podfish/shared"
+	"github.com/scottmangiapane/podfish/shared/clients"
 	"github.com/scottmangiapane/podfish/shared/models"
 	"gorm.io/gorm"
 )
@@ -46,7 +43,7 @@ func PostSignIn(c *gin.Context) {
 	}
 
 	var user models.User
-	result := shared.DB.First(&user, &models.User{Email: req.Email})
+	result := clients.DB.First(&user, &models.User{Email: req.Email})
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
 		middleware.Abort(c, http.StatusNotFound, "No user found with that email")
 		return
@@ -62,21 +59,15 @@ func PostSignIn(c *gin.Context) {
 		return
 	}
 
-	key := []byte(os.Getenv("JWT_HMAC_KEY"))
-	t := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"iat": time.Now().UTC().Unix(),
-		"sub": user.UserID,
-	})
-	s, err := t.SignedString(key)
-	if err != nil {
-		log.Printf("Error signing JWT: %v", err)
-		middleware.Abort(c, http.StatusInternalServerError, "Failed to create JWT")
+	session := sessions.Default(c)
+	session.Set("user_id", user.UserID)
+
+	if err := session.Save(); err != nil {
+		log.Printf("Failed to save session: %v", err)
+		c.AbortWithStatus(http.StatusInternalServerError)
 		return
 	}
 
-	secure := strings.EqualFold(os.Getenv("SECURE_COOKIES"), "true")
-	c.SetCookie("auth", s, 3600, "/", os.Getenv("UI_URL"), secure, true)
-	c.SetCookie("user", user.UserID.String(), 3600, "/", os.Getenv("UI_URL"), secure, false)
 	c.JSON(http.StatusOK, user)
 }
 
@@ -84,9 +75,9 @@ func PostSignIn(c *gin.Context) {
 // @Router /auth/sign-out [post]
 // @Success 204
 func PostSignOut(c *gin.Context) {
-	secure := strings.EqualFold(os.Getenv("SECURE_COOKIES"), "true")
-	c.SetCookie("auth", "", -1, "/", os.Getenv("UI_URL"), secure, true)
-	c.SetCookie("user", "", -1, "/", os.Getenv("UI_URL"), secure, false)
+	session := sessions.Default(c)
+	session.Clear()
+	session.Save()
 	c.JSON(http.StatusNoContent, nil)
 }
 
@@ -101,14 +92,14 @@ func PostSignUp(c *gin.Context) {
 		return
 	}
 
-	result := shared.DB.Where(&models.User{Email: req.Email}).First(&models.User{})
+	result := clients.DB.Where(&models.User{Email: req.Email}).First(&models.User{})
 	if !errors.Is(result.Error, gorm.ErrRecordNotFound) {
 		middleware.Abort(c, http.StatusConflict, "Email is already in use")
 		return
 	}
 
 	user := models.User{Email: req.Email, Password: req.Password}
-	if result := shared.DB.Create(&user); result.Error != nil {
+	if result := clients.DB.Create(&user); result.Error != nil {
 		log.Printf("Error creating user in DB: %v", result.Error)
 		middleware.Abort(c, http.StatusInternalServerError, "Failed to create user")
 		return

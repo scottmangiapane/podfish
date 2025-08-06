@@ -1,8 +1,8 @@
 **/.DS_Store
 **/.idea
 **/.vscode/
-pg_data/
-rss_data/
+pg-data/
+rss-data/
 
 api/docs/
 api/podfish
