@@ -24,6 +24,7 @@ function SignIn() {
     const res = await postSignIn(email, password, rememberMe);
     if (res.ok && res.data?.userId) {
       localStorage.setItem('user_id', res.data.userId);
+      localStorage.setItem('remember_me', rememberMe.toString());
       dispatch({ type: 'SET_USER', data: localStorage.getItem('user_id') });
       navigate('/');
     }
@@ -49,7 +50,11 @@ function SignIn() {
           type="password"
         />
         <label className="checkbox-label">
-          <input name="remember-me" type="checkbox" />
+          <input
+            defaultChecked={ localStorage.getItem('remember_me') === 'true' }
+            name="remember-me"
+            type="checkbox"
+          />
           Remember me
         </label>
         <button className="btn btn-pill" type="submit">Sign In</button>
