@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-func SetupHealth() {
+func SetUpHealth() {
 	http.HandleFunc("/healthz", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("OK"))
 	})

@@ -1,28 +1,21 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"time"
 
-	"github.com/hibiken/asynq"
 	"github.com/scottmangiapane/podfish/shared/clients"
 	"github.com/scottmangiapane/podfish/shared/models"
 	"github.com/scottmangiapane/podfish/shared/utils"
-	"github.com/scottmangiapane/podfish/worker/task"
 )
 
 func main() {
 	log.Println("Starting scheduler...")
-	clients.SetupDatabase()
-	utils.SetupHealth()
+	utils.SetUpHealth()
 
-	client := asynq.NewClient(asynq.RedisClientOpt{
-		Addr:     fmt.Sprintf("%s:6379", utils.GetEnvString("REDIS_HOST")),
-		Password: utils.GetEnvString("REDIS_PASSWORD"),
-		DB:       0,
-	})
-	defer client.Close()
+	clients.SetUpDatabase()
+	clients.SetUpQueue()
+	defer clients.Queue.Close()
 
 	intervalMinutes := utils.GetEnvInt("FEED_POLL_INTERVAL")
 	pollInterval := time.Duration(intervalMinutes) * time.Minute
@@ -31,13 +24,13 @@ func main() {
 	ticker := time.NewTicker(1 * time.Minute)
 	defer ticker.Stop()
 
-	run(client, pollInterval)
+	poll(pollInterval)
 	for range ticker.C {
-		run(client, pollInterval)
+		poll(pollInterval)
 	}
 }
 
-func run(client *asynq.Client, pollInterval time.Duration) {
+func poll(pollInterval time.Duration) {
 	cutoff := time.Now().Add(-pollInterval)
 
 	var podcasts []models.Podcast
@@ -53,13 +46,13 @@ func run(client *asynq.Client, pollInterval time.Duration) {
 	log.Printf("Found %v podcasts in need of syncing", len(podcasts))
 
 	for _, podcast := range podcasts {
-		task, err := task.NewSyncPodcastTask(podcast.PodcastID)
+		task, err := clients.NewSyncPodcastTask(podcast.PodcastID)
 		if err != nil {
 			log.Printf("Error creating sync task: %v", err)
 			continue
 		}
 
-		info, err := client.Enqueue(task)
+		info, err := clients.Queue.Enqueue(task)
 		if err != nil {
 			log.Printf("Error enqueueing sync task: %v", err)
 			continue

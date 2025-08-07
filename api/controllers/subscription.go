@@ -78,14 +78,18 @@ func PostSubscriptions(c *gin.Context) {
 		return
 	}
 
-	// TODO request immediate sync of podcast
-	// TODO show "syncing..." indicator in UI
-	// err := global.Sync(&podcast)
-	// if err != nil {
-	// 	log.Printf("Error syncing podcast: %v", err)
-	// 	middleware.Abort(c, http.StatusInternalServerError, "Failed to sync podcast")
-	// 	return
-	// }
+	task, err := clients.NewSyncPodcastTask(podcast.PodcastID)
+	if err != nil {
+		log.Printf("Error creating sync task: %v", err)
+		middleware.Abort(c, http.StatusInternalServerError, "Failed to create sync task")
+	}
+
+	info, err := clients.Queue.Enqueue(task)
+	if err != nil {
+		log.Printf("Error enqueueing sync task: %v", err)
+		middleware.Abort(c, http.StatusInternalServerError, "Failed to enqueue sync task")
+	}
+	log.Printf("Successfully enqueued sync task %v for podcast %v", info.ID, podcast.PodcastID)
 
 	c.JSON(http.StatusCreated, podcast)
 }

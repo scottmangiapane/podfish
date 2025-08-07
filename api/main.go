@@ -26,8 +26,11 @@ import (
 // @license.url     https://github.com/scottmangiapane/podfish/blob/master/LICENSE
 func main() {
 	log.Println("Starting API...")
-	clients.SetupDatabase()
-	utils.SetupHealth()
+	utils.SetUpHealth()
+
+	clients.SetUpDatabase()
+	clients.SetUpQueue()
+	defer clients.Queue.Close()
 
 	gin.ForceConsoleColor()
 	gin.SetMode(gin.ReleaseMode)

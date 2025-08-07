@@ -13,7 +13,7 @@ var (
 	DB *gorm.DB
 )
 
-func SetupDatabase() {
+func SetUpDatabase() {
 	dsn := fmt.Sprintf("dbname=%s host=%s user=%s password=%s port=5432 sslmode=disable TimeZone=UTC",
 		utils.GetEnvString("POSTGRES_DB"),
 		utils.GetEnvString("POSTGRES_HOST"),

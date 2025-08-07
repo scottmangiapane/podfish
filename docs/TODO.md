@@ -1,6 +1,5 @@
 SECURITY
 
-- Set SameSite cookie attribute (ex: `c.SetSameSite(http.SameSiteLaxMode)`)
 - Add HTTP security headers
 - Investigate if `http.Dir` following symlinks allows malicious RSS feeds to read arbitrary files
 - Block RSS feeds (or images within feeds) from invalid/internal domains (ex: localhost, docker hostnames like `api:3000`, `0.0.0.0`)
@@ -9,9 +8,8 @@ API
 
 - Ensure sync queue handles duplicates
 - Fix excessive worker logs
-- Immediately request syncs of new podcasts
 - Use `etag` / `last_modified` headers for conditional GETs to save bandwidth
-- Implement account management
+- Implement endpoints for account management
 - Use actual migration files instead of GORM's auto-migrate
 - Validate that new RSS feeds are actually valid RSS
 - Handle when a podcast feed is removed (retain metadata but show error in UI)
@@ -21,8 +19,8 @@ API
 
 UI
 
+- Implement settings page ((account management)
 - Add a loading animation while podcast is being added
-- Implement account management
 - Improve error handling for sign up / sign in
 - Fix inconsistent play icons and cover image sizes on mobile
 - Implement search functionality

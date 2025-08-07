@@ -12,8 +12,9 @@ import (
 
 func main() {
 	log.Println("Starting worker...")
-	clients.SetupDatabase()
-	utils.SetupHealth()
+	utils.SetUpHealth()
+
+	clients.SetUpDatabase()
 
 	server := asynq.NewServer(
 		asynq.RedisClientOpt{
@@ -26,7 +27,7 @@ func main() {
 		})
 
 	mux := asynq.NewServeMux()
-	mux.HandleFunc(task.TypeSyncPodcast, task.HandleSyncPodcastTask)
+	mux.HandleFunc(clients.TypeSyncPodcast, task.HandleSyncPodcastTask)
 
 	if err := server.Run(mux); err != nil {
 		log.Fatal(err)
