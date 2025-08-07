@@ -38,6 +38,8 @@ EXPOSE ${API_PORT}
 ENTRYPOINT CompileDaemon \
     -build="swag init --parseDependency --parseInternal && go build -o /podfish-api" \
     -command="/podfish-api" \
+    -directory="." \
+    -directory="../shared" \
     -exclude-dir="./docs" \
     -polling=true
 

@@ -46,17 +46,10 @@ func poll(pollInterval time.Duration) {
 	log.Printf("Found %v podcasts in need of syncing", len(podcasts))
 
 	for _, podcast := range podcasts {
-		task, err := clients.NewSyncPodcastTask(podcast.PodcastID)
-		if err != nil {
-			log.Printf("Error creating sync task: %v", err)
-			continue
-		}
-
-		info, err := clients.Queue.Enqueue(task)
+		err := clients.EnqueueSyncPodcastTask(podcast.PodcastID)
 		if err != nil {
 			log.Printf("Error enqueueing sync task: %v", err)
 			continue
 		}
-		log.Printf("Successfully enqueued sync task %v for podcast %v", info.ID, podcast.PodcastID)
 	}
 }

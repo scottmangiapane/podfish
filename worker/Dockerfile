@@ -35,6 +35,8 @@ WORKDIR /app/worker
 ENTRYPOINT CompileDaemon \
     -build="go build -o /podfish-worker" \
     -command="/podfish-worker" \
+    -directory="." \
+    -directory="../shared" \
     -polling=true
 
 ################################

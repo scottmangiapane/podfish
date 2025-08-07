@@ -71,7 +71,6 @@ func main() {
 	authorized.PATCH("/users/:id/password", controllers.PatchUserPassword)
 
 	docs.SwaggerInfo.Title = "Podfish"
-	r.StaticFS("/docs", gin.Dir("docs", false))
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 
 	r.StaticFS("/file", gin.Dir(utils.GetEnvString("RSS_DATA_DIR"), false))

@@ -2,7 +2,9 @@ package clients
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
+	"log"
 
 	"github.com/google/uuid"
 	"github.com/hibiken/asynq"
@@ -32,5 +34,29 @@ func NewSyncPodcastTask(podcastId uuid.UUID) (*asynq.Task, error) {
 	if err != nil {
 		return nil, err
 	}
-	return asynq.NewTask(TypeSyncPodcast, payload, asynq.MaxRetry(0)), nil
+	return asynq.NewTask(
+		TypeSyncPodcast,
+		payload,
+		asynq.MaxRetry(0),
+		asynq.TaskID(podcastId.String()),
+	), nil
+}
+
+func EnqueueSyncPodcastTask(podcastID uuid.UUID) error {
+	task, err := NewSyncPodcastTask(podcastID)
+	if err != nil {
+		return fmt.Errorf("failed to create sync task: %w", err)
+	}
+
+	info, err := Queue.Enqueue(task)
+	if err != nil {
+		if errors.Is(err, asynq.ErrTaskIDConflict) {
+			log.Printf("Task for podcast %v is already queued or processing", podcastID)
+			return nil
+		}
+		return fmt.Errorf("failed to enqueue sync task: %w", err)
+	}
+
+	log.Printf("Successfully enqueued sync task %v for podcast %v", info.ID, podcastID)
+	return nil
 }

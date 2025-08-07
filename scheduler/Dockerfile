@@ -35,6 +35,8 @@ WORKDIR /app/scheduler
 ENTRYPOINT CompileDaemon \
     -build="pwd && ls && go build -o /podfish-scheduler" \
     -command="/podfish-scheduler" \
+    -directory="." \
+    -directory="../shared" \
     -polling=true
 
 ################################

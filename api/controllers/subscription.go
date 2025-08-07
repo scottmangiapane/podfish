@@ -78,18 +78,12 @@ func PostSubscriptions(c *gin.Context) {
 		return
 	}
 
-	task, err := clients.NewSyncPodcastTask(podcast.PodcastID)
-	if err != nil {
-		log.Printf("Error creating sync task: %v", err)
-		middleware.Abort(c, http.StatusInternalServerError, "Failed to create sync task")
-	}
-
-	info, err := clients.Queue.Enqueue(task)
+	err := clients.EnqueueSyncPodcastTask(podcast.PodcastID)
 	if err != nil {
 		log.Printf("Error enqueueing sync task: %v", err)
 		middleware.Abort(c, http.StatusInternalServerError, "Failed to enqueue sync task")
+		return
 	}
-	log.Printf("Successfully enqueued sync task %v for podcast %v", info.ID, podcast.PodcastID)
 
 	c.JSON(http.StatusCreated, podcast)
 }

@@ -6,7 +6,6 @@ SECURITY
 
 API
 
-- Ensure sync queue handles duplicates
 - Fix excessive worker logs
 - Use `etag` / `last_modified` headers for conditional GETs to save bandwidth
 - Implement endpoints for account management
