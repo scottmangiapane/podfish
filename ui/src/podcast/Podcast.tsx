@@ -4,6 +4,7 @@ import sanitizeHtml from "sanitize-html";
 import { useImmer } from "use-immer";
 
 import { getEpisodes, getSubscription } from "@/api-service";
+import Spinner from "@/components/Spinner";
 import { useAppContext } from "@/contexts/AppContext";
 import Collapsable from "@/components/Collapsable";
 import Cover from "@/components/Cover";
@@ -20,12 +21,14 @@ function Podcast() {
   const [episodes, updateEpisodes] = useImmer(new Map<string, TEpisodePosition>);
   const [beforeId, setBeforeId] = useState<string | undefined>();
   const [hasMoreEpisodes, setHasMoreEpisodes] = useState(true);
+  const [isLoadingSubscription, setIsLoadingSubscription] = useState(true);
   const [isLoadingEpisodes, setIsLoadingEpisodes] = useState(false);
   const [error, setError] = useState<number>(0);
   const [podcast, setPodcast] = useState<TPodcast | null>(null);
 
   useEffect(() => {
     getSubscription(navigate, podcastId!).then((res) => {
+      setIsLoadingSubscription(false);
       if (!res.ok || !res.data) {
         setError(res.status);
         return;
@@ -89,6 +92,10 @@ function Podcast() {
     });
   }
 
+  if (isLoadingSubscription) {
+    return <Spinner margin="4px" size="40px" />
+  }
+
   if (error) {
     return (
       <>
@@ -144,7 +151,7 @@ function Podcast() {
         <div className="podcast-list">
           { episodeList }
           <div ref={ containerRef }>
-            { isLoadingEpisodes && <p>Loading more episodes...</p> }
+            { isLoadingEpisodes && <Spinner margin="4px" size="40px" /> }
             { !hasMoreEpisodes && <p>No more episodes.</p> }
           </div>
         </div>

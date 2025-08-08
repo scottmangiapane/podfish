@@ -18,7 +18,7 @@ API
 
 UI
 
-- Implement settings page ((account management)
+- Implement settings page (account management)
 - Add a loading animation while podcast is being added
 - Improve error handling for sign up / sign in
 - Fix inconsistent play icons and cover image sizes on mobile

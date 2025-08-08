@@ -1,11 +1,16 @@
 **/.DS_Store
 **/.idea
 **/.vscode/
+
+# Storage volumes
 pg-data/
 rss-data/
 
 api/docs/
-api/podfish
+
+api/podfish-api
+scheduler/podfish-scheduler
+worker/podfish-worker
 
 ui/dist/
 ui/node_modules/
