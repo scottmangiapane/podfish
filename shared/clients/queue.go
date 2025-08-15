@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"time"
 
 	"github.com/google/uuid"
 	"github.com/hibiken/asynq"
@@ -38,7 +39,6 @@ func NewSyncPodcastTask(podcastId uuid.UUID) (*asynq.Task, error) {
 		TypeSyncPodcast,
 		payload,
 		asynq.MaxRetry(0),
-		asynq.TaskID(podcastId.String()),
 	), nil
 }
 
@@ -48,9 +48,9 @@ func EnqueueSyncPodcastTask(podcastID uuid.UUID) error {
 		return fmt.Errorf("failed to create sync task: %w", err)
 	}
 
-	info, err := Queue.Enqueue(task)
+	info, err := Queue.Enqueue(task, asynq.Unique(24*time.Hour))
 	if err != nil {
-		if errors.Is(err, asynq.ErrTaskIDConflict) {
+		if errors.Is(err, asynq.ErrDuplicateTask) {
 			log.Printf("Task for podcast %v is already queued or processing", podcastID)
 			return nil
 		}
