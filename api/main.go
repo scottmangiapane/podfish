@@ -32,15 +32,10 @@ func main() {
 	clients.SetUpQueue()
 	defer clients.Queue.Close()
 
-	gin.ForceConsoleColor()
-	gin.SetMode(gin.ReleaseMode)
-
-	r := gin.Default()
-	r.SetTrustedProxies(nil)
-	setupSessionMiddleware(r)
+	r := setUpRouter()
+	v1 := r.Group("/api/v1")
 
 	// Auth
-	v1 := r.Group("/api/v1")
 	v1.POST("/auth/reset-password", controllers.PostResetPassword)
 	v1.PATCH("/auth/reset-password/:token", controllers.PatchResetPasswordWithToken)
 	v1.POST("/auth/sign-in", controllers.PostSignIn)
@@ -82,7 +77,42 @@ func main() {
 	r.Run("0.0.0.0:" + utils.GetEnvString("API_PORT"))
 }
 
-func setupSessionMiddleware(r *gin.Engine) {
+func setUpRouter() *gin.Engine {
+	var r *gin.Engine
+	if utils.GetEnvString("ENVIRONMENT") == "dev" {
+		gin.ForceConsoleColor()
+		gin.SetMode(gin.DebugMode)
+		r = gin.Default()
+	} else {
+		gin.SetMode(gin.ReleaseMode)
+		r = gin.New()
+		r.Use(gin.Recovery())
+		r.Use(gin.Logger())
+		r.Use(SecurityHeaders())
+	}
+	r.SetTrustedProxies(nil)
+	setUpSessionMiddleware(r)
+	return r
+}
+
+func SecurityHeaders() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		c.Header("Referrer-Policy", "no-referrer-when-downgrade")
+		c.Header("X-Content-Type-Options", "nosniff")
+		c.Header("X-Frame-Options", "DENY")
+		c.Header("X-XSS-Protection", "1; mode=block")
+
+		if utils.GetEnvBool("USES_TLS") {
+			c.Header("Strict-Transport-Security", "max-age=31536000; includeSubDomains; preload")
+		}
+
+		c.Header("Content-Security-Policy", "default-src 'self'; font-src 'self'; img-src 'self' data:; script-src 'self'; style-src 'self';")
+
+		c.Next()
+	}
+}
+
+func setUpSessionMiddleware(r *gin.Engine) {
 	gob.Register(uuid.UUID{})
 
 	authKey := []byte(utils.GetEnvString("AUTH_KEY"))
@@ -103,7 +133,7 @@ func setupSessionMiddleware(r *gin.Engine) {
 		MaxAge:   60 * 60 * 12, // 12 hours
 		Path:     "/",
 		SameSite: http.SameSiteStrictMode,
-		Secure:   utils.GetEnvBool("SECURE_COOKIES"),
+		Secure:   utils.GetEnvBool("USES_TLS"),
 	})
 
 	r.Use(sessions.Sessions("session", store))

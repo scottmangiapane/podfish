@@ -1,6 +1,5 @@
 SECURITY
 
-- Add HTTP security headers
 - Investigate if `http.Dir` following symlinks allows malicious RSS feeds to read arbitrary files
 - Block RSS feeds (or images within feeds) from invalid/internal domains (ex: localhost, docker hostnames like `api:3000`, `0.0.0.0`)
 
@@ -17,8 +16,6 @@ FEATURES
 
 API ENHANCEMENTS
 
-- Investigate and fix bug where tasks get stuck
-- Fix excessive worker logs
 - Use `etag` / `last_modified` headers for conditional GETs to save bandwidth
 - Use actual migration files instead of GORM's auto-migrate
 - Validate that new RSS feeds are actually valid RSS

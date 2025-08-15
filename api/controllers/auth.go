@@ -73,7 +73,7 @@ func PostSignIn(c *gin.Context) {
 			MaxAge:   60 * 60 * 24 * 90, // 90 days
 			Path:     "/",
 			SameSite: http.SameSiteStrictMode,
-			Secure:   utils.GetEnvBool("SECURE_COOKIES"),
+			Secure:   utils.GetEnvBool("USES_TLS"),
 		})
 	}
 

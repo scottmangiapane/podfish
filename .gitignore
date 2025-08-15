@@ -2,15 +2,21 @@
 **/.idea
 **/.vscode/
 
+# Config
+.env
+
 # Storage volumes
 pg-data/
 rss-data/
 
+# Swagger docs
 api/docs/
 
+# Backend builds
 api/podfish-api
 scheduler/podfish-scheduler
 worker/podfish-worker
 
+# Frontend builds and dependencies
 ui/dist/
 ui/node_modules/

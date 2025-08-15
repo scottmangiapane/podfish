@@ -15,6 +15,7 @@ Podfish is a self-hostable podcast client. It lets you browse your favorite podc
 
 Getting started is easy. Just run:
 ```sh
+cp .env.example .env
 docker compose up
 ```
 

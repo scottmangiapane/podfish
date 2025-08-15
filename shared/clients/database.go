@@ -2,11 +2,15 @@ package clients
 
 import (
 	"fmt"
+	"log"
+	"os"
+	"time"
 
 	"github.com/scottmangiapane/podfish/shared/models"
 	"github.com/scottmangiapane/podfish/shared/utils"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 )
 
 var (
@@ -19,7 +23,9 @@ func SetUpDatabase() {
 		utils.GetEnvString("POSTGRES_HOST"),
 		utils.GetEnvString("POSTGRES_USER"),
 		utils.GetEnvString("POSTGRES_PASSWORD"))
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
+		Logger: setUpLogger(),
+	})
 	if err != nil {
 		panic("failed to connect to database")
 	}
@@ -33,5 +39,26 @@ func SetUpDatabase() {
 		&models.Position{},
 		&models.Subscription{},
 		&models.User{},
+	)
+}
+
+func setUpLogger() logger.Interface {
+	if utils.GetEnvString("ENVIRONMENT") == "dev" {
+		return logger.New(
+			log.New(os.Stdout, "\r\n", log.LstdFlags),
+			logger.Config{
+				SlowThreshold: 200 * time.Millisecond,
+				LogLevel:      logger.Info,
+				Colorful:      true,
+			},
+		)
+	}
+	return logger.New(
+		log.New(os.Stdout, "\r\n", log.LstdFlags),
+		logger.Config{
+			SlowThreshold: time.Second,
+			LogLevel:      logger.Warn,
+			Colorful:      false,
+		},
 	)
 }
