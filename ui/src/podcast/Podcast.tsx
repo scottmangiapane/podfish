@@ -130,18 +130,20 @@ function Podcast() {
     <div className="podcast-split">
       <div className="podcast-split-left">
         <div className="podcast-header">
-          <Cover
-            color={ podcast.color }
-            src={ `/file/${ podcast.imageId }-lg.jpeg` }
-            style={{
-              borderRadius: "8px",
-              boxShadow: "rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, "
-                + "rgba(60, 64, 67, 0.15) 0px 1px 3px 1px",
-              overflow: "hidden",
-              width: "100%"
-            }} />
+          <div className="podcast-header-cover">
+            <Cover
+              color={ podcast.color }
+              src={ `/file/${ podcast.imageId }-lg.jpeg` }
+              style={{
+                borderRadius: "8px",
+                boxShadow: "rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, "
+                  + "rgba(60, 64, 67, 0.15) 0px 1px 3px 1px",
+                overflow: "hidden",
+                width: "100%"
+              }} />
+          </div>
+          <h3 className="break-word podcast-title">{ podcast.title }</h3>
           <div className="break-word">
-            <h3 className="break-word podcast-title">{ podcast.title }</h3>
             <Collapsable lines={ 6 } text={ descriptionClean } />
             {/* TODO unsubscribe button? */}
           </div>

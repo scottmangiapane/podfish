@@ -1,5 +1,5 @@
 import { produce } from 'immer';
-import { createContext, useContext, useReducer } from 'react';
+import { createContext, useContext, useReducer, type ReactNode } from 'react';
 
 import type { TNowPlaying } from '@/types';
 
@@ -33,7 +33,7 @@ interface TState {
 
 const AppContext = createContext<TAppContext | null>(null);
 
-export function AppProvider({ children }: any) {
+export function AppProvider({ children }: { children: ReactNode }) {
   const initialState = {
     audio: {
       isPaused: true,

@@ -8,7 +8,7 @@ interface TSpinnerProps {
 
 function Spinner({ borderSize, margin, size }: TSpinnerProps) {
     return (
-        <div className='center wrapper'>
+        <div className='center'>
             <div
                 className={ 'spinner' }
                 style={{

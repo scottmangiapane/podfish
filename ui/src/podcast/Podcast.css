@@ -33,8 +33,13 @@
     .podcast-header {
         align-items: flex-start;
         display: flex;
+        flex-direction: column;
         gap: 16px;
-        padding-bottom: 8px;
+    }
+
+    .podcast-header-cover {
+        margin: 0 auto;
+        max-width: 25%;
     }
 
     .podcast-split { flex-wrap: wrap; }

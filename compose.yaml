@@ -5,8 +5,7 @@ x-healthcheck-base: &healthcheck-base
   timeout: 3s
 
 x-service-base: &service-base
-  env_file:
-    - ./.env
+  env_file: ./.env
   restart: always
   stop_grace_period: 3s
 

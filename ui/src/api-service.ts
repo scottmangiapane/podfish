@@ -79,7 +79,7 @@ async function callApi<T>(navigate: NavigateFunction | null, resource: string, o
   let parsed = null;
   try {
     parsed = convertKeysToCamelCase<T>(await res.json())
-  } catch {}
+  } catch { /* do nothing */ }
   return {
     data: parsed,
     ok: res.ok,
@@ -87,20 +87,21 @@ async function callApi<T>(navigate: NavigateFunction | null, resource: string, o
   };
 }
 
-function convertKeysToCamelCase<T>(obj: any): T {
+export function convertKeysToCamelCase<T>(obj: unknown): T {
   if (Array.isArray(obj)) {
-    return obj.map(item => convertKeysToCamelCase(item)) as any;
-  } else if (obj !== null && typeof obj === 'object') {
+    return obj.map(item => convertKeysToCamelCase(item)) as unknown as T;
+  }
+  if (obj !== null && typeof obj === "object") {
     return Object.fromEntries(
-      Object.entries(obj).map(([key, value]) => [
+      Object.entries(obj as Record<string, unknown>).map(([key, value]) => [
         toCamelCase(key),
         convertKeysToCamelCase(value),
       ])
     ) as T;
   }
-  return obj;
+  return obj as T;
 }
 
 function toCamelCase(str: string): string {
-  return str.replace(/_([a-z])/g, (_, letter) => letter.toUpperCase());
+  return str.replace(/_([a-z])/g, (_, char) => char.toUpperCase());
 }

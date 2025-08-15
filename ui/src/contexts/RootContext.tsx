@@ -1,5 +1,5 @@
 import { produce } from 'immer';
-import { createContext, useContext, useReducer } from 'react';
+import { createContext, useContext, useReducer, type ReactNode } from 'react';
 
 interface TRootContext {
   state: TState;
@@ -17,7 +17,7 @@ type TAction =
 
 const RootContext = createContext<TRootContext | null>(null);
 
-export function RootProvider({ children }: any) {
+export function RootProvider({ children }: { children: ReactNode }) {
   const initialState = {
     isMobile: window.innerWidth < 576,
     user: localStorage.getItem('user_id'),

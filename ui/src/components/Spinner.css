@@ -8,12 +8,8 @@
     border-width: 6px;
     margin: 0;
     padding: 0;
-    /* height: 48px; */
-    /* width: 48px; */
-}
-
-.wrapper {
-    width: 100%;
+    height: 48px;
+    width: 48px;
 }
 
 @keyframes spin {
