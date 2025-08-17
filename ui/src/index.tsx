@@ -7,13 +7,12 @@ import {
 } from "react-router-dom";
 
 import App from "@/App";
+import Auth from "@/auth/Auth";
 import Error from "@/error/Error";
 import Home from "@/home/Home";
 import Podcast from "@/podcast/Podcast";
 import Root from "@/Root";
 import Settings from "@/settings/Settings";
-import SignIn from "@/sign-in/SignIn";
-import SignUp from "@/sign-up/SignUp";
 import Subscribe from "@/subscribe/Subscribe";
 
 import "@/index.css";
@@ -50,12 +49,12 @@ const router = createBrowserRouter([
       },
       {
         path: "sign-in",
-        element: <SignIn />,
+        element: <Auth type="sign-in" />,
         errorElement: <Error />
       },
       {
         path: "sign-up",
-        element: <SignUp />,
+        element: <Auth type="sign-up" />,
         errorElement: <Error />
       }
     ]

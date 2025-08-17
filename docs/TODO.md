@@ -29,6 +29,5 @@ UI ENHANCEMENTS
 - Enable automatic linting on save (ex: consistent quotes)
 - Add a loading animation while podcast is being added
 - Improve error handling for sign up / sign in
-- Fix inconsistent play icons and cover image sizes on mobile
 - Implement search functionality
 - Ensure Docker reflects added/removed Node dependencies (may require rethinking `.dockerignore` or volumes; live reload limitations?)

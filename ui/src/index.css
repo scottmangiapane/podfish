@@ -117,6 +117,11 @@ input[type=email], input[type=password], input[type=text], input[type=url] {
     color: white;
 }
 
+.btn-pill:disabled {
+    color: white;
+    opacity: 40%;
+}
+
 .btn-text {
     background-color: transparent;
     outline: none;
