@@ -1,5 +1,6 @@
 export interface TApiResponse<T> {
   data: T | null;
+  error: string | null;
   ok: boolean;
   status: number;
 }

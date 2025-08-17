@@ -76,12 +76,16 @@ async function callApi<T>(navigate: NavigateFunction | null, resource: string, o
   if (res.status === 401 && navigate) {
     navigate('/sign-in');
   }
-  let parsed = null;
+  let data = null;
+  let error = null;
   try {
-    parsed = convertKeysToCamelCase<T>(await res.json())
+    const json = await res.json();
+    data = convertKeysToCamelCase<T>(json)
+    error = json.error as null | string;
   } catch { /* do nothing */ }
   return {
-    data: parsed,
+    data,
+    error,
     ok: res.ok,
     status: res.status,
   };

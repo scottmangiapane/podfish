@@ -11,6 +11,7 @@ function Auth({ type }: { type: 'sign-in' | 'sign-up' }) {
   const emailRef = useRef<HTMLInputElement>(null);
 
   const [email, setEmail] = useState('');
+  const [error, setError] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(
@@ -36,10 +37,13 @@ function Auth({ type }: { type: 'sign-in' | 'sign-up' }) {
       localStorage.setItem('remember_me', '' + rememberMe);
       dispatch({ type: 'SET_USER', data: localStorage.getItem('user_id') });
       navigate('/');
+    } else {
+      setError(res.error || 'Failed to sign in');
     }
   }
 
   const title = (type === 'sign-in') ? 'Sign In' : 'Sign Up';
+
   const confirmPasswordInput = (
     <input
       autoComplete="on"
@@ -51,6 +55,13 @@ function Auth({ type }: { type: 'sign-in' | 'sign-up' }) {
       value={ confirmPassword }
     />
   );
+
+  const errorMsg = error !== '' && (
+    <div className="alert">
+      <p className="text-error">{ error }</p>
+    </div>
+  );
+
   let submitBtn;
   if (type === 'sign-in') {
     submitBtn = (
@@ -102,6 +113,7 @@ function Auth({ type }: { type: 'sign-in' | 'sign-up' }) {
           Remember me
         </label>
         { submitBtn }
+        { errorMsg }
       </form>
     </div>
   );
