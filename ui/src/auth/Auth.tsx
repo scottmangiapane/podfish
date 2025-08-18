@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { postSignIn, postSignUp } from "@/api-service";
+import Alert from "@/components/Alert";
 import { useRootContext } from '@/contexts/RootContext';
 
 function Auth({ type }: { type: 'sign-in' | 'sign-up' }) {
@@ -24,6 +25,14 @@ function Auth({ type }: { type: 'sign-in' | 'sign-up' }) {
     }
     emailRef.current?.focus();
   }, []);
+
+  useEffect(() => {
+    setEmail('');
+    setError('');
+    setPassword('');
+    setConfirmPassword('');
+    setRememberMe(localStorage.getItem('remember_me') === 'true' || false);
+  }, [type])
 
   async function onSubmit() {
     let res;
@@ -56,11 +65,7 @@ function Auth({ type }: { type: 'sign-in' | 'sign-up' }) {
     />
   );
 
-  const errorMsg = error !== '' && (
-    <div className="alert">
-      <p className="text-error">{ error }</p>
-    </div>
-  );
+  const errorMsg = error !== '' && <Alert text={ error } />;
 
   let submitBtn;
   if (type === 'sign-in') {

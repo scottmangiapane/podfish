@@ -24,7 +24,7 @@ function AppWithContext() {
 
     audio.pause();
     audio.removeAttribute("src");
-    audio.load(); // TODO should I also load before play/pause?
+    audio.load();
 
     const handleLoadStart = () => dispatch({ type: 'SET_IS_LOADING', data: true });
     const handleCanPlay = () => dispatch({ type: 'SET_IS_LOADING', data: false });
@@ -57,17 +57,18 @@ function AppWithContext() {
     if (!state.nowPlaying?.position) return;
     if (state.positionLastSynced === null || Date.now() - state.positionLastSynced > 5 * 1000) {
       const { currentTime, realDuration } = state.nowPlaying.position;
-        patchEpisodePosition(
-          navigate,
-          state.nowPlaying.episode.episodeId,
-          false,
-          Math.round(currentTime),
-          Math.round(realDuration),
-        );
-        dispatch({ type: 'SYNC_POSITION', data: {
-          currentTime,
-          realDuration,
-        } });
+      const completed = Math.round(realDuration) - Math.round(currentTime) <= 15;
+      patchEpisodePosition(
+        navigate,
+        state.nowPlaying.episode.episodeId,
+        completed,
+        (completed) ? Math.round(realDuration) : Math.round(currentTime),
+        Math.round(realDuration),
+      );
+      dispatch({ type: 'SYNC_POSITION', data: {
+        currentTime,
+        realDuration,
+      } });
     }
   }, [state.nowPlaying?.position?.currentTime]);
 
@@ -94,7 +95,6 @@ function AppWithContext() {
     audio.addEventListener('pause', audioPause);
     audio.addEventListener('play', audioPlay);
     audio.addEventListener('timeupdate', audioTimeUpdate);
-    // TODO: attaching to document breaks text inputs
     document.addEventListener('keydown', spacebarPressed);
     return () => {
       audio.removeEventListener('durationchange', audioDurationChange);
@@ -107,15 +107,7 @@ function AppWithContext() {
   }, []);
 
   function audioEnded() {
-    // TODO: the following doesn't work because event listeners only know the default state... use ref instead?
-    // TODO: does it even matter?
-    // if (!state.nowPlaying) return;
-    // patchEpisodePosition(
-    //   navigate,
-    //   state.nowPlaying?.episode.episodeId,
-    //   true,
-    //   0,
-    // );
+    // TODO play next item in playlist
   }
 
   function audioDurationChange() {
@@ -135,6 +127,13 @@ function AppWithContext() {
   }
 
   function spacebarPressed(event: KeyboardEvent) {
+    const target = event.target as HTMLElement | null;
+    const isTyping = target && (
+      ['INPUT', 'TEXTAREA'].includes(target.tagName)
+      || target.isContentEditable
+    );
+    if (isTyping) return;
+
     if (event.code === 'Space') {
       event.preventDefault();
       dispatch({ type: 'SET_HAS_USER_INTERACTED' });

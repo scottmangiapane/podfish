@@ -4,10 +4,11 @@ import sanitizeHtml from "sanitize-html";
 import { useImmer } from "use-immer";
 
 import { getEpisodes, getSubscription } from "@/api-service";
+import Alert from "@/components/Alert";
 import Spinner from "@/components/Spinner";
-import { useAppContext } from "@/contexts/AppContext";
 import Collapsable from "@/components/Collapsable";
 import Cover from "@/components/Cover";
+import { useAppContext } from "@/contexts/AppContext";
 import Episode from "@/podcast/Episode";
 import type { TEpisodePosition, TPodcast } from "@/types";
 
@@ -126,6 +127,11 @@ function Podcast() {
     allowedAttributes: {},
   });
 
+  let syncWarning;
+  if (podcast.lastSyncAt !== podcast.lastSyncAttemptAt) {
+    syncWarning = <Alert text='Failed to sync. Please check again later.' />;
+  }
+
   return (
     <div className="podcast-split">
       <div className="podcast-split-left">
@@ -151,6 +157,7 @@ function Podcast() {
       </div>
       <div className="podcast-split-right">
         <div className="podcast-list">
+          { syncWarning }
           { episodeList }
           <div ref={ containerRef }>
             { isLoadingEpisodes && <Spinner margin="4px" size="40px" /> }

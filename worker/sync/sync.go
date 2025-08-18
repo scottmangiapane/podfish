@@ -128,7 +128,6 @@ func Sync(podcastId uuid.UUID) error {
 		})
 	}
 
-	// TODO this causes a lot of log spam, and will break if the query is >1GB
 	result = clients.DB.Clauses(clause.OnConflict{
 		Columns:   []clause.Column{{Name: "podcast_id"}, {Name: "item_id"}},
 		DoUpdates: clause.AssignmentColumns([]string{"title", "description", "date", "duration", "url"}),

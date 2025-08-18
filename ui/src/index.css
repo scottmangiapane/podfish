@@ -82,13 +82,6 @@ input[type=email], input[type=password], input[type=text], input[type=url] {
     border-radius: 8px;
 }
 
-.alert {
-    background-color: var(--error-color);
-    border-radius: 8px;
-    color: black;
-    padding: 8px;
-}
-
 .align-right {
     margin-left: auto;
     margin-right: 0;

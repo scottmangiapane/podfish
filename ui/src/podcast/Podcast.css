@@ -34,7 +34,6 @@
         align-items: flex-start;
         display: flex;
         flex-direction: column;
-        gap: 16px;
     }
 
     .podcast-header-cover {
@@ -46,8 +45,5 @@
 
     .podcast-split-left, .podcast-split-right { flex-basis: 100%; }
 
-    .podcast-title {
-        flex: 1;
-        margin-top: 0;
-    }
+    .podcast-title { flex: 1; }
 }

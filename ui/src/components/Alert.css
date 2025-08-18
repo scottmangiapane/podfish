@@ -1,0 +1,10 @@
+.alert {
+    align-items: center;
+    background-color: var(--error-color);
+    border-radius: 8px;
+    color: black;
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    padding: 8px 16px;
+}

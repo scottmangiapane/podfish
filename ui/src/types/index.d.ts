@@ -45,6 +45,8 @@ export interface TPodcast {
   color: string;
   description: string;
   imageId: string;
+  lastSyncAt: string;
+  lastSyncAttemptAt: string;
   podcastId: string;
   title: string;
 }

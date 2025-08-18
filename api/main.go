@@ -106,7 +106,12 @@ func SecurityHeaders() gin.HandlerFunc {
 			c.Header("Strict-Transport-Security", "max-age=31536000; includeSubDomains; preload")
 		}
 
-		c.Header("Content-Security-Policy", "default-src 'self'; font-src 'self'; img-src 'self' data:; script-src 'self'; style-src 'self';")
+		c.Header("Content-Security-Policy", fmt.Sprintf(
+			"default-src 'self'; font-src 'self'; img-src 'self' data:; script-src 'self'%s; style-src 'self' 'unsafe-hashes'%s%s;",
+			" 'sha256-c17TKd4R2Onsu4yAuAGsG+TpzUrDWl6EFTZP54Anlq0='", // Swagger inline script
+			" 'sha256-uiD1ejCBF+BQY4HmKpovbP6UD3MuKGymMj+v0lhBlZs='", // Swagger inline style
+			" 'sha256-ezdv1bOGcoOD7FKudKN0Y2Mb763O6qVtM8LT2mtanIU='", // Swagger inline SVG
+		))
 
 		c.Next()
 	}

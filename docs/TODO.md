@@ -19,9 +19,7 @@ API ENHANCEMENTS
 - Use `etag` / `last_modified` headers for conditional GETs to save bandwidth
 - Use actual migration files instead of GORM's auto-migrate
 - Validate that new RSS feeds are actually valid RSS
-- Handle when a podcast feed is removed (retain metadata but show error in UI)
 - Handle when an individual episode is removed (retain metadata but hide from UI)
-- Consider removing `Completed` boolean (not used in UI)
 - Simplify error handling (ex: checking for a GORM "not found" error before falling back to a 500)
 
 UI ENHANCEMENTS
