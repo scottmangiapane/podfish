@@ -12,6 +12,7 @@ import Error from "@/error/Error";
 import Home from "@/home/Home";
 import Podcast from "@/podcast/Podcast";
 import Root from "@/Root";
+import Search from "@/search/Search";
 import Settings from "@/settings/Settings";
 import Subscribe from "@/subscribe/Subscribe";
 
@@ -32,6 +33,10 @@ const router = createBrowserRouter([
           {
             path: "/",
             element: <Home />
+          },
+          {
+            path: "search",
+            element: <Search />
           },
           {
             path: "settings",

@@ -10,6 +10,7 @@ import "@/components/TitleBar.css";
 function TitleBar() {
   const navigate = useNavigate();
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const [searchText, setSearchText] = useState('');
   const [showDropdown, setShowDropdown] = useState(false);
   const { dispatch, state } = useRootContext();
 
@@ -32,7 +33,8 @@ function TitleBar() {
   }, [showDropdown]);
 
   async function search() {
-    // TODO
+    navigate(`/search?q=${ encodeURIComponent(searchText) }`);
+    setSearchText('');
   }
 
   async function signOut() {
@@ -58,12 +60,13 @@ function TitleBar() {
       <div className="title-bar-item-row">
         <form className="form" action={ search }>
           <input
-            // ref={ searchRef }
-            // autoComplete="on"
+            autoComplete="on"
             name="search"
+            onChange={ (event) => setSearchText(event.target.value) }
             placeholder="Search"
             required={ true }
             type="text"
+            value={ searchText }
           />
         </form>
         <div className="title-bar-dropdown" ref={ dropdownRef }>

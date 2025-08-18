@@ -45,5 +45,5 @@
 
     .podcast-split-left, .podcast-split-right { flex-basis: 100%; }
 
-    .podcast-title { flex: 1; }
+    .podcast-title { align-self: center; }
 }

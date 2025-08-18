@@ -4,7 +4,7 @@
 <img src="ui/public/logo.svg" width=20%>
 </p>
 
-Podfish is a self-hostable podcast client. It lets you browse your favorite podcasts, play episodes, keep track of which episodes you've heard already, and more. It aims to be like Google Podcasts minus the discovery features.
+Podfish is a self-hostable podcast client. It lets you browse your favorite podcasts, play episodes, keep track of which episodes you've heard already, and more. It aims to be like Apple Podcasts, Spotify, etc.
 
 # Screenshots
 
