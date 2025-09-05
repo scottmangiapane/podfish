@@ -17,10 +17,10 @@ import (
 
 // @Tags episodes
 // @Router /episodes [get]
+// @Param cursor query string false "Cursor"
 // @Param limit query number false "Limit" default(10)
-// @Param before_id query string false "Before"
-// @Param after_id query string false "After"
 // @Param podcast_id query string false "Podcast ID"
+// @Param sort query string false "Sort" Enums(asc, desc) default(desc)
 // @Success 200 {object} []models.EpisodePosition
 func GetEpisodes(c *gin.Context) {
 	limit := 10
@@ -33,38 +33,6 @@ func GetEpisodes(c *gin.Context) {
 		limit = limitParam
 	}
 
-	var beforeId uuid.UUID
-	var beforeEpisode models.Episode
-	if c.Query("before_id") != "" {
-		beforeParam, err := uuid.Parse(c.Query("before_id"))
-		if err != nil {
-			middleware.Abort(c, http.StatusUnprocessableEntity, "Invalid before ID")
-			return
-		}
-		beforeId = beforeParam
-		result := clients.DB.First(&beforeEpisode, &models.Episode{EpisodeID: beforeId})
-		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-			middleware.Abort(c, http.StatusNotFound, "Before episode not found")
-			return
-		}
-	}
-
-	var afterId uuid.UUID
-	var afterEpisode models.Episode
-	if c.Query("after_id") != "" {
-		afterParam, err := uuid.Parse(c.Query("after_id"))
-		if err != nil {
-			middleware.Abort(c, http.StatusUnprocessableEntity, "Invalid after ID")
-			return
-		}
-		afterId = afterParam
-		result := clients.DB.First(&afterEpisode, &models.Episode{EpisodeID: afterId})
-		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-			middleware.Abort(c, http.StatusNotFound, "After episode not found")
-			return
-		}
-	}
-
 	var podcastId uuid.UUID
 	if c.Query("podcast_id") != "" {
 		podcastIdParam, err := uuid.Parse(c.Query("podcast_id"))
@@ -72,8 +40,21 @@ func GetEpisodes(c *gin.Context) {
 			middleware.Abort(c, http.StatusUnprocessableEntity, "Invalid podcast ID")
 			return
 		}
+		var podcast models.Podcast
+		result := clients.DB.First(&podcast, &models.Podcast{PodcastID: podcastIdParam})
+		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+			middleware.Abort(c, http.StatusNotFound, "Podcast not found")
+			return
+		}
 		podcastId = podcastIdParam
 	}
+
+	sort := c.DefaultQuery("sort", "desc")
+	sortQuery := "date DESC, episodes.episode_id"
+	if sort == "asc" {
+		sortQuery = "date ASC, episodes.episode_id"
+	}
+
 	query := clients.DB.
 		Table("episodes").
 		Joins("LEFT JOIN positions "+
@@ -83,17 +64,30 @@ func GetEpisodes(c *gin.Context) {
 		query = query.Where("podcast_id = ?", podcastId)
 	}
 
-	if beforeId != uuid.Nil {
-		query = query.Where("date < ?", beforeEpisode.Date)
-	}
+	if c.Query("cursor") != "" {
+		cursorId, err := uuid.Parse(c.Query("cursor"))
+		if err != nil {
+			middleware.Abort(c, http.StatusUnprocessableEntity, "Invalid cursor")
+			return
+		}
 
-	if afterId != uuid.Nil {
-		query = query.Where("date > ?", afterEpisode.Date)
+		var cursorEpisode models.Episode
+		result := clients.DB.First(&cursorEpisode, &models.Episode{EpisodeID: cursorId})
+		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+			middleware.Abort(c, http.StatusNotFound, "Cursor episode not found")
+			return
+		}
+
+		if sort == "asc" {
+			query = query.Where("date > ?", cursorEpisode.Date)
+		} else {
+			query = query.Where("date < ?", cursorEpisode.Date)
+		}
 	}
 
 	var episodes []models.EpisodePosition = []models.EpisodePosition{}
 	result := query.
-		Order("date DESC, episodes.episode_id").
+		Order(sortQuery).
 		Limit(limit).
 		Scan(&episodes)
 	if result.Error != nil {

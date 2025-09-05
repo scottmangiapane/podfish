@@ -1,13 +1,13 @@
 .cover-placeholder {
-    max-height: 100%;
-    max-width: 100%;
+    height: 100%;
+    width: 100%;
     position: absolute;
     inset: 0;
 }
 
 .cover-image {
     display: block;
-    max-height: 100%;
-    max-width: 100%;
+    height: 100%;
+    width: 100%;
     transition: opacity 0.2s ease-out;
 }

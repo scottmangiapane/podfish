@@ -2,6 +2,7 @@ SECURITY
 
 - Investigate if `http.Dir` following symlinks allows malicious RSS feeds to read arbitrary files
 - Block RSS feeds (or images within feeds) from invalid/internal domains (ex: localhost, docker hostnames like `api:3000`, `0.0.0.0`)
+- Rate limiting (especially on the auth endpoints)
 
 FEATURES
 
@@ -24,6 +25,7 @@ API ENHANCEMENTS
 
 UI ENHANCEMENTS
 
+- Improve media player in mobile notification drawer
 - Enable automatic linting on save (ex: consistent quotes)
 - Add a loading animation while podcast is being added
 - Implement search functionality

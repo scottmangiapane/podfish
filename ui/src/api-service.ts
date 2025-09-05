@@ -3,15 +3,16 @@ import type { TApiResponse, TEpisodePosition, TNowPlaying, TPodcast, TSignIn, TS
 
 /* API calls */
 
-export function getEpisodes(navigate: NavigateFunction, podcastId: string, beforeId?: string) {
-  const beforeQuery = (beforeId) ? `&before_id=${ beforeId }` : '';
-  return callApi<TEpisodePosition[]>(navigate, `/api/v1/episodes?limit=50&podcast_id=${ podcastId }${ beforeQuery }`, {
+export function getEpisodes(navigate: NavigateFunction, podcastId: string, cursor?: string, sort?: "asc" | "desc") {
+  const cursorQuery = (cursor) ? `&cursor=${cursor}` : '';
+  const sortQuery = (sort) ? `&sort=${sort}` : '';
+  return callApi<TEpisodePosition[]>(navigate, `/api/v1/episodes?limit=50&podcast_id=${podcastId}${cursorQuery}${sortQuery}`, {
     method: 'GET',
   });
 }
 
 export function patchEpisodePosition(navigate: NavigateFunction, episodeId: string, completed: boolean, currentTime: number, realDuration: number) {
-  return callApi<TNowPlaying>(navigate, `/api/v1/episodes/${ episodeId }/position`, {
+  return callApi<TNowPlaying>(navigate, `/api/v1/episodes/${episodeId}/position`, {
     method: 'PATCH',
     body: JSON.stringify({ completed, 'current_time': currentTime, 'real_duration': realDuration }),
   });
@@ -44,7 +45,7 @@ export function postSubscription(navigate: NavigateFunction, rss: string) {
 }
 
 export function getSubscription(navigate: NavigateFunction, podcastId: string) {
-  return callApi<TPodcast>(navigate, `/api/v1/subscriptions/${ podcastId }`, {
+  return callApi<TPodcast>(navigate, `/api/v1/subscriptions/${podcastId}`, {
     method: 'GET',
   });
 }
@@ -71,7 +72,7 @@ export function postSignUp(email: string, password: string) {
 
 /* Helper methods */
 
-async function callApi<T>(navigate: NavigateFunction | null, resource: string, options={}) : Promise<TApiResponse<T>> {
+async function callApi<T>(navigate: NavigateFunction | null, resource: string, options = {}): Promise<TApiResponse<T>> {
   const res = await fetch(resource, options);
   if (res.status === 401 && navigate) {
     navigate('/sign-in');

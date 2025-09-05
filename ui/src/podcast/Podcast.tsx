@@ -10,6 +10,8 @@ import Collapsable from "@/components/Collapsable";
 import Cover from "@/components/Cover";
 import { useAppContext } from "@/contexts/AppContext";
 import Episode from "@/podcast/Episode";
+import ArrowDownward from "@/symbols/ArrowDownward";
+import ArrowUpward from "@/symbols/ArrowUpward";
 import type { TEpisodePosition, TPodcast } from "@/types";
 
 import "@/podcast/Podcast.css";
@@ -20,8 +22,9 @@ function Podcast() {
   const { podcastId } = useParams();
   const containerRef = useRef(null);
   const [episodes, updateEpisodes] = useImmer(new Map<string, TEpisodePosition>);
-  const [beforeId, setBeforeId] = useState<string | undefined>();
+  const [cursor, setCursor] = useState<string | undefined>();
   const [hasMoreEpisodes, setHasMoreEpisodes] = useState(true);
+  const [isSortedAsc, setIsSortedAsc] = useState(false);
   const [isLoadingSubscription, setIsLoadingSubscription] = useState(true);
   const [isLoadingEpisodes, setIsLoadingEpisodes] = useState(false);
   const [error, setError] = useState<number>(0);
@@ -40,17 +43,21 @@ function Podcast() {
   }, []);
 
   useEffect(() => {
+    loadEpisodes();
+  }, [isSortedAsc]);
+
+  useEffect(() => {
     const observer = new IntersectionObserver(([entry]) => {
-        if (entry.isIntersecting) {
-            loadEpisodes();
-        }
+      if (entry.isIntersecting) {
+        loadEpisodes();
+      }
     }, { threshold: 1 });
 
     const el = containerRef.current;
     if (el) observer.observe(el);
 
     return () => {
-      if (el)  observer.unobserve(el);
+      if (el) observer.unobserve(el);
     };
   }, [loadEpisodes]);
 
@@ -78,13 +85,13 @@ function Podcast() {
       return;
     }
     setIsLoadingEpisodes(true);
-    getEpisodes(navigate, podcastId!, beforeId).then((res) => {
+    getEpisodes(navigate, podcastId!, cursor, isSortedAsc ? "asc" : "desc").then((res) => {
       if (res.ok && res.data) {
         if (res.data.length) {
           updateEpisodes((draft) => {
-            res.data!.forEach((episode) => draft.set(episode.episode.episodeId, episode));
+            res.data!.forEach((ep) => draft.set(ep.episode.episodeId, ep));
           });
-          setBeforeId(res.data.at(-1)?.episode?.episodeId);
+          setCursor(res.data.at(-1)?.episode?.episodeId);
         } else {
           setHasMoreEpisodes(false);
         }
@@ -100,7 +107,7 @@ function Podcast() {
   if (error) {
     return (
       <>
-        <h1>{ error } Error</h1>
+        <h1>{error} Error</h1>
         <p>Podcast does not exist or may have been removed.</p>
         <Link to={"/"}>
           <button className="btn btn-pill mt-3">Home</button>
@@ -113,14 +120,23 @@ function Podcast() {
     return null;
   }
 
-  const episodeList: ReactElement[] = [];
+  const episodeDateList: { date: string, episode: ReactElement }[] = [];
   for (const { episode, position } of episodes.values()) {
-    episodeList.push(
-      <div className="podcast-list-item" key={ episode.episodeId }>
-        <Episode episode={ episode } podcast={ podcast } position={ position } />
-      </div>
-    );
+    episodeDateList.push({
+      date: episode.date,
+      episode: (
+        <div className="podcast-list-item" key={episode.episodeId}>
+          <Episode episode={episode} podcast={podcast} position={position} />
+        </div>
+      ),
+    });
+    episodeDateList.sort((e1, e2) => {
+      return isSortedAsc
+        ? new Date(e1.date).getTime() - new Date(e2.date).getTime()
+        : new Date(e2.date).getTime() - new Date(e1.date).getTime();
+    });
   }
+  const episodeList = episodeDateList.map(ed => ed.episode);
 
   const descriptionClean = sanitizeHtml(podcast.description, {
     allowedTags: [],
@@ -132,14 +148,23 @@ function Podcast() {
     syncWarning = <Alert text='Failed to sync. Please check again later.' />;
   }
 
+  const toggleSortOrder = () => {
+    updateEpisodes((draft) => {
+      draft.clear();
+    });
+    setCursor(undefined);
+    setHasMoreEpisodes(true);
+    setIsSortedAsc(!isSortedAsc);
+  };
+
   return (
     <div className="podcast-split">
       <div className="podcast-split-left">
         <div className="podcast-header">
           <div className="podcast-header-cover">
             <Cover
-              color={ podcast.color }
-              src={ `/file/${ podcast.imageId }-lg.jpeg` }
+              color={podcast.color}
+              src={`/file/${podcast.imageId}-lg.jpeg`}
               style={{
                 borderRadius: "8px",
                 boxShadow: "rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, "
@@ -148,20 +173,22 @@ function Podcast() {
                 width: "100%"
               }} />
           </div>
-          <h3 className="break-word podcast-title">{ podcast.title }</h3>
+          <h3 className="break-word podcast-title">{podcast.title}</h3>
           <div className="break-word">
-            <Collapsable lines={ 6 } text={ descriptionClean } />
+            <Collapsable lines={6} text={descriptionClean} />
             {/* TODO unsubscribe button? */}
           </div>
         </div>
       </div>
       <div className="podcast-split-right">
         <div className="podcast-list">
-          { syncWarning }
-          { episodeList }
-          <div ref={ containerRef }>
-            { isLoadingEpisodes && <Spinner margin="4px" size="40px" /> }
-            { !hasMoreEpisodes && <p>No more episodes.</p> }
+          {syncWarning}
+          {isSortedAsc && <ArrowUpward onClick={toggleSortOrder} />}
+          {!isSortedAsc && <ArrowDownward onClick={toggleSortOrder} />}
+          {episodeList}
+          <div ref={containerRef}>
+            {isLoadingEpisodes && <Spinner margin="4px" size="40px" />}
+            {!hasMoreEpisodes && <p>No more episodes.</p>}
           </div>
         </div>
       </div>
